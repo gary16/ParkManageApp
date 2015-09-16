@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zoway.parkmanage.view.OcrResultActivity" >
+
+    <LinearLayout
+        android:id="@+id/tkephotoly1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff0878ca" >
+
+            <TextView
+                android:id="@+id/infofrguna"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="3dp"
+                android:gravity="center_vertical"
+                android:text="车牌确认"
+                android:textColor="#ffffffff"
+                android:textSize="32sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tkephotoly2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/lblocrres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+   
+            android:gravity="center_horizontal"
+            android:text="车辆号牌"
+            android:textColor="#ffffffff"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal" >
+
+            <Spinner
+                android:id="@+id/comshengfen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/shengfen"
+                android:spinnerMode="dialog" />
+
+            <EditText
+                android:id="@+id/txtocrreshphm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="dp"
+                android:text="X123456"
+                android:textSize="33sp"
+                android:width="140dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/btnressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ff30cf86"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="确认"
+                android:textColor="#ffffffff"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnrescancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:background="#ff30cf86"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="重拍"
+                android:textColor="#ffffffff"
+                android:textSize="30sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tkephotoly3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000" />
+    </LinearLayout>
+
+</LinearLayout>

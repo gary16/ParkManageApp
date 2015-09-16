@@ -1,0 +1,142 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="5dp"
+    tools:context="com.zoway.parkmanage.view.MainActivity" >
+
+    <LinearLayout
+        android:id="@+id/maly1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff0878ca" >
+
+        <TextView
+            android:id="@+id/infofrguna"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="管理中心"
+            android:textColor="#ffffffff"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/malogout"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/logout_bg"
+            android:gravity="center"
+            android:text="注销"
+            android:textColor="#ffffffff"
+            android:textSize="23sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/maly2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maly1"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/maiv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/userbig" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/malbun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/maiv1"
+            android:text="用户名称"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/matxtun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/malbun"
+            android:text="测试人员"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/malblgtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/malbun"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/maiv1"
+            android:text="登录时间"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/matxtlgtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/malblgtime"
+            android:layout_below="@id/matxtun"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/malblgtime"
+            android:text="2015年08月31日  12时12分"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/malbworkpls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/maiv1"
+            android:layout_below="@id/matxtlgtime"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/maiv1"
+            android:text="工作地点"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/matxtworkpls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/malbworkpls"
+            android:layout_below="@id/matxtlgtime"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/malbworkpls"
+            android:text="测试路段"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/maiv2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@id/maly2"
+        android:layout_marginTop="10dp"
+        android:background="#ff0878ca"
+        android:src="@drawable/userbig" >
+    </ImageView>
+
+    <ExpandableListView
+        android:id="@+id/expandableListView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maiv2"
+        android:layout_centerHorizontal="true" >
+    </ExpandableListView>
+
+</RelativeLayout>
