@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 	private MainListAdapter madapter;
 	private Button malogout;
 	private TextView matxtlgtime;
-
+//
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
