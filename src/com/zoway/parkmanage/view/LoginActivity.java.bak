@@ -126,7 +126,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// this is a comment
+		// this is comment
 		super.onCreate(savedInstanceState);
 		DbHelper.openDatabase(this);
 		ActivityList.pushActivity(this);
