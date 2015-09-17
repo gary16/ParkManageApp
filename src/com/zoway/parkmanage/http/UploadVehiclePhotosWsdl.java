@@ -14,7 +14,7 @@ public class UploadVehiclePhotosWsdl {
 	// 调用的方法名称
 	private String methodName = "UploadVehiclePhotos";
 	// EndPoint
-	private String endPoint = "http://59.39.7.122:8083/WebServices/Terminal.asmx";
+	private String endPoint = BaseUrl.BASETERMINATEURL;
 	// SOAP Action
 	private String soapAction = "http://tempuri.org/UploadVehiclePhotos";
 

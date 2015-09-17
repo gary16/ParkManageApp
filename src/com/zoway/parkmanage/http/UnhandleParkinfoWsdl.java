@@ -23,7 +23,8 @@ import org.dom4j.tree.DefaultElement;
 
 public class UnhandleParkinfoWsdl {
 
-	private final String URL = "http://59.39.7.122:8083/WebServices/Terminal.asmx?op=GetUnhandledParkRecords";
+	private final String URL = BaseUrl.BASETERMINATEURL
+			+ "?op=GetUnhandledParkRecords";
 
 	// sectionid µØ¶ÎId
 	private String assemblePostTxt(int sectionId, int pageSize, int pageIndex) {
