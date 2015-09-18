@@ -1,0 +1,197 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zoway.parkmanage.view.InputInfoActivityForK6P100" >
+
+    <LinearLayout
+        android:id="@+id/maly1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff0878ca" >
+
+        <TextView
+            android:id="@+id/infofrguna"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="信息录入"
+            android:textColor="#ffffffff"
+            android:textSize="32sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ly1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="left" >
+
+        <TextView
+            android:id="@+id/txtcartype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="10dp"
+            android:text="小型汽车"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtcarnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/txtcartype"
+            android:text="粤X123456"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblpark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtcartype"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="10dp"
+            android:text="车位位置"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtpark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtcarnumber"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/lblpark"
+            android:text="测试路段"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblparktime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtpark"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="停放时间"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtparktime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtpark"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/lblparktime"
+            android:text="2015年12月12日 24時60分"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblparkimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtparktime"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="车辆停放照片"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ly2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ly1"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/content_bg"
+        android:gravity="center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <ImageButton
+            android:id="@+id/parkimg1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/iv_bg"
+            android:padding="3dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/takephoto" />
+
+        <ImageButton
+            android:id="@+id/parkimg2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/parkimg1"
+            android:background="@drawable/iv_bg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/takephoto" />
+
+        <ImageButton
+            android:id="@+id/parkimg3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/parkimg1"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/iv_bg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/takephoto" />
+
+        <ImageButton
+            android:id="@+id/parkimg4"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/parkimg2"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/parkimg3"
+            android:background="@drawable/iv_bg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/takephoto" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ly3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/btninfosure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ff30cf86"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="确认打印"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/btninfocancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:background="#ff30cf86"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="		取消		"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+</LinearLayout>

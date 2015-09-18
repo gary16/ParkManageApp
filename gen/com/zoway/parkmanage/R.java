@@ -107,25 +107,27 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_input_info=0x7f030000;
-        public static final int activity_login=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_ocr_result=0x7f030003;
-        public static final int activity_printinfo=0x7f030004;
-        public static final int activity_show_ocr_photo=0x7f030005;
-        public static final int activity_take_photo=0x7f030006;
-        public static final int mainlistdetails=0x7f030007;
-        public static final int mainlistparent=0x7f030008;
-        public static final int province_spinner=0x7f030009;
+        public static final int activity_input_info_activity_for_k6_p100=0x7f030001;
+        public static final int activity_login=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int activity_ocr_result=0x7f030004;
+        public static final int activity_printinfo=0x7f030005;
+        public static final int activity_show_ocr_photo=0x7f030006;
+        public static final int activity_take_photo=0x7f030007;
+        public static final int mainlistdetails=0x7f030008;
+        public static final int mainlistparent=0x7f030009;
+        public static final int province_spinner=0x7f03000a;
     }
     public static final class menu {
         public static final int camera=0x7f0a0000;
         public static final int input_info=0x7f0a0001;
-        public static final int login=0x7f0a0002;
-        public static final int main=0x7f0a0003;
-        public static final int ocr_cap_photo=0x7f0a0004;
-        public static final int ocr_photo=0x7f0a0005;
-        public static final int ocr_result=0x7f0a0006;
-        public static final int printinfo=0x7f0a0007;
+        public static final int input_info_activity_for_k6_p100=0x7f0a0002;
+        public static final int login=0x7f0a0003;
+        public static final int main=0x7f0a0004;
+        public static final int ocr_cap_photo=0x7f0a0005;
+        public static final int ocr_photo=0x7f0a0006;
+        public static final int ocr_result=0x7f0a0007;
+        public static final int printinfo=0x7f0a0008;
     }
     public static final class raw {
         public static final int ic_launcher=0x7f040000;
@@ -139,11 +141,13 @@ public final class R {
         public static final int parkinfonotification=0x7f07000c;
         public static final int title_activity_camera=0x7f070005;
         public static final int title_activity_input_info=0x7f070009;
+        public static final int title_activity_input_info_activity_for_k6_p100=0x7f07000e;
         public static final int title_activity_login=0x7f070003;
         public static final int title_activity_main=0x7f070004;
         public static final int title_activity_ocr_result=0x7f070006;
         public static final int title_activity_print_info=0x7f07000a;
         public static final int title_activity_printinfo=0x7f07000b;
+        public static final int title_activity_printinfo_activity_for_k6_p100=0x7f07000d;
         public static final int title_activity_show_ocr_photo=0x7f070008;
         public static final int title_activity_take_ocr_photo=0x7f070007;
     }

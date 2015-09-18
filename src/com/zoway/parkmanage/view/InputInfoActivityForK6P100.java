@@ -3,6 +3,7 @@ package com.zoway.parkmanage.view;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -14,8 +15,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,19 +30,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.landicorp.android.eptapi.DeviceService;
-import com.landicorp.android.eptapi.device.Printer;
-import com.landicorp.android.eptapi.device.Printer.Format;
-import com.landicorp.android.eptapi.exception.ReloginException;
-import com.landicorp.android.eptapi.exception.RequestException;
-import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
-import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
-import com.landicorp.android.eptapi.utils.QrCode;
+import com.bw.spdev.PosDevCallBackController;
+import com.bw.spdev.RspCode;
+import com.odm.misc.MiscDevice;
+import com.odm.misc.MiscUtil;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.http.RegisterVehicleInfoWsdl;
+import com.zoway.parkmanage.image.Bmp1BitsBytesProcuder;
 import com.zoway.parkmanage.utils.PathUtils;
+import com.zoway.parkmanage.utils.PosUtils;
 
-public class InputInfoActivity extends Activity implements OnClickListener {
+public class InputInfoActivityForK6P100 extends Activity implements
+		OnClickListener {
 
 	public final int REQIMG1 = 0X01;
 	public final int REQIMG2 = 0X02;
@@ -49,6 +51,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	private String sno = null;
 	private String rt = null;
 	private String hphm = null;
+	PrintThread rth = null;
 	private String img_path = PathUtils.getSdPath();
 
 	// size 48*48
@@ -61,7 +64,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	private Bitmap bitmapSelected3 = null;
 	private ProgressDialog pDia;
 	private TextView txtparktime;
-
 	private Handler handler = new Handler() {
 
 		@Override
@@ -73,7 +75,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				nm.cancel(Integer.parseInt(rcid));
 				pDia.dismiss();
-				Toast.makeText(InputInfoActivity.this, "处理成功",
+				Toast.makeText(InputInfoActivityForK6P100.this, "处理成功",
 						Toast.LENGTH_LONG).show();
 				try {
 					Thread.sleep(1000);
@@ -82,9 +84,9 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 					e.printStackTrace();
 				}
 
-				Intent intent = new Intent(InputInfoActivity.this,
+				Intent intent = new Intent(InputInfoActivityForK6P100.this,
 						MainActivity.class);
-				InputInfoActivity.this.startActivity(intent);
+				InputInfoActivityForK6P100.this.startActivity(intent);
 				break;
 			case 2:
 
@@ -94,90 +96,11 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		}
 	};
 
-	public void runOnUiThreadDelayed(Runnable r, int delayMillis) {
-		handler.postDelayed(r, delayMillis);
-	}
-
-	/**
-	 * To gain control of the device service, you need invoke this method before
-	 * any device operation.
-	 */
-	public void bindDeviceService() {
-		try {
-			DeviceService.login(this);
-		} catch (RequestException e) {
-			// Rebind after a few milliseconds,
-			// If you want this application keep the right of the device service
-			runOnUiThreadDelayed(new Runnable() {
-				@Override
-				public void run() {
-					bindDeviceService();
-				}
-			}, 300);
-			e.printStackTrace();
-		} catch (ServiceOccupiedException e) {
-			e.printStackTrace();
-		} catch (ReloginException e) {
-			e.printStackTrace();
-		} catch (UnsupportMultiProcess e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Release the right of using the device.
-	 */
-	public void unbindDeviceService() {
-		DeviceService.logout();
-	}
-
-	private Printer.Progress progress = new Printer.Progress() {
-
-		@Override
-		public void doPrint(Printer printer) throws Exception {
-			// TODO Auto-generated method stub
-			Format format = new Format();
-			// Use this 5x7 dot and 1 times width, 2 times height
-			format.setAscSize(Format.ASC_DOT5x7);
-			format.setAscScale(Format.ASC_SC1x2);
-			printer.setFormat(format);
-			printer.printText("        路边停车收费凭条\n");
-			format.setAscScale(Format.ASC_SC1x1);
-			printer.setFormat(format);
-			printer.printText("\n");
-			printer.printText("商户名称:测试商户\n");
-			printer.printText("车牌号码:粤X12345\n");
-			printer.printText("停车位置:测试路段第" + sno + "车位\n");
-			printer.printText("停车时间:" + rt + "\n");
-			printer.printText("操作员:测试人员\n\n");
-			printer.setAutoTrunc(false);
-			printer.printText("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
-			printer.printText("\n\n");
-
-			String cUrl = String.format(
-					"http://cx.zoway.com.cn/Pay/detail/%s.do", rcno);
-			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(5);
-		}
-
-		@Override
-		public void onFinish(int arg0) {
-			// TODO Auto-generated method stub
-			Message msg = new Message();
-			msg.what = 1;
-			handler.sendMessage(msg);
-		}
-
-		@Override
-		public void onCrash() {
-			// TODO Auto-generated method stub
-		}
-	};
-
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) { // 监控/拦截/屏蔽返回键
-
+			PosUtils.sp.SpDevRelease();
+			PowerOffDevice();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -203,18 +126,14 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			startActivityForResult(intent, REQIMG3);
 			break;
 		case R.id.btninfosure:
-			pDia = ProgressDialog.show(InputInfoActivity.this, "打印停车纸",
-					"正在打印中", true, false);
-
-			try {
-				progress.start();
-			} catch (RequestException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			pDia = ProgressDialog.show(InputInfoActivityForK6P100.this,
+					"打印停车纸", "正在打印中", true, false);
+			PosUtils.sp.SpDevSetAppContext(InputInfoActivityForK6P100.this);
 			Thread tt1 = new Thread(new UploadDataThread());
 			tt1.start();
-
+			rth = new PrintThread();
+			rth.startRunning();
+			rth.start();
 			break;
 		default:
 			break;
@@ -249,6 +168,16 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		img3.setOnClickListener(this);
 		infosure.setOnClickListener(this);
 
+		PowerOnDevice();
+		PosUtils.InitDev();
+		PosUtils.sys.SetCmdSendMaxWT(1000);
+		PosUtils.sys.SetRspRecvMaxWT(1000);
+		if (PosUtils.sys.SysGetSpVersion() == null) {
+		} else {
+			PosUtils.sys.SysUnLockFunction();
+			PosUtils.sys.SetCmdSendMaxWT(1000);
+			PosUtils.sys.SetRspRecvMaxWT(10000);
+		}
 	}
 
 	@Override
@@ -314,41 +243,193 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		return bitmap;
 	}
 
-	// void toPrintBmp() {
-	// PosUtils.sp.SpDevSetAppContext(getApplicationContext());
-	// // set the callback
-	// PosUtils.printer.Init(new DeviceResponseHandlerImpl(),
-	// getApplicationContext());
-	// PosUtils.printer.ClearPrintData();// clean the data
-	// PosUtils.printer.SetStep(1000);// set the step
-	// PosUtils.printer.SetPrinterPara((short) 1250);// set the gray
-	// Bmp1BitsBytesProcuder bp = new Bmp1BitsBytesProcuder();
-	//
-	// byte[] ptr1 = bp.create352pixQRImage(String.format(
-	// "http://cx.zoway.com.cn/Pay/detail/%s.do", rcno));
-	// PosUtils.printer.SetProperty(1);// 粗体
-	// PosUtils.printer.SetFontSize(30);
-	// PosUtils.printer.AddString("             路边停车收费凭条\n");
-	// PosUtils.printer.SetProperty(0);
-	// PosUtils.printer.SetFontSize(26);
-	// PosUtils.printer.AddString("\n");
-	// PosUtils.printer.AddString("商户名称:测试商户\n");
-	// PosUtils.printer.AddString("车牌号码:粤X12345\n");
-	// PosUtils.printer.AddString("停车位置:测试路段第" + sno + "车位\n");
-	// PosUtils.printer.AddString("停车时间:" + rt + "\n");
-	// PosUtils.printer.AddString("操作员:测试人员\n\n");
-	// PosUtils.printer
-	// .AddString("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
-	// PosUtils.printer.AddBmpData(ptr1, ptr1.length, 20, 530);
-	// PosUtils.printer.Print();
-	//
-	// }
+	void toPrintBmp() {
+		PosUtils.sp.SpDevSetAppContext(getApplicationContext());
+		// set the callback
+		PosUtils.printer.Init(new DeviceResponseHandlerImpl(),
+				getApplicationContext());
+		PosUtils.printer.ClearPrintData();// clean the data
+		PosUtils.printer.SetStep(1000);// set the step
+		PosUtils.printer.SetPrinterPara((short) 1250);// set the gray
+		Bmp1BitsBytesProcuder bp = new Bmp1BitsBytesProcuder();
+
+		byte[] ptr1 = bp.create352pixQRImage(String.format(
+				"http://cx.zoway.com.cn/Pay/detail/%s.do", rcno));
+		PosUtils.printer.SetProperty(1);// 粗体
+		PosUtils.printer.SetFontSize(30);
+		PosUtils.printer.AddString("             路边停车收费凭条\n");
+		PosUtils.printer.SetProperty(0);
+		PosUtils.printer.SetFontSize(26);
+		PosUtils.printer.AddString("\n");
+		PosUtils.printer.AddString("商户名称:测试商户\n");
+		PosUtils.printer.AddString("车牌号码:粤X12345\n");
+		PosUtils.printer.AddString("停车位置:测试路段第" + sno + "车位\n");
+		PosUtils.printer.AddString("停车时间:" + rt + "\n");
+		PosUtils.printer.AddString("操作员:测试人员\n\n");
+		PosUtils.printer
+				.AddString("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
+		PosUtils.printer.AddBmpData(ptr1, ptr1.length, 20, 530);
+		PosUtils.printer.Print();
+
+	}
+
+	class DeviceResponseHandlerImpl extends PosDevCallBackController {
+		@Override
+		public int onPrinterPrint(int status) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+
+				}
+			});
+
+			switch (status) {
+			case RspCode.RSPOK:
+				Log.e(null, "print finish");
+				break;
+			case RspCode.RET_PRINTER_ERR_COMERR:
+				Log.e(null, "RET_PRINTER_ERR_COMERR");
+				break;
+			case RspCode.RET_PRINTER_ERR_BMPLOST:
+				Log.e(null, "RET_PRINTER_ERR_BMPLOST");
+				break;
+			case RspCode.RET_PRINTER_ERR_NOPAPER:
+				Log.e(null, "RET_PRINTER_ERR_NOPAPER");
+				break;
+			case RspCode.RET_PRINTER_ERR_HT:
+				Log.e(null, "RET_PRINTER_ERR_HT");
+				break;
+
+			case RspCode.RET_PRINTER_ERR_OTHER:
+				Log.e(null, "RET_PRINTER_ERR_OTHER");
+				break;
+			default:
+				break;
+			}
+			Message msg = new Message();
+			msg.what = 1;
+			handler.sendMessage(msg);
+			return 0;
+		}
+	}
+
+	public byte[] readFromRaw() {
+		String res = "";
+		try {
+
+			InputStream in = getResources().openRawResource(R.raw.test2);
+
+			int length = in.available();
+
+			byte[] buffer = new byte[length];
+
+			in.read(buffer);
+
+			in.close();
+			return buffer;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	private class UploadDataThread implements Runnable {
+
 		@Override
 		public void run() {
 			RegisterVehicleInfoWsdl rv = new RegisterVehicleInfoWsdl();
 			rv.uploadData(Integer.parseInt(rcid), 2, 23, "小型汽车", "粤X123456");
+		}
+	}
+
+	private class PrintThread extends Thread {
+		private boolean mStopRunning = false;
+
+		// private AlertDialog show;
+		public void stopRunning() {
+			mStopRunning = true;
+		}
+
+		public void startRunning() {
+			mStopRunning = false;
+		}
+
+		public void run() {
+			Looper.prepare();
+			super.run();
+
+			// toPrint();
+			// or
+			toPrintBmp();
+
+			Looper.loop();
+			rth = null;
+
+		}
+	};
+
+	void PowerOnDevice() {
+		Class<?> c;
+
+		String postty = null;
+		try {
+
+			// Log.e(null,"1");
+			c = Class.forName("android.os.SystemProperties");
+
+			Method get = c.getMethod("get", String.class);
+			postty = (String) get.invoke(c, "ro.config.postty");
+
+			if (postty == null || postty.isEmpty() == true) {
+				PosUtils.misPos = new MiscDevice(MiscUtil.POS_MISC_DEV,
+						MiscUtil.POS_MISC_IO);
+				PosUtils.misPos.setPinHigh(MiscUtil.POS_PIN_PWR);
+				PosUtils.misPos.setPinHigh(MiscUtil.POS_PIN_PWD);
+				return;
+			} else if (postty.length() == 0) {
+				PosUtils.misPos = new MiscDevice(MiscUtil.POS_MISC_DEV,
+						MiscUtil.POS_MISC_IO);
+				PosUtils.misPos.setPinHigh(MiscUtil.POS_PIN_PWR);
+				PosUtils.misPos.setPinHigh(MiscUtil.POS_PIN_PWD);
+				return;
+
+			} else {
+				return;
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+	void PowerOffDevice() {
+		Class<?> c;
+
+		String postty = null;
+		try {
+
+			// Log.e(null,"1");
+			c = Class.forName("android.os.SystemProperties");
+
+			Method get = c.getMethod("get", String.class);
+			postty = (String) get.invoke(c, "ro.config.postty");
+
+			if (postty == null || postty.isEmpty() == true) {
+
+				PosUtils.misPos.setPinLow(MiscUtil.POS_PIN_PWR);
+				PosUtils.misPos.setPinLow(MiscUtil.POS_PIN_PWD);
+
+				return;
+			} else if (postty.length() == 0) {
+				PosUtils.misPos.setPinLow(MiscUtil.POS_PIN_PWR);
+				PosUtils.misPos.setPinLow(MiscUtil.POS_PIN_PWD);
+				return;
+
+			} else {
+				return;
+			}
+		} catch (Exception e) {
+
 		}
 	}
 
@@ -357,14 +438,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 
 		super.onPause();
-		unbindDeviceService();
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		bindDeviceService();
 	}
 
 }

@@ -20,4 +20,7 @@
         <item>沪</item>
     </string-array>
 
+    <string name="title_activity_printinfo_activity_for_k6_p100">PrintinfoActivityForK6P100</string>
+    <string name="title_activity_input_info_activity_for_k6_p100">InputInfoActivityForK6P100</string>
+
 </resources>
