@@ -2,28 +2,29 @@ package com.zoway.parkmanage.view;
 
 import java.io.File;
 
-import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.R.id;
-import com.zoway.parkmanage.R.layout;
-import com.zoway.parkmanage.R.menu;
-import com.zoway.parkmanage.image.BitmapHandle;
-import com.zoway.parkmanage.image.HphmRegonize;
-import com.zoway.parkmanage.utils.LogUtils;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ImageView;
+
+import com.wintone.plateid.PlateCfgParameter;
+import com.wintone.plateid.PlateRecognitionParameter;
+import com.wintone.plateid.RecogService;
+import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.image.BitmapHandle;
+import com.zoway.parkmanage.image.HphmRegonize;
+import com.zoway.parkmanage.utils.LogUtils;
 
 public class ShowOcrPhotoActivity extends Activity {
 
@@ -31,12 +32,41 @@ public class ShowOcrPhotoActivity extends Activity {
 	private String rcno = null;
 	private String sno = null;
 	private String rt = null;
+	public RecogService.MyBinder recogBinder;
+	public int iInitPlateIDSDK;
+	public int nRet;
+	private boolean usepara;
+	private String lpFileName;
+	private String pic;
+	private String devcode;
+	private String datefile;
+	private int imageformat = 1;
+	int bVertFlip = 0;
+	int bDwordAligned = 1;
+	boolean bGetVersion = false;
+	private int ReturnAuthority = -1;
+	private int nPlateLocate_Th;// 识别阈值(取值范围0-9,5:默认阈值0:最宽松的阈值9:最严格的阈值)
+	private int nOCR_Th;
+	private int bIsAutoSlope;// 是否要倾斜校正
+	private int nSlopeDetectRange;// 倾斜校正的范围(取值范围0-16)
+	private int nContrast;// 清晰度指数(取值范围0-9,最模糊时设为1;最清晰时设为9)
+	private int bIsNight;// 是否夜间模式：1是；0不是
+	private String szProvince;// 省份顺序
+	private int individual;// 是否开启个性化车牌:0是；1不是
+	private int tworowyellow;// 双层黄色车牌是否开启:2是；3不是
+	private int armpolice;// 单层武警车牌是否开启:4是；5不是
+	private int tworowarmy;// 双层军队车牌是否开启:6是；7不是
+	private int tractor; // 农用车车牌是否开启:8是；9不是
+	private int onlytworowyellow;// 只识别双层黄牌是否开启:10是；11不是
+	private int embassy;// 使馆车牌是否开启:12是；13不是
+	private int onlylocation;// 只定位车牌是否开启:14是；15不是
+	private int armpolice2;// 双层武警车牌是否开启:16是；17不是
+	String[] fieldvalue = new String[14];
 	private Handler handler = new Handler() {
 		private ProgressDialog pDia;
 
 		@Override
 		public void handleMessage(Message msg) {
-			// TODO 接收消息并且去更新UI线程上的控件内容
 			super.handleMessage(msg);
 			Intent intent = new Intent(ShowOcrPhotoActivity.this,
 					OcrResultActivity.class);
@@ -47,17 +77,13 @@ public class ShowOcrPhotoActivity extends Activity {
 			String s = (String) msg.obj;
 			switch (msg.what) {
 			case 1:
-				pDia = ProgressDialog.show(ShowOcrPhotoActivity.this, "识别车牌图片",
-						"正在识别中", true, false);
+				// pDia = ProgressDialog.show(ShowOcrPhotoActivity.this,
+				// "识别车牌图片",
+				// "正在识别中", true, false);
 				break;
 			case 2:
-				pDia.dismiss();
+				// pDia.dismiss();
 				intent.putExtra("s", s);
-				ShowOcrPhotoActivity.this.startActivity(intent);
-				break;
-			case 3:
-				pDia.dismiss();
-				intent.putExtra("s", "X12345");
 				ShowOcrPhotoActivity.this.startActivity(intent);
 				break;
 			default:
@@ -75,50 +101,100 @@ public class ShowOcrPhotoActivity extends Activity {
 		this.startActivity(ii);
 	}
 
-	private class DoOcrThread implements Runnable {
-		private Bitmap b1;
-
-		public DoOcrThread(Bitmap bb) {
-			b1 = bb;
+	public ServiceConnection recogConn = new ServiceConnection() {
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			recogConn = null;
 		}
 
-		public void run() {
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			recogBinder = (RecogService.MyBinder) service;
+			int inRet = recogBinder.getInitPlateIDSDK();
+			// nRet = recogBinder.getInitPlateIDSDK();
+			inRet = 0;
+			if (inRet != 0) {
+				// Toast.makeText(getApplicationContext(), "验证授权或初始化失败:" + nRet,
+				// Toast.LENGTH_SHORT).show();
 
-			Message msg = new Message();
-			msg.what = 1;
-			handler.sendMessage(msg);
-
-			try {
-				BitmapHandle bh = new BitmapHandle();
-				bh.setSrcBitmap(b1);
-				// 预处理
-				Bitmap bBinar = bh.preTreateImg();
-				// 返回7个图片
-				Bitmap[] bArr = bh.getAllChrBitmap(bBinar);
-				StringBuilder sb1 = new StringBuilder("");
-				if (bArr.length > 0) {
-					for (int i = 1; i < bArr.length; i++) {
-						if (bArr[i] != null) {
-							HphmRegonize hr = new HphmRegonize();
-							String ss1 = hr.doOcr2(bArr[i]);
-							sb1.append(ss1);
-							LogUtils.i(ShowOcrPhotoActivity.class, ss1);
-						} else {
-							sb1.append("?");
-						}
-					}
+			} else {
+				if (usepara == false) {
+					recogBinder.setRecogArgu(lpFileName, imageformat,
+							bGetVersion, bVertFlip, bDwordAligned);
+				} else {
+					System.out.println("usepara");
+					// 设置识别用到的参数，采用直接设置参数对象的方式设置识别参数，所有参数定义请查看文档
+					PlateCfgParameter cfgparameter = new PlateCfgParameter();
+					cfgparameter.armpolice = armpolice;
+					cfgparameter.armpolice2 = armpolice2;
+					cfgparameter.bIsAutoSlope = bIsAutoSlope;
+					cfgparameter.bIsNight = bIsNight;
+					cfgparameter.embassy = embassy;
+					cfgparameter.individual = individual;
+					cfgparameter.nContrast = nContrast;
+					cfgparameter.nOCR_Th = nOCR_Th;
+					cfgparameter.nPlateLocate_Th = nPlateLocate_Th;
+					cfgparameter.nSlopeDetectRange = nSlopeDetectRange;
+					cfgparameter.onlylocation = onlylocation;
+					cfgparameter.tworowyellow = tworowyellow;
+					cfgparameter.tworowarmy = tworowarmy;
+					if (szProvince == null)
+						szProvince = "";
+					cfgparameter.szProvince = szProvince;
+					cfgparameter.onlytworowyellow = onlytworowyellow;
+					cfgparameter.tractor = tractor;
+					recogBinder.setRecogArgu(cfgparameter, imageformat,
+							bVertFlip, bDwordAligned);
 				}
-				Message msg1 = new Message();
-				msg1.what = 2;
-				msg1.obj = sb1.toString();
-				handler.sendMessage(msg1);
-			} catch (Exception e) {
-				e.printStackTrace();
-				Message msg2 = new Message();
-				msg2.what = 3;
-				handler.sendMessage(msg2);
+				nRet = recogBinder.getnRet();
+				// fieldvalue = recogBinder.doRecog(pic, width, height);
+				PlateRecognitionParameter prp = new PlateRecognitionParameter();
+				prp.dataFile = datefile;
+				prp.devCode = devcode;
+				prp.pic = lpFileName;
+				fieldvalue = recogBinder.doRecogDetail(prp);
+				nRet = recogBinder.getnRet();
 			}
+			// 解绑识别服务。
+			if (recogBinder != null) {
+				unbindService(recogConn);
+			}
+			// 用户不指定lpFileName时删除所拍图片
+			if (null != pic && !pic.equals("")) {
+				// System.out.println("null != lpFileName && !lpFileName.equals");
+			} else {
+				// System.out.println("lpFileName="+lpFileName);
+				File picFile = new File(lpFileName);
+				if (picFile.exists()) {
+					picFile.delete();
+				}
+			}
+			// 返回识别结果
+			// Log.i(TAG, "pic="+pic);
+			// Intent intentReturn = new Intent();
+			// intentReturn.putExtra("ReturnAuthority", ReturnAuthority);
+			// intentReturn.putExtra("nRet", nRet);
+			// intentReturn.putExtra("ReturnLPFileName", lpFileName);
+			// intentReturn.putExtra("fieldvalue", fieldvalue);
+			// setResult(Activity.RESULT_OK, intentReturn);
+			// finish();
+			Message msg1 = new Message();
+			msg1.what = 2;
+			if (fieldvalue[0] != null) {
+				msg1.obj = fieldvalue[0].substring(1, fieldvalue[0].length());
+			} else {
+				msg1.obj = "?????";
+			}
+			handler.sendMessage(msg1);
+		}
+	};
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int ii = 0;
+		if (resultCode == Activity.RESULT_OK) {
+
+			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 
@@ -137,21 +213,14 @@ public class ShowOcrPhotoActivity extends Activity {
 		sno = intent.getStringExtra("sno");
 		rt = intent.getStringExtra("rt");
 		File f = new File(fn);
+		lpFileName = fn;
+		pic = lpFileName;
 		if (f.exists()) {
-			Bitmap mBitmap = BitmapFactory.decodeFile(fn);
-			Log.d("ShowOcrPhotoActivity",
-					mBitmap.getWidth() + "..." + mBitmap.getHeight());
-			Matrix matrix = new Matrix();
-			matrix.postRotate(90.0f);
-			Bitmap rotaBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
-					mBitmap.getWidth(), mBitmap.getHeight(), matrix, false);
-			// Bitmap rectBitmap = BitmapHandle.getRectBitmap(mBitmap, 0.625f,
-			// 0.15f);
-			iv1.setImageBitmap(rotaBitmap);
-			mBitmap.recycle();
-			mBitmap = null;
-			Thread t1 = new Thread(new DoOcrThread(rotaBitmap));
-			t1.start();
+			Message msg1 = new Message();
+			msg1.what = 1;
+			handler.sendMessage(msg1);
+			Intent recogIntent = new Intent(this, RecogService.class);
+			bindService(recogIntent, recogConn, Service.BIND_AUTO_CREATE);
 		}
 
 	}

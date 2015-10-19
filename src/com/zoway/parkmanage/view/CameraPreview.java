@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.hardware.Camera.Size;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -38,10 +38,13 @@ public class CameraPreview extends SurfaceView implements Callback {
 			boolean b = mparam.isSmoothZoomSupported();
 			boolean c = mparam.isZoomSupported();
 			mparam.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-			// List l = mparam.getSupportedPictureSizes();
+			List l = mparam.getSupportedPictureSizes();
 			// Size s = mparam.getPictureSize();
 			maxzoom = mparam.getMaxZoom();
-			mparam.setPictureSize(2048, 1536);
+			mparam.setPictureFormat(PixelFormat.JPEG);
+			mparam.setRotation(90);
+			// mparam.setPictureSize(1920, 1080);
+			mparam.setPictureSize(1600, 1200);
 			mCamera.setParameters(mparam);
 			mCamera.setDisplayOrientation(90);
 			mCamera.setPreviewDisplay(holder);

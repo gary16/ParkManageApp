@@ -32,18 +32,28 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnressure:
-			Intent intent = new Intent(this, InputInfoActivity.class);
+			Intent intent = new Intent(this, InputInfoActivityForK6P100.class);
 			intent.putExtra("rcid", rcid);
 			intent.putExtra("rcno", rcno);
 			intent.putExtra("sno", sno);
 			intent.putExtra("rt", rt);
 			intent.putExtra("hphm", txtocrreshphm.getText().toString());
 			this.startActivity(intent);
+			break;
+		case R.id.btnrescancel:
+			Intent intent1 = new Intent(this, TakeOcrPhotoActivity.class);
+			intent1.putExtra("rcid", rcid);
+			intent1.putExtra("rcno", rcno);
+			intent1.putExtra("sno", sno);
+			intent1.putExtra("rt", rt);
+			this.startActivity(intent1);
+			break;
 		}
 
 	}
 
 	private Button btnressure;
+	private Button btnrescancel;
 	private EditText txtocrreshphm;
 
 	@Override
@@ -67,9 +77,11 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 		sno = intent.getStringExtra("sno");
 		rt = intent.getStringExtra("rt");
 		btnressure = (Button) this.findViewById(R.id.btnressure);
+		btnrescancel = (Button) this.findViewById(R.id.btnrescancel);
 		txtocrreshphm = (EditText) this.findViewById(R.id.txtocrreshphm);
 		txtocrreshphm.setText(s);
 		btnressure.setOnClickListener(this);
+		btnrescancel.setOnClickListener(this);
 		mSpinner = (Spinner) this.findViewById(R.id.comshengfen);
 		this.initView();
 	}

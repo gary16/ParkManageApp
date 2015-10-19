@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -70,6 +71,21 @@
             android:name="com.zoway.parkmanage.view.InputInfoActivityForK6P100"
             android:label="@string/title_activity_input_info_activity_for_k6_p100" >
         </activity>
+
+        <service
+            android:name="com.wintone.plateid.AuthService"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="wintone.plateid.authservice" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.wintone.plateid.RecogService"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="wintone.plateid.recogService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

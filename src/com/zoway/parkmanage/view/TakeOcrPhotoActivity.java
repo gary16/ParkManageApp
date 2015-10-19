@@ -140,6 +140,13 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 		mPicture = new pitcCallback();
 	}
 
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		int uiRot = getWindowManager().getDefaultDisplay().getRotation();
+	}
+
 	private class pitcCallback implements PictureCallback {
 
 		@Override
@@ -173,12 +180,12 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 			if (TakeOcrPhotoActivity.this.mCamera != null) {
 				Size ss = TakeOcrPhotoActivity.this.mCamera.getParameters()
 						.getPictureSize();
-				BitmapHandle.writeJpgFromBytes2(fn, ss.width, ss.height, dat,
+				BitmapHandle.writeOcrJpgFromBytes(fn, ss.height, ss.width, dat,
 						100);
 			}
 			Message msg = new Message();
 			msg.what = 2;
-			msg.obj = fn;
+			msg.obj = this.fn;
 			handler.sendMessage(msg);
 
 		}
@@ -192,7 +199,9 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 		super.onPause();
 		mCamera.stopPreview();
 		mCamera.release();
-		pDia1.dismiss();
+		if (pDia1 != null) {
+			pDia1.dismiss();
+		}
 	}
 
 	@Override

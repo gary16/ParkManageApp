@@ -43,18 +43,21 @@ public class BitmapHandle {
 		return dst;
 	}
 
-	public static void writeJpgFromBytes(String filePath, byte[] data, int ysb) {
+	public static void writeJpgFromBytes(String filePath, int wid, int hei,
+			byte[] data, int ysb) {
 		File f1 = new File(filePath);
 		try {
+			if (f1.exists()) {
+				f1.delete();
+			}
+			f1.createNewFile();
 			BufferedOutputStream bos = new BufferedOutputStream(
 					new FileOutputStream(f1));
-
-			Matrix mat = new Matrix();
-			mat.setRotate(90);
-			int ii = data.length;
-			Bitmap a = BitmapFactory.decodeByteArray(data, 0, data.length);
-			// Bitmap b = Bitmap.createBitmap(a, 0, 0, a.getWidth(),
-			// a.getHeight(), mat, true);
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			opts.inInputShareable = true;
+			opts.inPurgeable = true;
+			Bitmap a = BitmapFactory
+					.decodeByteArray(data, 0, data.length, opts);
 			a.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
 			bos.flush();
 			bos.close();
@@ -91,6 +94,40 @@ public class BitmapHandle {
 			bos.close();
 			brd.recycle();
 			brd = null;
+			a.recycle();
+			a = null;
+			System.gc();
+		} catch (Exception er) {
+			er.printStackTrace();
+		}
+	}
+
+	public static void writeOcrJpgFromBytes(String filePath, int wid, int hei,
+			byte[] data, int ysb) {
+		File f1 = new File(filePath);
+		try {
+			if (f1.exists()) {
+				f1.delete();
+			}
+			f1.createNewFile();
+			BufferedOutputStream bos = new BufferedOutputStream(
+					new FileOutputStream(f1));
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			opts.inInputShareable = true;
+			opts.inPurgeable = true;
+			Bitmap a = BitmapFactory
+					.decodeByteArray(data, 0, data.length, opts);
+
+			Matrix matrix = new Matrix();
+			float widthScale = (float) 1.0;
+			float heightScale = (float) 1536 / a.getHeight();
+			matrix.postScale(widthScale, heightScale);
+
+			a = Bitmap.createBitmap(a, 0, 0, a.getWidth(), 1536, matrix, true);
+
+			a.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
+			bos.flush();
+			bos.close();
 			a.recycle();
 			a = null;
 			System.gc();

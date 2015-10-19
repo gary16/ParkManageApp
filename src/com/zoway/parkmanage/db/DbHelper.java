@@ -15,12 +15,22 @@ public class DbHelper {
 		}
 	}
 
+	public static void createTables() {
+		String ct1Str = " cretae table  if not exists t_unhandlelist (tid int primary key,recordid int,recordno varchar,parkid int,parkno varchar)";
+		execSql(ct1Str, null);
+	}
+
 	public static void execSql(String sql, Object[] bindArgs) {
+		db.beginTransaction();
 		db.execSQL(sql, bindArgs);
+		db.endTransaction();
 	}
 
 	public static Cursor rawQuery(String sql, String[] selectionArgs) {
-		return db.rawQuery(sql, selectionArgs);
+		db.beginTransaction();
+		Cursor cur = db.rawQuery(sql, selectionArgs);
+		db.endTransaction();
+		return cur;
 	}
 
 	public static void closeDatabase() {
