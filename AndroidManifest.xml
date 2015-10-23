@@ -16,7 +16,7 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="14"
         android:targetSdkVersion="16" />
 
     <application
@@ -40,8 +40,7 @@
         </activity>
         <activity
             android:name=".view.OcrResultActivity"
-            android:label="@string/title_activity_ocr_result"
-            android:theme="@style/SunnyTransparent" >
+            android:label="@string/title_activity_ocr_result" >
         </activity>
         <activity
             android:name=".view.ShowOcrPhotoActivity"
@@ -68,7 +67,7 @@
             android:label="@string/title_activity_printinfo_activity_for_k6_p100" >
         </activity>
         <activity
-            android:name="com.zoway.parkmanage.view.InputInfoActivityForK6P100"
+            android:name=".view.InputInfoActivityForK6P100"
             android:label="@string/title_activity_input_info_activity_for_k6_p100" >
         </activity>
 
@@ -86,6 +85,23 @@
                 <action android:name="wintone.plateid.recogService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".view.PaybillActivity"
+            android:label="@string/title_activity_paybill" >
+        </activity>
+        <activity
+            android:name=".view.FeeEvasionActivity"
+            android:label="@string/title_activity_fee_evasion" >
+        </activity>
+        <activity
+            android:name=".view.QueryListsActivity"
+            android:label="@string/title_activity_auery_lists" >
+        </activity>
+        <activity
+            android:name="com.zoway.parkmanage.view.UnhandledListActivity"
+            android:label="@string/title_activity_unhandled_list" >
+        </activity>
     </application>
 
 </manifest>

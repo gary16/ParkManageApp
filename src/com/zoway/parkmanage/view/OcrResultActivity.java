@@ -27,18 +27,34 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 	private String rcno = null;
 	private String sno = null;
 	private String rt = null;
+	private String fn = null;
+	private int type = 0;
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnressure:
-			Intent intent = new Intent(this, InputInfoActivityForK6P100.class);
-			intent.putExtra("rcid", rcid);
-			intent.putExtra("rcno", rcno);
-			intent.putExtra("sno", sno);
-			intent.putExtra("rt", rt);
-			intent.putExtra("hphm", txtocrreshphm.getText().toString());
-			this.startActivity(intent);
+			if (type == 1) {
+				Intent intent = new Intent(this, InputInfoActivity.class);
+				intent.putExtra("rcid", rcid);
+				intent.putExtra("rcno", rcno);
+				intent.putExtra("sno", sno);
+				intent.putExtra("rt", rt);
+				intent.putExtra("type", type);
+				intent.putExtra("fn", fn);
+				intent.putExtra("hphm", txtocrreshphm.getText().toString());
+				this.startActivity(intent);
+			} else if (type == 2) {
+				Intent intent = new Intent(this, PaybillActivity.class);
+				intent.putExtra("rcid", rcid);
+				intent.putExtra("rcno", rcno);
+				intent.putExtra("sno", sno);
+				intent.putExtra("rt", rt);
+				intent.putExtra("type", type);
+				intent.putExtra("fn", fn);
+				intent.putExtra("hphm", txtocrreshphm.getText().toString());
+				this.startActivity(intent);
+			}
 			break;
 		case R.id.btnrescancel:
 			Intent intent1 = new Intent(this, TakeOcrPhotoActivity.class);
@@ -46,6 +62,8 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 			intent1.putExtra("rcno", rcno);
 			intent1.putExtra("sno", sno);
 			intent1.putExtra("rt", rt);
+			intent1.putExtra("fn", fn);
+			intent1.putExtra("type", type);
 			this.startActivity(intent1);
 			break;
 		}
@@ -76,6 +94,8 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 		rcno = intent.getStringExtra("rcno");
 		sno = intent.getStringExtra("sno");
 		rt = intent.getStringExtra("rt");
+		fn = intent.getStringExtra("fn");
+		type = intent.getIntExtra("type", 0);
 		btnressure = (Button) this.findViewById(R.id.btnressure);
 		btnrescancel = (Button) this.findViewById(R.id.btnrescancel);
 		txtocrreshphm = (EditText) this.findViewById(R.id.txtocrreshphm);

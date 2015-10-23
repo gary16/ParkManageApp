@@ -115,21 +115,72 @@ public class BitmapHandle {
 			BitmapFactory.Options opts = new BitmapFactory.Options();
 			opts.inInputShareable = true;
 			opts.inPurgeable = true;
-			Bitmap a = BitmapFactory
-					.decodeByteArray(data, 0, data.length, opts);
+			Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length,
+					opts);
 
 			Matrix matrix = new Matrix();
-			float widthScale = (float) 1.0;
-			float heightScale = (float) 1536 / a.getHeight();
-			matrix.postScale(widthScale, heightScale);
+			matrix.preRotate(90);
+			Bitmap rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+					bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+			if (bitmap != rotate_bitmap) {
+				if (!bitmap.isRecycled()) {
+					bitmap.recycle();
+					bitmap = null;
+				}
+				bitmap = rotate_bitmap;
+			}
+			float widthScale;
+			float heightScale;
 
-			a = Bitmap.createBitmap(a, 0, 0, a.getWidth(), 1536, matrix, true);
+			if (bitmap.getWidth() > 2048 && bitmap.getHeight() > 1536) {
+				matrix = new Matrix();
+				widthScale = (float) 2048 / bitmap.getWidth();
+				heightScale = (float) 1536 / bitmap.getHeight();
+				matrix.postScale(widthScale, heightScale);
+				Bitmap cut_bitmap = Bitmap.createBitmap(bitmap, 0, 0, 2048,
+						1536, matrix, true);
+				if (bitmap != cut_bitmap) {
+					if (!bitmap.isRecycled()) {
+						bitmap.recycle();
+						bitmap = null;
+					}
+					bitmap = cut_bitmap;
+				}
+			} else if (bitmap.getWidth() > 2048 && bitmap.getHeight() <= 1536) {
+				matrix = new Matrix();
+				widthScale = (float) 2048 / bitmap.getWidth();
+				heightScale = (float) 1.0;
+				matrix.postScale(widthScale, heightScale);
+				Bitmap cut_bitmap = Bitmap.createBitmap(bitmap, 0, 0, 2048,
+						bitmap.getHeight(), matrix, true);
+				if (bitmap != cut_bitmap) {
+					if (!bitmap.isRecycled()) {
+						bitmap.recycle();
+						bitmap = null;
+					}
+					bitmap = cut_bitmap;
+				}
+			} else if (bitmap.getWidth() <= 2048 && bitmap.getHeight() > 1536) {
+				matrix = new Matrix();
+				widthScale = (float) 1.0;
+				heightScale = (float) 1536 / bitmap.getHeight();
+				matrix.postScale(widthScale, heightScale);
+				Bitmap cut_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+						bitmap.getWidth(), 1536, matrix, true);
+				if (bitmap != cut_bitmap) {
+					if (!bitmap.isRecycled()) {
+						bitmap.recycle();
+						bitmap = null;
+					}
+					bitmap = cut_bitmap;
+				}
+			}
 
-			a.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
 			bos.flush();
 			bos.close();
-			a.recycle();
-			a = null;
+			bitmap.recycle();
+			bitmap = null;
 			System.gc();
 		} catch (Exception er) {
 			er.printStackTrace();

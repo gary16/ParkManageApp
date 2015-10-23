@@ -45,9 +45,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 				break;
 			case 2:
 				pDia.dismiss();
-				Intent ii = new Intent(LoginActivity.this,
-						TerminalService.class);
-				ComponentName cnn = LoginActivity.this.startService(ii);
+				// Intent ii = new Intent(LoginActivity.this,
+				// TerminalService.class);
+				// ComponentName cnn = LoginActivity.this.startService(ii);
 
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);

@@ -32,6 +32,8 @@ public class ShowOcrPhotoActivity extends Activity {
 	private String rcno = null;
 	private String sno = null;
 	private String rt = null;
+	private String fn = null;
+	private int type = 0;
 	public RecogService.MyBinder recogBinder;
 	public int iInitPlateIDSDK;
 	public int nRet;
@@ -74,6 +76,8 @@ public class ShowOcrPhotoActivity extends Activity {
 			intent.putExtra("rcno", rcno);
 			intent.putExtra("sno", sno);
 			intent.putExtra("rt", rt);
+			intent.putExtra("type", type);
+			intent.putExtra("fn", fn);
 			String s = (String) msg.obj;
 			switch (msg.what) {
 			case 1:
@@ -207,11 +211,12 @@ public class ShowOcrPhotoActivity extends Activity {
 		ImageView iv1 = (ImageView) this.findViewById(R.id.imageView1);
 
 		Intent intent = this.getIntent();
-		String fn = intent.getStringExtra("fn");
+		fn = intent.getStringExtra("fn");
 		rcid = intent.getStringExtra("rcid");
 		rcno = intent.getStringExtra("rcno");
 		sno = intent.getStringExtra("sno");
 		rt = intent.getStringExtra("rt");
+		type = intent.getIntExtra("type", 0);
 		File f = new File(fn);
 		lpFileName = fn;
 		pic = lpFileName;

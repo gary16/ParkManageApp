@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zoway.parkmanage.view.QueryListsActivity" >
+
+    <LinearLayout
+        android:id="@+id/maly1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff0878ca" >
+
+        <TextView
+            android:id="@+id/infofrguna"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="停车查询"
+            android:textColor="#ffffffff"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/malogout"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/logout_bg"
+            android:gravity="center"
+            android:text="返回"
+            android:textColor="#ffffffff"
+            android:textSize="23sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/maly2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maly1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnunhandled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已缴费" >
+        </Button>
+
+        <Button
+            android:id="@+id/btnhandled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已逃费" >
+        </Button>
+
+        <EditText
+            android:id="@+id/txtQuery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Egv162"
+            android:width="100dp" />
+
+        <Button
+            android:id="@+id/btnquery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索" >
+        </Button>
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/reclist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/maly2" >
+    </ExpandableListView>
+
+</RelativeLayout>

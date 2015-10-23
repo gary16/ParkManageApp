@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.zoway.parkmanage.R;
@@ -31,8 +30,13 @@ public class MainActivity extends Activity {
 	private ExpandableListView lview;
 	private MainListAdapter madapter;
 	private Button malogout;
+	private ImageButton btnmainremark;
+	private ImageButton btnmainpay;
+	private ImageButton btnmainescape;
+	private ImageButton btnmainquery;
 	private TextView matxtlgtime;
-//
+
+	//
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,23 +46,29 @@ public class MainActivity extends Activity {
 		SparseArray<Group> groups = createData();
 
 		malogout = (Button) this.findViewById(R.id.malogout);
-		lview = (ExpandableListView) this
-				.findViewById(R.id.expandableListView1);
+		btnmainremark = (ImageButton) this.findViewById(R.id.btnmainremark);
+		btnmainpay = (ImageButton) this.findViewById(R.id.btnmainpay);
+		btnmainescape = (ImageButton) this.findViewById(R.id.btnmainescape);
+		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
+		// lview = (ExpandableListView) this
+		// .findViewById(R.id.expandableListView1);
 
-		lview.setGroupIndicator(null);
-		madapter = new MainListAdapter(this, groups);
-		lview.setAdapter(madapter);
+		// lview.setGroupIndicator(null);
+		// madapter = new MainListAdapter(this, groups);
+		// lview.setAdapter(madapter);
+
+		// lview.setOnGroupExpandListener(new OnGroupExpandListener() {
+		//
+		// @Override
+		// public void onGroupExpand(int groupPosition) {
+		//
+		// }
+		// });
+
 		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		Date df = Calendar.getInstance().getTime();
 		matxtlgtime.setText(sdf.format(df));
-		lview.setOnGroupExpandListener(new OnGroupExpandListener() {
-
-			@Override
-			public void onGroupExpand(int groupPosition) {
-
-			}
-		});
 
 		malogout.setOnClickListener(new OnClickListener() {
 
@@ -75,6 +85,51 @@ public class MainActivity extends Activity {
 				DbHelper.closeDatabase();
 				ActivityList.exitAllActivity();
 				System.exit(0);
+			}
+		});
+
+		btnmainremark.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MainActivity.this,
+						TakeOcrPhotoActivity.class);
+				intent.putExtra("type", 1);
+				MainActivity.this.startActivity(intent);
+			}
+		});
+		btnmainpay.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MainActivity.this,
+						TakeOcrPhotoActivity.class);
+				intent.putExtra("type", 2);
+				MainActivity.this.startActivity(intent);
+			}
+		});
+		btnmainescape.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MainActivity.this,
+						UnhandledListActivity.class);
+				intent.putExtra("type", 3);
+				MainActivity.this.startActivity(intent);
+			}
+		});
+		btnmainquery.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MainActivity.this,
+						QueryListsActivity.class);
+				intent.putExtra("fresh", 0);
+				MainActivity.this.startActivity(intent);
 			}
 		});
 	}

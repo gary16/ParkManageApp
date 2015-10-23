@@ -131,12 +131,66 @@
         android:src="@drawable/userbig" >
     </ImageView>
 
-    <ExpandableListView
-        android:id="@+id/expandableListView1"
+    <LinearLayout
+        android:id="@+id/mainly2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_below="@id/maiv2"
-        android:layout_centerHorizontal="true" >
-    </ExpandableListView>
+        android:orientation="vertical"
+        android:weightSum="2" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <ImageButton
+                android:id="@+id/btnmainremark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/btnmainpay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" >
+            </ImageButton>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <ImageButton
+                android:id="@+id/btnmainescape"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/btnmainquery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" >
+            </ImageButton>
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

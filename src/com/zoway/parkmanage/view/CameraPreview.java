@@ -42,7 +42,7 @@ public class CameraPreview extends SurfaceView implements Callback {
 			// Size s = mparam.getPictureSize();
 			maxzoom = mparam.getMaxZoom();
 			mparam.setPictureFormat(PixelFormat.JPEG);
-			mparam.setRotation(90);
+			// mparam.setRotation(90);
 			// mparam.setPictureSize(1920, 1080);
 			mparam.setPictureSize(1600, 1200);
 			mCamera.setParameters(mparam);

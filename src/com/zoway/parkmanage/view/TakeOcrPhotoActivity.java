@@ -35,6 +35,8 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 	private String rcno = null;
 	private String sno = null;
 	private String rt = null;
+	// 传入的类型 1.停泊2.结算3.逃费4.地磁通知
+	private int type = 0;
 	private ProgressDialog pDia1 = null;
 	private Camera mCamera;
 	private CameraPreview mPreview;
@@ -63,6 +65,7 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 				intent.putExtra("sno", sno);
 				intent.putExtra("rt", rt);
 				intent.putExtra("fn", (String) msg.obj);
+				intent.putExtra("type", type);
 				TakeOcrPhotoActivity.this.startActivity(intent);
 				break;
 			}
@@ -125,13 +128,16 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 		rcno = i.getStringExtra("rcno");
 		sno = i.getStringExtra("sno");
 		rt = i.getStringExtra("rt");
+		type = i.getIntExtra("type", 0);
 		if (sno != null && rt != null) {
-			TextView tv = new TextView(this);
-			tv.setText("车位位置:" + sno + "\n" + rt.replace("T", "  "));
+			if (type == 4) {
+				TextView tv = new TextView(this);
+				tv.setText("车位位置:" + sno + "\n" + rt.replace("T", "  "));
 
-			tv.setTextSize(25);
-			tv.setTextColor(Color.rgb(255, 0, 0));
-			preview.addView(tv);
+				tv.setTextSize(25);
+				tv.setTextColor(Color.rgb(255, 0, 0));
+				preview.addView(tv);
+			}
 		}
 		DrawRectView drv = new DrawRectView(this);
 

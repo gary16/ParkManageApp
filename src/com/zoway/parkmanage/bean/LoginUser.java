@@ -37,7 +37,7 @@ public class LoginUser {
 	private static int workerId = 0;
 	private static int companyId = 0;
 	private static String workerNo;
-	private static String workerName;
+	private static String workerName="≤‚ ‘»À‘±";
 	private static int attendanceId = 0;
 	private static int terminalId = 0;
 	private static int sectionId = 0;

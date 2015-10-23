@@ -2,7 +2,8 @@ package com.zoway.parkmanage.view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -36,6 +37,7 @@ import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
 import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
 import com.landicorp.android.eptapi.utils.QrCode;
 import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.bean.LoginUser;
 import com.zoway.parkmanage.http.RegisterVehicleInfoWsdl;
 import com.zoway.parkmanage.utils.PathUtils;
 
@@ -49,6 +51,8 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	private String sno = null;
 	private String rt = null;
 	private String hphm = null;
+	private String fn = null;
+	private int type = 0;
 	private String img_path = PathUtils.getSdPath();
 
 	// size 48*48
@@ -70,8 +74,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			super.handleMessage(msg);
 			switch (msg.what) {
 			case 1:
-				NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				nm.cancel(Integer.parseInt(rcid));
 				pDia.dismiss();
 				Toast.makeText(InputInfoActivity.this, "处理成功",
 						Toast.LENGTH_LONG).show();
@@ -141,15 +143,23 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			format.setAscSize(Format.ASC_DOT5x7);
 			format.setAscScale(Format.ASC_SC1x2);
 			printer.setFormat(format);
-			printer.printText("        路边停车收费凭条\n");
+			printer.printText("        管理员凭条\n");
+			format.setAscScale(Format.ASC_SC1x1);
+			printer.setFormat(format);
+			printer.printText("\n");
+			printer.printText("车牌号码:粤X12345\n");
+			printer.printText("停车位置:南源路\n");
+			printer.printText("停车时间:" + rt + "\n");
+			printer.feedLine(10);
+			printer.printText("        路边停车凭条\n");
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
 			printer.printText("商户名称:测试商户\n");
 			printer.printText("车牌号码:粤X12345\n");
-			printer.printText("停车位置:测试路段第" + sno + "车位\n");
+			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + rt + "\n");
-			printer.printText("操作员:测试人员\n\n");
+			printer.printText("操作员:" + LoginUser.getWorkerName() + "\n\n");
 			printer.setAutoTrunc(false);
 			printer.printText("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
 			printer.printText("\n\n");
@@ -207,13 +217,17 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 					"正在打印中", true, false);
 
 			try {
+				File f = new File(fn);
+				if (f.exists()) {
+
+				}
 				progress.start();
 			} catch (RequestException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Thread tt1 = new Thread(new UploadDataThread());
-			tt1.start();
+			// Thread tt1 = new Thread(new UploadDataThread());
+			// tt1.start();
 
 			break;
 		default:
@@ -224,6 +238,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		ActivityList.pushActivity(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_input_info);
@@ -231,22 +246,30 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		rcid = intent.getStringExtra("rcid");
 		rcno = intent.getStringExtra("rcno");
 		sno = intent.getStringExtra("sno");
-		rt = intent.getStringExtra("rt");
+
+		type = intent.getIntExtra("type", 0);
+		if (type == 4) {
+			rt = intent.getStringExtra("rt");
+		} else {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
+			rt = sdf1.format(new Date());
+		}
 		hphm = intent.getStringExtra("hphm");
-		img_path = img_path + File.separator + rcid + File.separator;
+		fn = intent.getStringExtra("fn");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		img_path = img_path + File.separator + sdf.format(new Date()) + hphm
+				+ File.separator;
 		File fDir = new File(img_path);
 		if (!fDir.exists()) {
 			fDir.mkdirs();
 		}
 		img1 = (ImageButton) this.findViewById(R.id.parkimg1);
 		img2 = (ImageButton) this.findViewById(R.id.parkimg2);
-		img3 = (ImageButton) this.findViewById(R.id.parkimg3);
 		infosure = (Button) this.findViewById(R.id.btninfosure);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
 		txtparktime.setText(rt);
 		img1.setOnClickListener(this);
 		img2.setOnClickListener(this);
-		img3.setOnClickListener(this);
 		infosure.setOnClickListener(this);
 
 	}
@@ -280,20 +303,30 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				bitmapSelected1 = getReduceBitmap(Uri.fromFile(new File(
 						img_path, "p1.jpg")));
 				this.img1.setImageBitmap(bitmapSelected1);
+				if (bitmapSelected1 != null) {
+					bitmapSelected1 = null;
+				}
 				break;
 			case REQIMG2:
 				bitmapSelected2 = getReduceBitmap(Uri.fromFile(new File(
 						img_path, "p2.jpg")));
 				this.img2.setImageBitmap(bitmapSelected2);
+				if (bitmapSelected2 != null) {
+					bitmapSelected2 = null;
+				}
 				break;
 			case REQIMG3:
 				bitmapSelected3 = getReduceBitmap(Uri.fromFile(new File(
 						img_path, "p3.jpg")));
 				this.img3.setImageBitmap(bitmapSelected3);
+				if (bitmapSelected3 != null) {
+					bitmapSelected3 = null;
+				}
 				break;
 			default:
 				break;
 			}
+			System.gc();
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
