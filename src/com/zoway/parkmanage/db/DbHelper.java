@@ -24,7 +24,7 @@ public class DbHelper {
 	}
 
 	private static void createTables() {
-		String deleteStr = " drop table t_parkrecord";
+		String deleteStr = " drop table if exists t_parkrecord";
 		db.execSQL(deleteStr);
 		String ct1Str = " create table  if not exists t_parkrecord (tid integer primary key AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno  text,hphm text,hphmcolor text,parktime text,leavetime text ,fees  REAL,status integer ,filepathlist text,isprint int)";
 		db.execSQL(ct1Str);
@@ -69,8 +69,8 @@ public class DbHelper {
 		return cur;
 	}
 
-	private static List<ParkRecord> queryRecordList(String payStatus) {
-		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,,filepathlist,isprint from t_parkrecord where status=?";
+	public static List<ParkRecord> queryRecordList(String payStatus) {
+		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepathlist,isprint from t_parkrecord where status=?";
 		Cursor cur = rawQuery(sql1, new String[] { payStatus });
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
