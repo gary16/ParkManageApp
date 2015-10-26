@@ -1,17 +1,14 @@
 package com.zoway.parkmanage.view;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,7 +35,9 @@ import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
 import com.landicorp.android.eptapi.utils.QrCode;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginUser;
+import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.RegisterVehicleInfoWsdl;
+import com.zoway.parkmanage.image.BitmapHandle;
 import com.zoway.parkmanage.utils.PathUtils;
 
 public class InputInfoActivity extends Activity implements OnClickListener {
@@ -65,6 +64,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	private Bitmap bitmapSelected3 = null;
 	private ProgressDialog pDia;
 	private TextView txtparktime;
+	private TextView txtcarnumber;
 
 	private Handler handler = new Handler() {
 
@@ -147,7 +147,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
-			printer.printText("车牌号码:粤X12345\n");
+			printer.printText("车牌号码:粤" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + rt + "\n");
 			printer.feedLine(10);
@@ -156,7 +156,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			printer.setFormat(format);
 			printer.printText("\n");
 			printer.printText("商户名称:测试商户\n");
-			printer.printText("车牌号码:粤X12345\n");
+			printer.printText("车牌号码:粤" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + rt + "\n");
 			printer.printText("操作员:" + LoginUser.getWorkerName() + "\n\n");
@@ -199,7 +199,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		switch (arg0.getId()) {
 		case R.id.parkimg1:
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,
-					Uri.fromFile(new File(img_path, "p1.jpg")));
+					Uri.fromFile(new File(img_path, "p1ori.jpg")));
 			startActivityForResult(intent, REQIMG1);
 			break;
 		case R.id.parkimg2:
@@ -213,16 +213,23 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			startActivityForResult(intent, REQIMG3);
 			break;
 		case R.id.btninfosure:
-			pDia = ProgressDialog.show(InputInfoActivity.this, "打印停车纸",
-					"正在打印中", true, false);
+
+			// pDia = ProgressDialog.show(InputInfoActivity.this, "打印停车纸",
+			// "正在打印中", true, false);
 
 			try {
-				File f = new File(fn);
-				if (f.exists()) {
-
-				}
-				progress.start();
-			} catch (RequestException e) {
+				InputStream is = getContentResolver().openInputStream(
+						Uri.fromFile(new File(fn)));
+				Bitmap b1 = BitmapHandle.getReduceBitmap(is, false, 5, 0);
+				BitmapHandle.writeJpgFromBitmap(img_path + File.separator
+						+ "p2.jpg", b1, 90);
+				b1 = null;
+				System.gc();
+				String da = rt.replace("年", "").replace("月", "")
+						.replace("日", "").replace("时", "").replace("分", "");
+				DbHelper.insertRecord(hphm, "blue", da, img_path, 0, 0, 0);
+				// progress.start();
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -268,6 +275,8 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		infosure = (Button) this.findViewById(R.id.btninfosure);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
 		txtparktime.setText(rt);
+		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
+		txtcarnumber.setText("粤" + hphm);
 		img1.setOnClickListener(this);
 		img2.setOnClickListener(this);
 		infosure.setOnClickListener(this);
@@ -300,27 +309,39 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		else {
 			switch (requestCode) {
 			case REQIMG1:
-				bitmapSelected1 = getReduceBitmap(Uri.fromFile(new File(
-						img_path, "p1.jpg")));
-				this.img1.setImageBitmap(bitmapSelected1);
-				if (bitmapSelected1 != null) {
-					bitmapSelected1 = null;
+				try {
+					InputStream is = getContentResolver().openInputStream(
+							Uri.fromFile(new File(img_path, "p1ori.jpg")));
+					bitmapSelected1 = BitmapHandle.getReduceBitmap(is, false,
+							5, 90);
+					this.img1.setImageBitmap(bitmapSelected1);
+					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
+							+ "p1.jpg", bitmapSelected1, 90);
+					File f = new File(img_path + File.separator + "p1ori.jpg");
+					if (f.exists()) {
+						f.delete();
+					}
+					if (bitmapSelected1 != null) {
+						bitmapSelected1 = null;
+					}
+				} catch (Exception er) {
+					er.printStackTrace();
 				}
 				break;
 			case REQIMG2:
-				bitmapSelected2 = getReduceBitmap(Uri.fromFile(new File(
-						img_path, "p2.jpg")));
-				this.img2.setImageBitmap(bitmapSelected2);
-				if (bitmapSelected2 != null) {
-					bitmapSelected2 = null;
-				}
-				break;
-			case REQIMG3:
-				bitmapSelected3 = getReduceBitmap(Uri.fromFile(new File(
-						img_path, "p3.jpg")));
-				this.img3.setImageBitmap(bitmapSelected3);
-				if (bitmapSelected3 != null) {
-					bitmapSelected3 = null;
+				try {
+					InputStream is = getContentResolver().openInputStream(
+							Uri.fromFile(new File(img_path, "p2ori.jpg")));
+					bitmapSelected2 = BitmapHandle.getReduceBitmap(is, false,
+							5, 90);
+					this.img2.setImageBitmap(bitmapSelected2);
+					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
+							+ "p2.jpg", bitmapSelected2, 90);
+					if (bitmapSelected2 != null) {
+						bitmapSelected2 = null;
+					}
+				} catch (Exception er) {
+					er.printStackTrace();
 				}
 				break;
 			default:
@@ -329,22 +350,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			System.gc();
 			super.onActivityResult(requestCode, resultCode, data);
 		}
-	}
-
-	private Bitmap getReduceBitmap(Uri uri) {
-		Bitmap bitmap = null;
-		try {
-			BitmapFactory.Options options = new BitmapFactory.Options();
-
-			options.inJustDecodeBounds = false;
-
-			options.inSampleSize = 5;
-			bitmap = BitmapFactory.decodeStream(getContentResolver()
-					.openInputStream(uri), null, options);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return bitmap;
 	}
 
 	// void toPrintBmp() {

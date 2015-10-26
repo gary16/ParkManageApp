@@ -1,31 +1,30 @@
 package com.zoway.parkmanage.view;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.R.id;
-import com.zoway.parkmanage.R.layout;
-import com.zoway.parkmanage.R.menu;
-
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.bean.ParkRecord;
+import com.zoway.parkmanage.db.DbHelper;
 
 public class QueryListsActivity extends Activity {
 
-	private final SparseArray<Group> groups = new SparseArray<Group>();
+	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
 	private MyExpandableListAdapter madapter;
 	private Button malogout;
@@ -36,17 +35,15 @@ public class QueryListsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_query_lists);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		Group group = new Group("粤X12345 2015年8月12日 9点50分");
-		groups.append(0, group);
-
-		group = new Group("粤X54321 2015年9月12日 10点21分");
-		groups.append(1, group);
-		group = new Group("粤XJQ001 2015年9月11日 14点21分");
-		groups.append(2, group);
+		setContentView(R.layout.activity_query_lists);
 
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
+
+		List<ParkRecord> li = DbHelper.queryRecordList("1");
+		for (int i = 0; i < li.size(); i++) {
+			groups.append(i, li.get(i));
+		}
 
 		lview.setGroupIndicator(null);
 		madapter = new MyExpandableListAdapter();
@@ -59,13 +56,11 @@ public class QueryListsActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				Group group = new Group("粤X12345 2015年8月12日 9点50分");
-				groups.append(0, group);
+				List<ParkRecord> li = DbHelper.queryRecordList("1");
+				for (int i = 0; i < li.size(); i++) {
+					groups.append(i, li.get(i));
+				}
 
-				group = new Group("粤X54321 2015年9月12日 10点21分");
-				groups.append(1, group);
-				group = new Group("粤XJQ001 2015年9月11日 14点21分");
-				groups.append(2, group);
 				madapter = new MyExpandableListAdapter();
 				lview.setAdapter(madapter);
 			}
@@ -77,12 +72,11 @@ public class QueryListsActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				Group group = new Group("粤XPP123 2015年7月2日 8点50分");
-				groups.append(0, group);
-				group = new Group("粤X78323 2015年5月23日 10点01分");
-				groups.append(1, group);
-				group = new Group("粤XPC777 2015年9月11日 15点21分");
-				groups.append(2, group);
+				List<ParkRecord> li = DbHelper.queryRecordList("2");
+				for (int i = 0; i < li.size(); i++) {
+					groups.append(i, li.get(i));
+				}
+
 				madapter = new MyExpandableListAdapter();
 				lview.setAdapter(madapter);
 			}
@@ -112,7 +106,7 @@ public class QueryListsActivity extends Activity {
 	public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
 		public Object getChild(int groupPosition, int childPosition) {
-			return groups.get(groupPosition).children.get(childPosition);
+			return null;
 		}
 
 		public long getChildId(int groupPosition, int childPosition) {
@@ -120,13 +114,44 @@ public class QueryListsActivity extends Activity {
 		}
 
 		public int getChildrenCount(int groupPosition) {
-			return groups.get(groupPosition).children.size();
+			return 1;
 		}
 
 		public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
 
-			return null;
+			RelativeLayout rl = new RelativeLayout(QueryListsActivity.this);
+
+			View v1 = new View(QueryListsActivity.this);
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(0,
+					0);
+			lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+			v1.setId(1);
+			v1.setLayoutParams(lp);
+
+			Button btnprint = new Button(QueryListsActivity.this);
+			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp1.addRule(RelativeLayout.LEFT_OF, v1.getId());
+			btnprint.setId(2);
+			btnprint.setText("补打凭条");
+			btnprint.setLayoutParams(lp1);
+
+			Button btndetail = new Button(QueryListsActivity.this);
+			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp2.addRule(RelativeLayout.RIGHT_OF, v1.getId());
+			btndetail.setId(3);
+			btndetail.setLayoutParams(lp2);
+			btndetail.setText("查看详情");
+
+			rl.addView(v1);
+			rl.addView(btnprint);
+			rl.addView(btndetail);
+
+			return rl;
 		}
 
 		public Object getGroup(int groupPosition) {
@@ -143,9 +168,32 @@ public class QueryListsActivity extends Activity {
 
 		public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
+			RelativeLayout rl = new RelativeLayout(QueryListsActivity.this);
+			rl.setBackgroundResource(R.drawable.mainlistline);
+
 			TextView tv1 = new TextView(QueryListsActivity.this);
-			tv1.setText(groups.get(groupPosition).string);
-			return tv1;
+			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			tv1.setText(groups.get(groupPosition).getHphm());
+			tv1.setTextSize(20);
+			tv1.setId(1);
+
+			TextView tv2 = new TextView(QueryListsActivity.this);
+			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
+					RelativeLayout.LayoutParams.WRAP_CONTENT,
+					RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp2.addRule(RelativeLayout.BELOW, tv1.getId());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
+			tv2.setText("停车时间:"
+					+ sdf.format(groups.get(groupPosition).getParktime()));
+			tv2.setTextSize(18);
+			tv2.setId(2);
+			tv2.setLayoutParams(lp2);
+
+			rl.addView(tv1);
+			rl.addView(tv2);
+			return rl;
 		}
 
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
@@ -158,12 +206,4 @@ public class QueryListsActivity extends Activity {
 
 	}
 
-	private class Group {
-		public String string;
-		public final List<String> children = new ArrayList<String>();
-
-		public Group(String string) {
-			this.string = string;
-		}
-	}
 }

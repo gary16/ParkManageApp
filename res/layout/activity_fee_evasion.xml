@@ -139,16 +139,16 @@
         android:id="@+id/ly2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/btnsure4bill"
         android:layout_below="@id/ly1"
         android:layout_marginTop="5dp"
-        android:layout_above="@id/btnsure4bill"
         android:background="@drawable/content_bg"
         android:gravity="center_horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp" >
 
         <ImageButton
-            android:id="@+id/parkimg4"
+            android:id="@+id/btnTakeEvapto"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerInParent="true"

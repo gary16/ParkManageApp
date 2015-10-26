@@ -2,7 +2,9 @@ package com.zoway.parkmanage.image;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +29,26 @@ public class BitmapHandle {
 		bOgiPixs = new int[bSrc.getWidth() * bSrc.getHeight()];
 		bSrc.getPixels(bOgiPixs, 0, bSrc.getWidth(), 0, 0, bSrc.getWidth(),
 				bSrc.getHeight());
+	}
+
+	public static Bitmap getReduceBitmap(InputStream is,boolean decodebounds,int sampleSize,int roation) {
+		Bitmap bitmap = null;
+		try {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = decodebounds;
+			options.inSampleSize = sampleSize;
+			bitmap = BitmapFactory.decodeStream(is, null, options);
+			Matrix matrix = new Matrix();
+			matrix.preRotate(roation);
+			Bitmap rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+					bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+			bitmap = rotate_bitmap;
+			rotate_bitmap = null;
+			System.gc();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bitmap;
 	}
 
 	public static Bitmap getRectBitmap(Bitmap bSrc, float wr, float hr) {
@@ -190,6 +212,9 @@ public class BitmapHandle {
 	public static void writeJpgFromBitmap(String filePath, Bitmap b, int ysb) {
 		File f1 = new File(filePath);
 		try {
+			if (!f1.exists()) {
+				f1.createNewFile();
+			}
 			BufferedOutputStream bos = new BufferedOutputStream(
 					new FileOutputStream(f1));
 			b.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
