@@ -21,18 +21,6 @@
             android:text="缴费确认"
             android:textColor="#ffffffff"
             android:textSize="32sp" />
-
-        <Button
-            android:id="@+id/malogout"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="3dp"
-            android:background="@drawable/logout_bg"
-            android:gravity="center"
-            android:text="返回"
-            android:textColor="#ffffffff"
-            android:textSize="23sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -44,7 +32,7 @@
         android:gravity="left" >
 
         <TextView
-            android:id="@+id/txtcartype"
+            android:id="@+id/lblcartype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
@@ -59,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@id/txtcartype"
+            android:layout_toRightOf="@id/lblcartype"
             android:text="粤X123456"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -155,14 +143,14 @@
             android:text="50元"
             android:textSize="20sp"
             android:textStyle="bold" />
-    </RelativeLayout> 
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnsure4bill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:background="#ff30cf86"
         android:paddingLeft="5dp"

@@ -34,7 +34,7 @@ public class FeeEvasionActivity extends Activity {
 	private int tid;
 	private String hphm;
 	private Date parktime;
-	private int recid;
+	private String recordno;
 	private String img_path;
 	private final int REQIMG = 0x12345678;
 	private TextView txtcarnumber;
@@ -46,6 +46,7 @@ public class FeeEvasionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_fee_evasion);
+		ActivityList.pushActivity(this);
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
@@ -55,6 +56,7 @@ public class FeeEvasionActivity extends Activity {
 		hphm = ii.getStringExtra("hphm");
 		parktime = (Date) ii.getSerializableExtra("parktime");
 		img_path = ii.getStringExtra("fname");
+		recordno = ii.getStringExtra("recordno");
 		tid = ii.getIntExtra("tid", 0);
 		txtcarnumber.setText("粤" + hphm);
 		txtpark.setText("南源路");
@@ -76,9 +78,9 @@ public class FeeEvasionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				DbHelper.setEscapeRecord(tid, recid, new Date());
+				DbHelper.setEscapeRecord(tid, recordno, hphm, new Date());
 				Toast.makeText(FeeEvasionActivity.this, "修改逃费成功",
-						Toast.LENGTH_LONG);
+						Toast.LENGTH_LONG).show();
 				Intent i = new Intent(FeeEvasionActivity.this,
 						UnhandledListActivity.class);
 				FeeEvasionActivity.this.startActivity(i);

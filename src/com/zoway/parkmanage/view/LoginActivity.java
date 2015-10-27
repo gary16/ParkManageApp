@@ -45,9 +45,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 				break;
 			case 2:
 				pDia.dismiss();
-				// Intent ii = new Intent(LoginActivity.this,
-				// TerminalService.class);
-				// ComponentName cnn = LoginActivity.this.startService(ii);
+				Intent ii = new Intent(LoginActivity.this,
+						TerminalService.class);
+				ComponentName cnn = LoginActivity.this.startService(ii);
 
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
@@ -91,8 +91,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			loginHdlr.sendMessage(msg1);
 			LoginWsdl lws = new LoginWsdl();
 			// boolean b = lws.getLogin(devId, mgrId, pwd);
-			// int b = lws.getLogin("h", mgrId, pwd);
-			int b = 0;
+			int b = lws.getLogin("h", mgrId, pwd);
 			if (b == 0) {
 				msg1 = new Message();
 				msg1.what = 2;
@@ -129,7 +128,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		// this is a comment
 		super.onCreate(savedInstanceState);
-		DbHelper.openDatabase(this);
+		// DbHelper.openDatabase(this);
 		ActivityList.pushActivity(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);

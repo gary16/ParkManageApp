@@ -34,7 +34,7 @@ import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
 import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
 import com.landicorp.android.eptapi.utils.QrCode;
 import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.bean.LoginUser;
+import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.RegisterVehicleInfoWsdl;
 import com.zoway.parkmanage.image.BitmapHandle;
@@ -159,7 +159,8 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			printer.printText("车牌号码:粤" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + rt + "\n");
-			printer.printText("操作员:" + LoginUser.getWorkerName() + "\n\n");
+			printer.printText("操作员:"
+					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
 			printer.setAutoTrunc(false);
 			printer.printText("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
 			printer.printText("\n\n");
@@ -213,10 +214,8 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			startActivityForResult(intent, REQIMG3);
 			break;
 		case R.id.btninfosure:
-
-			// pDia = ProgressDialog.show(InputInfoActivity.this, "打印停车纸",
-			// "正在打印中", true, false);
-
+			pDia = ProgressDialog.show(InputInfoActivity.this, "打印停车纸",
+					"正在打印中", true, false);
 			try {
 				InputStream is = getContentResolver().openInputStream(
 						Uri.fromFile(new File(fn)));
@@ -224,11 +223,10 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				BitmapHandle.writeJpgFromBitmap(img_path + File.separator
 						+ "p2.jpg", b1, 90);
 				b1 = null;
-				System.gc();
 				String da = rt.replace("年", "").replace("月", "")
 						.replace("日", "").replace("时", "").replace("分", "");
 				DbHelper.insertRecord(hphm, "blue", da, img_path, 0, 0, 0);
-				// progress.start();
+				progress.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

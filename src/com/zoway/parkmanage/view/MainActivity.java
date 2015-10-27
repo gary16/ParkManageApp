@@ -82,7 +82,6 @@ public class MainActivity extends Activity {
 				Intent MyIntent = new Intent(Intent.ACTION_MAIN);
 				MyIntent.addCategory(Intent.CATEGORY_HOME);
 				MainActivity.this.startActivity(MyIntent);
-				DbHelper.closeDatabase();
 				ActivityList.exitAllActivity();
 				System.exit(0);
 			}

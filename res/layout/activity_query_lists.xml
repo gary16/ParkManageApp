@@ -20,18 +20,6 @@
             android:text="停车查询"
             android:textColor="#ffffffff"
             android:textSize="32sp" />
-
-        <Button
-            android:id="@+id/malogout"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="3dp"
-            android:background="@drawable/logout_bg"
-            android:gravity="center"
-            android:text="返回"
-            android:textColor="#ffffffff"
-            android:textSize="23sp" />
     </LinearLayout>
 
     <LinearLayout

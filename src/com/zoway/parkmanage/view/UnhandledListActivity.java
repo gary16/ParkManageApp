@@ -35,7 +35,7 @@ public class UnhandledListActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_unhandled_list);
 		groups.clear();
-		List<ParkRecord> li = DbHelper.queryRecordList("0");
+		List<ParkRecord> li = DbHelper.queryRecordList("0", 10);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -57,7 +57,7 @@ public class UnhandledListActivity extends Activity {
 				b1.putSerializable("parktime", rec.getParktime());
 				intent.putExtras(b1);
 				intent.putExtra("tid", rec.getTid());
-				intent.putExtra("recid", rec.getRecoidid());
+				intent.putExtra("recordno", rec.getRecordno());
 				intent.putExtra("fname", rec.getFilepath());
 				UnhandledListActivity.this.startActivity(intent);
 				return false;

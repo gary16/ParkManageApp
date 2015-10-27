@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -37,10 +38,10 @@ public class QueryListsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_query_lists);
-
+		ActivityList.pushActivity(this);
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
 
-		List<ParkRecord> li = DbHelper.queryRecordList("1");
+		List<ParkRecord> li = DbHelper.queryRecordList("1", 10);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -56,7 +57,7 @@ public class QueryListsActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				List<ParkRecord> li = DbHelper.queryRecordList("1");
+				List<ParkRecord> li = DbHelper.queryRecordList("1", 10);
 				for (int i = 0; i < li.size(); i++) {
 					groups.append(i, li.get(i));
 				}
@@ -72,7 +73,7 @@ public class QueryListsActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				List<ParkRecord> li = DbHelper.queryRecordList("2");
+				List<ParkRecord> li = DbHelper.queryRecordList("2", 10);
 				for (int i = 0; i < li.size(); i++) {
 					groups.append(i, li.get(i));
 				}
@@ -82,6 +83,14 @@ public class QueryListsActivity extends Activity {
 			}
 		});
 		btnquery = (Button) this.findViewById(R.id.btnquery);
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent ii = new Intent(this, MainActivity.class);
+		this.startActivity(ii);
 	}
 
 	@Override
