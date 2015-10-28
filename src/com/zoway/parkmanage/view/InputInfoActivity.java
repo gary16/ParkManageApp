@@ -225,7 +225,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				b1 = null;
 				String da = rt.replace("年", "").replace("月", "")
 						.replace("日", "").replace("时", "").replace("分", "");
-				DbHelper.insertRecord(hphm, "blue", da, img_path, 0, 0, 0);
+				DbHelper.insertRecord(rcno,hphm, "blue", da, img_path, 0, 0, 0);
 				progress.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -249,15 +249,18 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_input_info);
 		Intent intent = this.getIntent();
 		rcid = intent.getStringExtra("rcid");
-		rcno = intent.getStringExtra("rcno");
+	
 		sno = intent.getStringExtra("sno");
 
 		type = intent.getIntExtra("type", 0);
 		if (type == 4) {
 			rt = intent.getStringExtra("rt");
+			rcno = intent.getStringExtra("rcno");
 		} else {
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
 			rt = sdf1.format(new Date());
+			String uuid = java.util.UUID.randomUUID().toString();
+			rcno=uuid;
 		}
 		hphm = intent.getStringExtra("hphm");
 		fn = intent.getStringExtra("fn");
@@ -347,44 +350,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			}
 			System.gc();
 			super.onActivityResult(requestCode, resultCode, data);
-		}
-	}
-
-	// void toPrintBmp() {
-	// PosUtils.sp.SpDevSetAppContext(getApplicationContext());
-	// // set the callback
-	// PosUtils.printer.Init(new DeviceResponseHandlerImpl(),
-	// getApplicationContext());
-	// PosUtils.printer.ClearPrintData();// clean the data
-	// PosUtils.printer.SetStep(1000);// set the step
-	// PosUtils.printer.SetPrinterPara((short) 1250);// set the gray
-	// Bmp1BitsBytesProcuder bp = new Bmp1BitsBytesProcuder();
-	//
-	// byte[] ptr1 = bp.create352pixQRImage(String.format(
-	// "http://cx.zoway.com.cn/Pay/detail/%s.do", rcno));
-	// PosUtils.printer.SetProperty(1);// 粗体
-	// PosUtils.printer.SetFontSize(30);
-	// PosUtils.printer.AddString("             路边停车收费凭条\n");
-	// PosUtils.printer.SetProperty(0);
-	// PosUtils.printer.SetFontSize(26);
-	// PosUtils.printer.AddString("\n");
-	// PosUtils.printer.AddString("商户名称:测试商户\n");
-	// PosUtils.printer.AddString("车牌号码:粤X12345\n");
-	// PosUtils.printer.AddString("停车位置:测试路段第" + sno + "车位\n");
-	// PosUtils.printer.AddString("停车时间:" + rt + "\n");
-	// PosUtils.printer.AddString("操作员:测试人员\n\n");
-	// PosUtils.printer
-	// .AddString("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
-	// PosUtils.printer.AddBmpData(ptr1, ptr1.length, 20, 530);
-	// PosUtils.printer.Print();
-	//
-	// }
-
-	private class UploadDataThread implements Runnable {
-		@Override
-		public void run() {
-			RegisterVehicleInfoWsdl rv = new RegisterVehicleInfoWsdl();
-			rv.uploadData(Integer.parseInt(rcid), 2, 23, "小型汽车", "粤X123456");
 		}
 	}
 

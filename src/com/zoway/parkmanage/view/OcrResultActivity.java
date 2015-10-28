@@ -1,10 +1,14 @@
 package com.zoway.parkmanage.view;
 
+import java.text.SimpleDateFormat;
+
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.R.array;
 import com.zoway.parkmanage.R.id;
 import com.zoway.parkmanage.R.layout;
 import com.zoway.parkmanage.R.menu;
+import com.zoway.parkmanage.bean.ParkRecord;
+import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.utils.PosUtils;
 
 import android.app.Activity;
@@ -20,15 +24,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class OcrResultActivity extends Activity implements OnClickListener {
 	private Spinner mSpinner;
 	private String rcid = null;
 	private String rcno = null;
 	private String sno = null;
+	// 停泊时间
 	private String rt = null;
 	private String fn = null;
 	private int type = 0;
+	private String s;
+	private ParkRecord pr;
 
 	@Override
 	public void onClick(View v) {
@@ -45,15 +53,25 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 				intent.putExtra("hphm", txtocrreshphm.getText().toString());
 				this.startActivity(intent);
 			} else if (type == 2) {
-				Intent intent = new Intent(this, PaybillActivity.class);
-				intent.putExtra("rcid", rcid);
-				intent.putExtra("rcno", rcno);
-				intent.putExtra("sno", sno);
-				intent.putExtra("rt", rt);
-				intent.putExtra("type", type);
-				intent.putExtra("fn", fn);
-				intent.putExtra("hphm", txtocrreshphm.getText().toString());
-				this.startActivity(intent);
+				pr = DbHelper.queryRecord(s);
+				if (pr != null) {
+					Intent intent = new Intent(this, PaybillActivity.class);
+					intent.putExtra("rcid", rcid);
+					intent.putExtra("rcno", pr.getRecordno());
+					intent.putExtra("sno", sno);
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy年MM月dd日 HH时mm分");
+					rt = sdf.format(pr.getParktime());
+					intent.putExtra("rt", rt);
+					intent.putExtra("type", type);
+					intent.putExtra("fn", fn);
+					intent.putExtra("tid", pr.getTid());
+					intent.putExtra("hphm", txtocrreshphm.getText().toString());
+					this.startActivity(intent);
+				} else {
+					Toast.makeText(OcrResultActivity.this, "该车牌没有停车记录",
+							Toast.LENGTH_LONG).show();
+				}
 			}
 			break;
 		case R.id.btnrescancel:
@@ -89,7 +107,7 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.activity_ocr_result);
 		Intent intent = this.getIntent();
-		String s = intent.getStringExtra("s");
+		s = intent.getStringExtra("s");
 		rcid = intent.getStringExtra("rcid");
 		rcno = intent.getStringExtra("rcno");
 		sno = intent.getStringExtra("sno");
@@ -104,6 +122,7 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 		btnrescancel.setOnClickListener(this);
 		mSpinner = (Spinner) this.findViewById(R.id.comshengfen);
 		this.initView();
+
 	}
 
 	@Override

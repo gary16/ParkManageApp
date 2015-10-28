@@ -1,9 +1,11 @@
 package com.zoway.parkmanage.http;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
@@ -21,11 +23,11 @@ public class PayWsdl {
 	// SOAP Action
 	private String soapAction = "http://tempuri.org/Pay";
 
-	public PayBean4Wsdl whenPay(int parkRecordId, int payType, int fare) {
+	public PayBean4Wsdl whenPay(String recordNo, String payType, int fare) {
 		PayBean4Wsdl obj = null;
 		try {
 			SoapObject rpc = new SoapObject(nameSpace, methodName);
-			rpc.addProperty("parkRecordId", parkRecordId);
+			rpc.addProperty("recordNo", recordNo);
 			rpc.addProperty("payType", payType);
 			rpc.addProperty("fare", fare);
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -41,17 +43,12 @@ public class PayWsdl {
 			}
 
 			SoapObject object = (SoapObject) envelope.bodyIn;
-
+			SoapPrimitive oj = (SoapPrimitive)object.getProperty(0);
 			obj = new PayBean4Wsdl();
-			Field[] fieldArr = obj.getClass().getDeclaredFields();
-			for (int i = 0; i < fieldArr.length; i++) {
-				Field f = fieldArr[i];
-				f.setAccessible(true);
-				f.set(obj, object.getProperty(f.getName()));
-			}
-			// long ParkRecordId = (Long) object.getProperty(0);
-			// Date ReachTime = (Date) object.getProperty(1);
-			// String Exception = object.getProperty(2).toString();
+			Field f = obj.getClass().getDeclaredField("PayResult");
+			f.setAccessible(true);
+			f.set(obj, Boolean.parseBoolean(oj.toString()));
+
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

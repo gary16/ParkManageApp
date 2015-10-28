@@ -29,24 +29,28 @@ public final class R {
     }
     public static final class drawable {
         public static final int bkg=0x7f020000;
-        public static final int called=0x7f020001;
-        public static final int content_bg=0x7f020002;
-        public static final int handle=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int ic_launcher_64dp=0x7f020005;
-        public static final int ic_launcher_80dp=0x7f020006;
-        public static final int iv_bg=0x7f020007;
-        public static final int logininput_bg=0x7f020008;
-        public static final int logout_bg=0x7f020009;
-        public static final int mainlistline=0x7f02000a;
-        public static final int navigatedown=0x7f02000b;
-        public static final int navigateright=0x7f02000c;
-        public static final int park=0x7f02000d;
-        public static final int runfee=0x7f02000e;
-        public static final int settings=0x7f02000f;
-        public static final int takephoto=0x7f020010;
-        public static final int takephotobutton=0x7f020011;
-        public static final int userbig=0x7f020012;
+        public static final int c1=0x7f020001;
+        public static final int c2=0x7f020002;
+        public static final int c3=0x7f020003;
+        public static final int c4=0x7f020004;
+        public static final int called=0x7f020005;
+        public static final int content_bg=0x7f020006;
+        public static final int handle=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int ic_launcher_64dp=0x7f020009;
+        public static final int ic_launcher_80dp=0x7f02000a;
+        public static final int iv_bg=0x7f02000b;
+        public static final int logininput_bg=0x7f02000c;
+        public static final int logout_bg=0x7f02000d;
+        public static final int mainlistline=0x7f02000e;
+        public static final int navigatedown=0x7f02000f;
+        public static final int navigateright=0x7f020010;
+        public static final int park=0x7f020011;
+        public static final int runfee=0x7f020012;
+        public static final int settings=0x7f020013;
+        public static final int takephoto=0x7f020014;
+        public static final int takephotobutton=0x7f020015;
+        public static final int userbig=0x7f020016;
     }
     public static final class id {
         public static final int action_settings=0x7f0b0048;

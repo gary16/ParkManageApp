@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.zoway.parkmanage.bean.ParkRecord;
+import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.utils.PathUtils;
 
 public class DbHelper {
@@ -58,7 +58,9 @@ public class DbHelper {
 		// insertSql =
 		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','XGK098','blue','201509241300','',30,2,'',0,0)";
 		// db.execSQL(insertSql);
-		ct1Str = "create table  if not exists t_uploadevasion (tid int primary key,recordno text,hphm text,escapetime text uploadtime text,uploadstatus int)";
+		ct1Str = "create table  if not exists t_uploadevasion (tid int primary key,recordno text,hphm text,escapetime text, uploadtime text,uploadstatus int)";
+		db.execSQL(ct1Str);
+		ct1Str = "create table  if not exists t_uploadpay (tid int primary key,recordno text,hphm text,fare float, uploadtime text,uploadstatus int)";
 		db.execSQL(ct1Str);
 		closeDatabase();
 	}
@@ -76,15 +78,14 @@ public class DbHelper {
 		closeDatabase();
 	}
 
-	public static boolean insertRecord(String hphm, String hphmcolor,
-			String parktime, String filepath, int status, int isupload,
-			int isprint) {
+	public static boolean insertRecord(String recordno, String hphm,
+			String hphmcolor, String parktime, String filepath, int status,
+			int isupload, int isprint) {
 		boolean flg = false;
 		try {
-			String uuid = java.util.UUID.randomUUID().toString();
 			String inSql = " insert into t_parkrecord(recordno,hphm,hphmcolor,parktime,filepath,status,isupload,isprint) values(?,?,?,?,?,?,?,?)";
-			Object[] objArr = new Object[] { uuid, hphm, hphmcolor, parktime,
-					filepath, status, isupload, isprint };
+			Object[] objArr = new Object[] { recordno, hphm, hphmcolor,
+					parktime, filepath, status, isupload, isprint };
 			execSql(inSql, objArr);
 			flg = true;
 		} catch (Exception e) {
@@ -106,6 +107,19 @@ public class DbHelper {
 		return flg;
 	}
 
+	public static boolean updateUploadPayFlag(int tid, int isupload) {
+		boolean flg = false;
+		String s1 = "update t_uploadpay set uploadstatus=? where tid=?";
+		execSql(s1, new Object[] { isupload, tid });
+		flg = true;
+		try {
+
+		} catch (Exception er) {
+			er.printStackTrace();
+		}
+		return flg;
+	}
+
 	public static boolean setEscapeRecord(int tid, String recordno,
 			String hphm, Date escapetime) {
 		boolean flg = false;
@@ -115,6 +129,24 @@ public class DbHelper {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
 		String da = sdf.format(escapetime);
 		execSql(s2, new Object[] { tid, recordno, hphm, da });
+		flg = true;
+		try {
+
+		} catch (Exception er) {
+			er.printStackTrace();
+		}
+		return flg;
+	}
+
+	public static boolean setPayRecord(int tid, String recordno, String hphm,
+			float fare, String leavetime, Date uploadTime) {
+		boolean flg = false;
+		String s1 = "update t_parkrecord set status=1,leavetime=? where tid=?";
+		execSql(s1, new Object[] { leavetime, tid });
+		String s2 = "insert into t_uploadpay(tid,recordno,hphm,fare,uploadtime,uploadstatus) values(?,?,?,?,?,0)";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		String da = sdf.format(uploadTime);
+		execSql(s2, new Object[] { tid, recordno, hphm, fare, da });
 		flg = true;
 		try {
 
@@ -156,6 +188,35 @@ public class DbHelper {
 			rec.setIsprint(cur.getInt(11));
 			rec.setTid(cur.getInt(12));
 			list.add(rec);
+		}
+		db.endTransaction();
+		cur.close();
+		closeDatabase();
+		return list;
+	}
+
+	public static List<PayRecord> queryNeedUploadPay(int limit) {
+		openDatabase();
+		db.beginTransaction();
+		String sql1 = "select tid,recordno,hphm,fare,uploadtime,uploadstatus from t_uploadpay where uploadstatus=0 order by uploadtime limit 0,?";
+		Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
+		List<PayRecord> list = new ArrayList<PayRecord>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		while (cur.moveToNext()) {
+			PayRecord par = new PayRecord();
+			par.setTid(cur.getInt(0));
+			par.setRecordno(cur.getString(1));
+			par.setHphm(cur.getString(2));
+			par.setFare(cur.getFloat(3));
+			try {
+				if (cur.getString(4) != null && !cur.getString(4).equals("")) {
+					par.setUploadtime(sdf.parse(cur.getString(4)));
+				}
+			} catch (Exception er) {
+				er.printStackTrace();
+			}
+			par.setUploadstatus(0);
+			list.add(par);
 		}
 		db.endTransaction();
 		cur.close();

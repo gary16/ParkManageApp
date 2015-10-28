@@ -1,27 +1,19 @@
 package com.zoway.parkmanage.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.IBinder;
 
-import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
+import com.zoway.parkmanage.bean.PayBean4Wsdl;
+import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.ParkWsdl;
-import com.zoway.parkmanage.http.UnhandleParkinfoWsdl;
-import com.zoway.parkmanage.view.TakeOcrPhotoActivity;
+import com.zoway.parkmanage.http.PayWsdl;
 
 public class TerminalService extends Service {
 
@@ -33,9 +25,9 @@ public class TerminalService extends Service {
 		// TODO Auto-generated method stub
 		super.onCreate();
 
-		//
-		Thread t1 = new Thread(new UploadParkingRecord());
+		Thread t1 = new Thread(new UploadTask());
 		t1.start();
+
 	}
 
 	@Override
@@ -51,26 +43,50 @@ public class TerminalService extends Service {
 
 	}
 
-	private class UploadParkingRecord implements Runnable {
+	private class UploadTask implements Runnable {
+		private int w = 0;
+
 		@Override
 		public void run() {
+
 			while (flg1) {
 				try {
-					ParkWsdl wsdl = new ParkWsdl();
-					List<ParkRecord> li = DbHelper.queryNeedUpload(20);
-					for (int i = 0; i < li.size(); i++) {
-						ParkRecord p = li.get(i);
-						ParkBean4Wsdl p4 = wsdl.whenCarIn(p.getRecordno(),
-								LoginBean4Wsdl.getTerminalId(), LoginBean4Wsdl
-										.getWorker().getWorkerId(), 2, p
-										.getHphm());
-						if (p4.getFlgflg()==1) {
-							DbHelper.updateUploadFlag(p.getTid(), 1);
-						}
+					UploadParkingRecord();
+					UploadPayRecord();
+					if (w % 5 == 0) {
+						w = 0;
 					}
+					w++;
 					Thread.sleep(5000);
 				} catch (Exception er) {
 
+				}
+			}
+		}
+
+		private void UploadParkingRecord() {
+			ParkWsdl wsdl = new ParkWsdl();
+			List<ParkRecord> li = DbHelper.queryNeedUpload(20);
+			for (int i = 0; i < li.size(); i++) {
+				ParkRecord p = li.get(i);
+				ParkBean4Wsdl p4 = wsdl.whenCarIn(p.getRecordno(),
+						LoginBean4Wsdl.getTerminalId(), LoginBean4Wsdl
+								.getWorker().getWorkerId(), 2, p.getHphm());
+				if (p4 != null) {
+					DbHelper.updateUploadFlag(p.getTid(), 1);
+				}
+			}
+		}
+
+		private void UploadPayRecord() {
+			PayWsdl wsdl = new PayWsdl();
+			List<PayRecord> li = DbHelper.queryNeedUploadPay(20);
+			for (int i = 0; i < li.size(); i++) {
+				PayRecord p = li.get(i);
+				PayBean4Wsdl p4 = wsdl.whenPay(p.getRecordno(), "ож╫П",
+						(int) p.getFare());
+				if (p4 != null) {
+					DbHelper.updateUploadPayFlag(p.getTid(), 1);
 				}
 			}
 		}

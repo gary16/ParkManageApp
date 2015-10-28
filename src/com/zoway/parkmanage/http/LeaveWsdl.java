@@ -43,26 +43,31 @@ public class LeaveWsdl {
 			SoapObject oj = (SoapObject) object.getProperty(0);
 			obj = new LeaveBean4Wsdl();
 
-			Field[] fieldArr = obj.getClass().getDeclaredFields();
-			for (int i = 0; i < fieldArr.length; i++) {
-				Field f = fieldArr[i];
-				f.setAccessible(true);
-				if (f.getType() == float.class) {
-					f.set(obj, Float.parseFloat(oj.getPropertySafelyAsString(f
-							.getName())));
-				} else if (f.getType() == String.class) {
-					f.set(obj, oj.getPropertySafelyAsString(f.getName()));
-				} else if (f.getType() == java.util.Date.class) {
-					String s = oj.getPropertySafelyAsString(f.getName());
-					if (!s.equals("")) {
-						SimpleDateFormat sdf = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm:ss");
-						int ii = s.indexOf(".");
-						s = s.substring(0, ii).replace("T", " ");
-						f.set(obj, sdf.parse(s));
-					}
-				}
+			if (oj.toString().indexOf("Exception") > 0) {
 
+			} else {
+
+				Field[] fieldArr = obj.getClass().getDeclaredFields();
+				for (int i = 0; i < fieldArr.length; i++) {
+					Field f = fieldArr[i];
+					f.setAccessible(true);
+					if (f.getType() == float.class) {
+						f.set(obj, Float.parseFloat(oj
+								.getPropertySafelyAsString(f.getName())));
+					} else if (f.getType() == String.class) {
+						f.set(obj, oj.getPropertySafelyAsString(f.getName()));
+					} else if (f.getType() == java.util.Date.class) {
+						String s = oj.getPropertySafelyAsString(f.getName());
+						if (!s.equals("")) {
+							SimpleDateFormat sdf = new SimpleDateFormat(
+									"yyyy-MM-dd HH:mm:ss");
+							int ii = s.indexOf(".");
+							s = s.substring(0, ii).replace("T", " ");
+							f.set(obj, sdf.parse(s));
+						}
+					}
+
+				}
 			}
 			// long ParkRecordId = (Long) object.getProperty(0);
 			// Date ReachTime = (Date) object.getProperty(1);

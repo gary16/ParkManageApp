@@ -153,7 +153,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_launcher" >
+                android:background="@drawable/c1" >
             </ImageButton>
 
             <ImageButton
@@ -162,7 +162,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_launcher" >
+                android:background="@drawable/c3" >
             </ImageButton>
         </LinearLayout>
 
@@ -179,7 +179,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_launcher" >
+                android:background="@drawable/c4" >
             </ImageButton>
 
             <ImageButton
@@ -188,7 +188,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_launcher" >
+                android:background="@drawable/c2" >
             </ImageButton>
         </LinearLayout>
     </LinearLayout>
