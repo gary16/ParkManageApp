@@ -9,6 +9,7 @@ import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.zoway.parkmanage.bean.EscapeRecord;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.utils.PathUtils;
@@ -120,6 +121,21 @@ public class DbHelper {
 		return flg;
 	}
 
+	public static boolean updateUploadEscapeFlag(int tid, int isupload) {
+		boolean flg = false;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		String da = sdf.format(new Date());
+		String s1 = "update t_uploadevasion set uploadtime=?,uploadstatus=? where tid=?";
+		execSql(s1, new Object[] { da, isupload, tid });
+		flg = true;
+		try {
+
+		} catch (Exception er) {
+			er.printStackTrace();
+		}
+		return flg;
+	}
+
 	public static boolean setEscapeRecord(int tid, String recordno,
 			String hphm, Date escapetime) {
 		boolean flg = false;
@@ -217,6 +233,39 @@ public class DbHelper {
 			}
 			par.setUploadstatus(0);
 			list.add(par);
+		}
+		db.endTransaction();
+		cur.close();
+		closeDatabase();
+		return list;
+	}
+
+	public static List<EscapeRecord> queryNeedUploadEvasion(int limit) {
+		openDatabase();
+		db.beginTransaction();
+		String sql1 = " select t.tid,t.recordno,t.hphm,t.escapetime,t.uploadtime,t.uploadstatus,s.filepath from t_uploadevasion as  t,t_parkrecord as  s where t.uploadstatus=0 and t.tid=s.tid order by t.escapetime limit 0,?";
+		Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
+		List<EscapeRecord> list = new ArrayList<EscapeRecord>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		while (cur.moveToNext()) {
+
+			EscapeRecord er = new EscapeRecord();
+			er.setTid(cur.getInt(0));
+			er.setRecordno(cur.getString(1));
+			er.setHphm(cur.getString(2));
+
+			try {
+				if (cur.getString(3) != null && !cur.getString(3).equals("")) {
+					er.setEscapetime(sdf.parse(cur.getString(3)));
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			er.setUploadstatus(0);
+			er.setFilepath(cur.getString(6));
+			list.add(er);
 		}
 		db.endTransaction();
 		cur.close();

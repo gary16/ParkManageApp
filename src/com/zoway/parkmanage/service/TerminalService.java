@@ -6,12 +6,15 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.zoway.parkmanage.bean.EscapeBean4Wsdl;
+import com.zoway.parkmanage.bean.EscapeRecord;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.bean.PayBean4Wsdl;
 import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.db.DbHelper;
+import com.zoway.parkmanage.http.EscapeWsdl;
 import com.zoway.parkmanage.http.ParkWsdl;
 import com.zoway.parkmanage.http.PayWsdl;
 
@@ -51,9 +54,10 @@ public class TerminalService extends Service {
 
 			while (flg1) {
 				try {
-					UploadParkingRecord();
-					UploadPayRecord();
+					uploadParkingRecord();
+					uploadPayRecord();
 					if (w % 5 == 0) {
+						uploadEscapeRecord();
 						w = 0;
 					}
 					w++;
@@ -64,21 +68,22 @@ public class TerminalService extends Service {
 			}
 		}
 
-		private void UploadParkingRecord() {
+		private void uploadParkingRecord() {
 			ParkWsdl wsdl = new ParkWsdl();
 			List<ParkRecord> li = DbHelper.queryNeedUpload(20);
 			for (int i = 0; i < li.size(); i++) {
 				ParkRecord p = li.get(i);
 				ParkBean4Wsdl p4 = wsdl.whenCarIn(p.getRecordno(),
 						LoginBean4Wsdl.getTerminalId(), LoginBean4Wsdl
-								.getWorker().getWorkerId(), 2, p.getHphm());
+								.getWorker().getWorkerId(), 2, p.getHphm(), p
+								.getParktime());
 				if (p4 != null) {
 					DbHelper.updateUploadFlag(p.getTid(), 1);
 				}
 			}
 		}
 
-		private void UploadPayRecord() {
+		private void uploadPayRecord() {
 			PayWsdl wsdl = new PayWsdl();
 			List<PayRecord> li = DbHelper.queryNeedUploadPay(20);
 			for (int i = 0; i < li.size(); i++) {
@@ -87,6 +92,20 @@ public class TerminalService extends Service {
 						(int) p.getFare());
 				if (p4 != null) {
 					DbHelper.updateUploadPayFlag(p.getTid(), 1);
+				}
+			}
+		}
+
+		private void uploadEscapeRecord() {
+			EscapeWsdl wsdl = new EscapeWsdl();
+			List<EscapeRecord> li = DbHelper.queryNeedUploadEvasion(10);
+			for (int i = 0; i < li.size(); i++) {
+				EscapeRecord er = li.get(i);
+				EscapeBean4Wsdl eb = wsdl.whenCarEscape(er.getRecordno(),
+						LoginBean4Wsdl.getWorker().getWorkerId(),
+						er.getFilepath());
+				if (eb != null & eb.isEscapeResult()) {
+					DbHelper.updateUploadEscapeFlag(er.getTid(), 1);
 				}
 			}
 		}

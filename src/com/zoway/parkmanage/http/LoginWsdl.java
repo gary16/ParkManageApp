@@ -1,6 +1,8 @@
 package com.zoway.parkmanage.http;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -73,6 +75,15 @@ public class LoginWsdl {
 								.getPropertySafelyAsString(f.getName())));
 					} else if (f.getType() == String.class) {
 						f.set(lb, oj.getPropertySafelyAsString(f.getName()));
+					} else if (f.getType() == java.util.Date.class) {
+						String s = oj.getPropertySafelyAsString(f.getName());
+						if (!s.equals("")) {
+							SimpleDateFormat sdf = new SimpleDateFormat(
+									"yyyy-MM-dd HH:mm:ss");
+							int ii = s.indexOf(".");
+							s = s.substring(0, ii).replace("T", " ");
+							f.set(lb, sdf.parse(s));
+						}
 					}
 				}
 

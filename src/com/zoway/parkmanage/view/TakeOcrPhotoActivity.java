@@ -38,7 +38,7 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 	// 传入的类型 1.停泊2.结算3.逃费4.地磁通知
 	private int type = 0;
 	private ProgressDialog pDia1 = null;
-	private Camera mCamera;
+	private Camera mCamera = null;
 	private CameraPreview mPreview;
 	private Button btnTakePhoto;
 	private Button btnUpZoom;
@@ -101,8 +101,22 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		ActivityList.pushActivity(this);
+		Intent i = this.getIntent();
+		rcid = i.getStringExtra("rcid");
+		rcno = i.getStringExtra("rcno");
+		sno = i.getStringExtra("sno");
+		rt = i.getStringExtra("rt");
+		type = i.getIntExtra("type", 0);
+
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+
 		setContentView(R.layout.activity_take_photo);
 		// Create an instance of Camera
 		mCamera = getCameraInstance();
@@ -123,12 +137,7 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 		btnDownZoom.setOnClickListener(this);
 
 		preview.addView(mPreview);
-		Intent i = this.getIntent();
-		rcid = i.getStringExtra("rcid");
-		rcno = i.getStringExtra("rcno");
-		sno = i.getStringExtra("sno");
-		rt = i.getStringExtra("rt");
-		type = i.getIntExtra("type", 0);
+
 		if (sno != null && rt != null) {
 			if (type == 4) {
 				TextView tv = new TextView(this);
@@ -144,13 +153,6 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 		preview.addView(drv);
 		preview.bringChildToFront(tkephotoly1);
 		mPicture = new pitcCallback();
-	}
-
-	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		int uiRot = getWindowManager().getDefaultDisplay().getRotation();
 	}
 
 	private class pitcCallback implements PictureCallback {
@@ -203,8 +205,6 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 
 		super.onPause();
-		mCamera.stopPreview();
-		mCamera.release();
 		if (pDia1 != null) {
 			pDia1.dismiss();
 		}
@@ -220,7 +220,6 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
 	}
 
 	@Override
@@ -234,6 +233,11 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+		if (mCamera != null) {
+			mCamera.stopPreview();
+			mCamera.release();
+			mCamera = null;
+		}
 
 	}
 

@@ -7,16 +7,8 @@ public class LeaveBean4Wsdl {
 	private float Fare;
 	private Date LeaveTime;
 	private String Exception;
-	private int flgflg=0;
-	
-	
-	public int getFlgflg() {
-		return flgflg;
-	}
 
-	public void setFlgflg(int flgflg) {
-		this.flgflg = flgflg;
-	}
+ 
 
 	public float getFare() {
 		return Fare;

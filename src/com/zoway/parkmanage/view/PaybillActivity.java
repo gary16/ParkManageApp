@@ -95,8 +95,10 @@ public class PaybillActivity extends Activity {
 		@Override
 		public void onFinish(int arg0) {
 			// TODO Auto-generated method stub
-			String ltt = leavetime.replace("年", "").replace("月", "").replace("日", "").replace("时", "").replace("分", "").replace(" ", "");
-			DbHelper.setPayRecord(tid, rcno, hphm, fare,ltt, new Date());
+			String ltt = leavetime.replace("年", "").replace("月", "")
+					.replace("日", "").replace("时", "").replace("分", "")
+					.replace(" ", "");
+			DbHelper.setPayRecord(tid, rcno, hphm, fare, ltt, new Date());
 			Message msg = new Message();
 			msg.what = 1;
 			handler.sendMessage(msg);
@@ -262,14 +264,14 @@ public class PaybillActivity extends Activity {
 			LeaveWsdl wsdl = new LeaveWsdl();
 			LeaveBean4Wsdl lb = wsdl.whenCarLeave(rcno, LoginBean4Wsdl
 					.getWorker().getWorkerId());
-			int b = lb.getFlgflg();
-			if (b == 0) {
+
+			if (lb != null) {
 				msg1 = new Message();
 				msg1.what = 2;
 				msg1.obj = lb.getFare();
 				fare = lb.getFare();
 				leaveHdlr.sendMessage(msg1);
-			} else if (b == 1) {
+			} else {
 				msg1 = new Message();
 				msg1.what = 3;
 				leaveHdlr.sendMessage(msg1);

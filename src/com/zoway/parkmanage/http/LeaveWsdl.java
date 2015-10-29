@@ -69,9 +69,6 @@ public class LeaveWsdl {
 
 				}
 			}
-			// long ParkRecordId = (Long) object.getProperty(0);
-			// Date ReachTime = (Date) object.getProperty(1);
-			// String Exception = object.getProperty(2).toString();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

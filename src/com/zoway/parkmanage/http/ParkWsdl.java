@@ -2,6 +2,7 @@ package com.zoway.parkmanage.http;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -22,7 +23,7 @@ public class ParkWsdl {
 	private String soapAction = "http://tempuri.org/Park";
 
 	public ParkBean4Wsdl whenCarIn(String recordNo, int terminalId,
-			int workerId, int vehicleType, String vehicleNo) {
+			int workerId, int vehicleType, String vehicleNo, Date reachTime) {
 		ParkBean4Wsdl obj = null;
 		try {
 			SoapObject rpc = new SoapObject(nameSpace, methodName);
@@ -31,6 +32,9 @@ public class ParkWsdl {
 			rpc.addProperty("workerId", workerId);
 			rpc.addProperty("vehicleType", "Ð¡ÐÍÆû³µ");
 			rpc.addProperty("vehicleNo", vehicleNo);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String ss = sdf.format(reachTime).replace(" ", "T");
+			rpc.addProperty("reachTime", ss);
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 					SoapEnvelope.VER12);
 			envelope.bodyOut = rpc;
@@ -44,29 +48,28 @@ public class ParkWsdl {
 			}
 
 			SoapObject object = (SoapObject) envelope.bodyIn;
-			SoapObject oj = (SoapObject) object.getProperty(0);
-			obj = new ParkBean4Wsdl();
-			Field[] fieldArr = obj.getClass().getDeclaredFields();
-			for (int i = 0; i < fieldArr.length; i++) {
-				Field f = fieldArr[i];
-				f.setAccessible(true);
-				if (f.getType() == String.class) {
-					f.set(obj, oj.getPropertySafelyAsString(f.getName()));
-				} else if (f.getType() == java.util.Date.class) {
-					String s = oj.getPropertySafelyAsString(f.getName());
-					if (!s.equals("")) {
-						SimpleDateFormat sdf = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm:ss");
-						int ii = s.indexOf(".");
-						s = s.substring(0, ii).replace("T", " ");
-						f.set(obj, sdf.parse(s));
+			String result = object.getProperty(0).toString();
+			if (result.indexOf("Exception") > 0) {
+
+			} else {
+
+				SoapObject oj = (SoapObject) object.getProperty(0);
+				obj = new ParkBean4Wsdl();
+				Field[] fieldArr = obj.getClass().getDeclaredFields();
+				for (int i = 0; i < fieldArr.length; i++) {
+					Field f = fieldArr[i];
+					f.setAccessible(true);
+					if (f.getType() == String.class) {
+						f.set(obj, oj.getPropertySafelyAsString(f.getName()));
+					} else if (f.getType() == java.util.Date.class) {
+						String s = oj.getPropertySafelyAsString(f.getName());
+						if (!s.equals("")) {
+							s = s.replace("T", " ");
+							f.set(obj, sdf.parse(s));
+						}
 					}
 				}
 			}
-			obj.setFlgflg(1);
-			// long ParkRecordId = (Long) object.getProperty(0);
-			// Date ReachTime = (Date) object.getProperty(1);
-			// String Exception = object.getProperty(2).toString();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

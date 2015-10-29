@@ -6,15 +6,6 @@ public class ParkBean4Wsdl {
 	private long ParkRecordId;
 	private Date ReachTime;
 	private String Exception;
-	private int flgflg = 0;
-
-	public int getFlgflg() {
-		return flgflg;
-	}
-
-	public void setFlgflg(int flgflg) {
-		this.flgflg = flgflg;
-	}
 
 	public long getParkRecordId() {
 		return ParkRecordId;

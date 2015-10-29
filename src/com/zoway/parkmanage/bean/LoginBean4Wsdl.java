@@ -1,5 +1,7 @@
 package com.zoway.parkmanage.bean;
 
+import java.util.Date;
+
 public class LoginBean4Wsdl {
 
 	private final static Worker worker = new Worker();
@@ -18,6 +20,14 @@ public class LoginBean4Wsdl {
 
 	public static int getAttendanceId() {
 		return AttendanceId;
+	}
+
+	public static Date getLoginServerTime() {
+		return loginServerTime;
+	}
+
+	public static Date getLoginClientTime() {
+		return loginClientTime;
 	}
 
 	public static int getTerminalId() {

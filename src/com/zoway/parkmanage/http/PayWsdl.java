@@ -43,11 +43,26 @@ public class PayWsdl {
 			}
 
 			SoapObject object = (SoapObject) envelope.bodyIn;
-			SoapPrimitive oj = (SoapPrimitive)object.getProperty(0);
+			SoapObject oj = (SoapObject) object.getProperty(0);
 			obj = new PayBean4Wsdl();
-			Field f = obj.getClass().getDeclaredField("PayResult");
-			f.setAccessible(true);
-			f.set(obj, Boolean.parseBoolean(oj.toString()));
+
+			Field[] fieldArr = obj.getClass().getDeclaredFields();
+			for (int i = 0; i < fieldArr.length; i++) {
+				Field f = fieldArr[i];
+				f.setAccessible(true);
+				if (f.getType() == String.class) {
+					f.set(obj, oj.getPropertySafelyAsString(f.getName()));
+				} else if (f.getType() == java.util.Date.class) {
+					String s = oj.getPropertySafelyAsString(f.getName());
+					if (!s.equals("")) {
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyy-MM-dd HH:mm:ss");
+						int ii = s.indexOf(".");
+						s = s.substring(0, ii).replace("T", " ");
+						f.set(obj, sdf.parse(s));
+					}
+				}
+			}
 
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
