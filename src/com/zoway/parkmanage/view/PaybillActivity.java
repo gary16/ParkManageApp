@@ -30,6 +30,7 @@ import com.zoway.parkmanage.bean.LeaveBean4Wsdl;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.LeaveWsdl;
+import com.zoway.parkmanage.utils.TimeUtil;
 
 public class PaybillActivity extends Activity {
 
@@ -98,7 +99,7 @@ public class PaybillActivity extends Activity {
 			String ltt = leavetime.replace("年", "").replace("月", "")
 					.replace("日", "").replace("时", "").replace("分", "")
 					.replace(" ", "");
-			DbHelper.setPayRecord(tid, rcno, hphm, fare, ltt, new Date());
+			DbHelper.setPayRecord(tid, rcno, hphm, fare);
 			Message msg = new Message();
 			msg.what = 1;
 			handler.sendMessage(msg);

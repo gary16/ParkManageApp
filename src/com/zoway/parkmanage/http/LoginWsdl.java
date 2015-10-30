@@ -83,6 +83,8 @@ public class LoginWsdl {
 							int ii = s.indexOf(".");
 							s = s.substring(0, ii).replace("T", " ");
 							f.set(lb, sdf.parse(s));
+						} else {
+							f.set(lb, new Date());
 						}
 					}
 				}

@@ -30,18 +30,18 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/txtQuery"
+        <Button
+            android:id="@+id/btnin30min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Egv162"
-            android:width="200dp" />
+            android:text="30分内" >
+        </Button>
 
         <Button
-            android:id="@+id/btnquery"
+            android:id="@+id/btnout30min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="搜索" >
+            android:text="30分外" >
         </Button>
     </LinearLayout>
 

@@ -99,8 +99,12 @@
             android:label="@string/title_activity_auery_lists" >
         </activity>
         <activity
-            android:name="com.zoway.parkmanage.view.UnhandledListActivity"
+            android:name=".view.UnhandledListActivity"
             android:label="@string/title_activity_unhandled_list" >
+        </activity>
+        <activity
+            android:name="com.zoway.parkmanage.view.FeeFreeActivity"
+            android:label="@string/title_activity_fee_free" >
         </activity>
     </application>
 

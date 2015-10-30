@@ -55,9 +55,10 @@ public final class R {
     public static final class id {
         public static final int action_settings=0x7f0b0048;
         public static final int btnTakeEvapto=0x7f0b000c;
-        public static final int btncapture=0x7f0b003e;
-        public static final int btndownzoom=0x7f0b003f;
+        public static final int btncapture=0x7f0b003c;
+        public static final int btndownzoom=0x7f0b003d;
         public static final int btnhandled=0x7f0b0037;
+        public static final int btnin30min=0x7f0b0040;
         public static final int btninfocancel=0x7f0b000f;
         public static final int btninfosure=0x7f0b000e;
         public static final int btninputdata=0x7f0b0044;
@@ -66,15 +67,15 @@ public final class R {
         public static final int btnmainpay=0x7f0b0025;
         public static final int btnmainquery=0x7f0b0027;
         public static final int btnmainremark=0x7f0b0024;
-        public static final int btnquery=0x7f0b0039;
+        public static final int btnout30min=0x7f0b0041;
         public static final int btnrescancel=0x7f0b002e;
         public static final int btnressure=0x7f0b002d;
         public static final int btnsure4bill=0x7f0b000a;
         public static final int btnunhandled=0x7f0b0036;
-        public static final int btnupzoom=0x7f0b003d;
-        public static final int camera_preview=0x7f0b003c;
+        public static final int btnupzoom=0x7f0b003b;
+        public static final int camera_preview=0x7f0b003a;
         public static final int comshengfen=0x7f0b002b;
-        public static final int imageView1=0x7f0b003b;
+        public static final int imageView1=0x7f0b0039;
         public static final int imginfo1=0x7f0b0035;
         public static final int infofrguna=0x7f0b0001;
         public static final int lblcartype=0x7f0b0030;
@@ -105,14 +106,13 @@ public final class R {
         public static final int parkimg2=0x7f0b0011;
         public static final int parkimg3=0x7f0b0012;
         public static final int parkimg4=0x7f0b0013;
-        public static final int reclist=0x7f0b003a;
+        public static final int reclist=0x7f0b0038;
         public static final int tiv1=0x7f0b0045;
         public static final int tiv2=0x7f0b0047;
         public static final int tkephotoly1=0x7f0b0028;
         public static final int tkephotoly2=0x7f0b0029;
         public static final int tkephotoly3=0x7f0b002f;
         public static final int ttv1=0x7f0b0046;
-        public static final int txtQuery=0x7f0b0038;
         public static final int txtcarnumber=0x7f0b0004;
         public static final int txtcartype=0x7f0b0003;
         public static final int txtleavetime=0x7f0b0032;
@@ -124,40 +124,42 @@ public final class R {
         public static final int txtparktime=0x7f0b0008;
         public static final int txtpass=0x7f0b0017;
         public static final int txtunam=0x7f0b0015;
-        public static final int unhandlely1=0x7f0b0040;
-        public static final int unhandlely2=0x7f0b0041;
+        public static final int unhandlely1=0x7f0b003e;
+        public static final int unhandlely2=0x7f0b003f;
     }
     public static final class layout {
         public static final int activity_fee_evasion=0x7f030000;
-        public static final int activity_input_info=0x7f030001;
-        public static final int activity_input_info_activity_for_k6_p100=0x7f030002;
-        public static final int activity_login=0x7f030003;
-        public static final int activity_main=0x7f030004;
-        public static final int activity_ocr_result=0x7f030005;
-        public static final int activity_paybill=0x7f030006;
-        public static final int activity_printinfo=0x7f030007;
-        public static final int activity_query_lists=0x7f030008;
-        public static final int activity_show_ocr_photo=0x7f030009;
-        public static final int activity_take_photo=0x7f03000a;
-        public static final int activity_unhandled_list=0x7f03000b;
-        public static final int mainlistdetails=0x7f03000c;
-        public static final int mainlistparent=0x7f03000d;
-        public static final int province_spinner=0x7f03000e;
+        public static final int activity_fee_free=0x7f030001;
+        public static final int activity_input_info=0x7f030002;
+        public static final int activity_input_info_activity_for_k6_p100=0x7f030003;
+        public static final int activity_login=0x7f030004;
+        public static final int activity_main=0x7f030005;
+        public static final int activity_ocr_result=0x7f030006;
+        public static final int activity_paybill=0x7f030007;
+        public static final int activity_printinfo=0x7f030008;
+        public static final int activity_query_lists=0x7f030009;
+        public static final int activity_show_ocr_photo=0x7f03000a;
+        public static final int activity_take_photo=0x7f03000b;
+        public static final int activity_unhandled_list=0x7f03000c;
+        public static final int mainlistdetails=0x7f03000d;
+        public static final int mainlistparent=0x7f03000e;
+        public static final int province_spinner=0x7f03000f;
     }
     public static final class menu {
         public static final int camera=0x7f0a0000;
         public static final int fee_evasion=0x7f0a0001;
-        public static final int input_info=0x7f0a0002;
-        public static final int input_info_activity_for_k6_p100=0x7f0a0003;
-        public static final int login=0x7f0a0004;
-        public static final int main=0x7f0a0005;
-        public static final int ocr_cap_photo=0x7f0a0006;
-        public static final int ocr_photo=0x7f0a0007;
-        public static final int ocr_result=0x7f0a0008;
-        public static final int paybill=0x7f0a0009;
-        public static final int printinfo=0x7f0a000a;
-        public static final int query_lists=0x7f0a000b;
-        public static final int unhandled_list=0x7f0a000c;
+        public static final int fee_free=0x7f0a0002;
+        public static final int input_info=0x7f0a0003;
+        public static final int input_info_activity_for_k6_p100=0x7f0a0004;
+        public static final int login=0x7f0a0005;
+        public static final int main=0x7f0a0006;
+        public static final int ocr_cap_photo=0x7f0a0007;
+        public static final int ocr_photo=0x7f0a0008;
+        public static final int ocr_result=0x7f0a0009;
+        public static final int paybill=0x7f0a000a;
+        public static final int printinfo=0x7f0a000b;
+        public static final int query_lists=0x7f0a000c;
+        public static final int unhandled_list=0x7f0a000d;
     }
     public static final class raw {
         public static final int ic_launcher=0x7f040000;
@@ -234,6 +236,7 @@ public final class R {
         public static final int title_activity_auery_lists=0x7f07005e;
         public static final int title_activity_camera=0x7f070005;
         public static final int title_activity_fee_evasion=0x7f07005d;
+        public static final int title_activity_fee_free=0x7f070060;
         public static final int title_activity_input_info=0x7f070009;
         public static final int title_activity_input_info_activity_for_k6_p100=0x7f07000e;
         public static final int title_activity_login=0x7f070003;

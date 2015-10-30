@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.RelativeLayout;
@@ -21,12 +24,17 @@ import android.widget.TextView;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
+import com.zoway.parkmanage.view.QueryListsActivity.MyExpandableListAdapter;
 
 public class UnhandledListActivity extends Activity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
 	private MyExpandableListAdapter madapter;
+	private Button btnin30min;
+	private Button btnout30min;
+	private EditText txtQuery;
+	private Button btnquery;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +43,7 @@ public class UnhandledListActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_unhandled_list);
 		groups.clear();
-		List<ParkRecord> li = DbHelper.queryRecordList("0", 10);
+		List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 50);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -63,6 +71,40 @@ public class UnhandledListActivity extends Activity {
 				return false;
 			}
 		});
+
+		btnin30min = (Button) this.findViewById(R.id.btnin30min);
+		btnin30min.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				groups.clear();
+				List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 10);
+				for (int i = 0; i < li.size(); i++) {
+					groups.append(i, li.get(i));
+				}
+
+				madapter = new MyExpandableListAdapter();
+				lview.setAdapter(madapter);
+			}
+		});
+		btnout30min = (Button) this.findViewById(R.id.btnout30min);
+		btnout30min.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				groups.clear();
+				List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 10);
+				for (int i = 0; i < li.size(); i++) {
+					groups.append(i, li.get(i));
+				}
+
+				madapter = new MyExpandableListAdapter();
+				lview.setAdapter(madapter);
+			}
+		});
+
 	}
 
 	@Override

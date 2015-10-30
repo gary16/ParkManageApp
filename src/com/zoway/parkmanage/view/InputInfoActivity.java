@@ -39,6 +39,7 @@ import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.RegisterVehicleInfoWsdl;
 import com.zoway.parkmanage.image.BitmapHandle;
 import com.zoway.parkmanage.utils.PathUtils;
+import com.zoway.parkmanage.utils.TimeUtil;
 
 public class InputInfoActivity extends Activity implements OnClickListener {
 
@@ -162,7 +163,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			printer.printText("操作员:"
 					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
 			printer.setAutoTrunc(false);
-			printer.printText("亲爱的车主，为了节约你宝贵的时间，支付停车款请用微信扫描以下二维码。 公众号添加和使用方法请查看凭条背面。");
+			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
 			printer.printText("\n\n");
 
 			String cUrl = String.format(
@@ -223,9 +224,9 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				BitmapHandle.writeJpgFromBitmap(img_path + File.separator
 						+ "p2.jpg", b1, 90);
 				b1 = null;
-				String da = rt.replace("年", "").replace("月", "")
-						.replace("日", "").replace("时", "").replace("分", "");
-				DbHelper.insertRecord(rcno,hphm, "blue", da, img_path, 0, 0, 0);
+				String da = rt.replace("年", "-").replace("月", "-")
+						.replace("日", " ").replace("时", ":").replace("分", "");
+				DbHelper.insertRecord(rcno, hphm, "blue", da, img_path, 0, 0, 0);
 				progress.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -249,7 +250,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_input_info);
 		Intent intent = this.getIntent();
 		rcid = intent.getStringExtra("rcid");
-	
+
 		sno = intent.getStringExtra("sno");
 
 		type = intent.getIntExtra("type", 0);
@@ -258,9 +259,9 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			rcno = intent.getStringExtra("rcno");
 		} else {
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
-			rt = sdf1.format(new Date());
+			rt = sdf1.format(TimeUtil.getTime());
 			String uuid = java.util.UUID.randomUUID().toString();
-			rcno=uuid;
+			rcno = uuid;
 		}
 		hphm = intent.getStringExtra("hphm");
 		fn = intent.getStringExtra("fn");

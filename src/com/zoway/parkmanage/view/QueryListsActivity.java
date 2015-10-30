@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,9 +29,9 @@ public class QueryListsActivity extends Activity {
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
 	private MyExpandableListAdapter madapter;
-	private Button malogout;
 	private Button btnunhandled;
 	private Button btnhandled;
+	private EditText txtQuery;
 	private Button btnquery;
 
 	@Override
@@ -49,7 +50,6 @@ public class QueryListsActivity extends Activity {
 		lview.setGroupIndicator(null);
 		madapter = new MyExpandableListAdapter();
 		lview.setAdapter(madapter);
-		malogout = (Button) this.findViewById(R.id.malogout);
 		btnunhandled = (Button) this.findViewById(R.id.btnunhandled);
 		btnunhandled.setOnClickListener(new OnClickListener() {
 
@@ -82,7 +82,6 @@ public class QueryListsActivity extends Activity {
 				lview.setAdapter(madapter);
 			}
 		});
-		btnquery = (Button) this.findViewById(R.id.btnquery);
 	}
 
 	@Override

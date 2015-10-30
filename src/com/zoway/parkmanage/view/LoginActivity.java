@@ -5,11 +5,11 @@ import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.LoginWsdl;
 import com.zoway.parkmanage.service.TerminalService;
 
@@ -136,7 +135,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 		txtunam = (TextView) this.findViewById(R.id.txtunam);
 		txtpass = (TextView) this.findViewById(R.id.txtpass);
 		btnloginsure.setOnClickListener(this);
-
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		int pp = 0;
 	}
 
 	@Override
