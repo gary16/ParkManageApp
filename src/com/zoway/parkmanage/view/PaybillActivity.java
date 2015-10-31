@@ -74,7 +74,7 @@ public class PaybillActivity extends Activity {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 			Date d1 = sdf.parse(parkingtime);
 			Date d2 = sdf.parse(leavetime);
-			long diff = d1.getTime() - d2.getTime();
+			long diff = d2.getTime() - d1.getTime();
 			long days = diff / (1000 * 60 * 60 * 24);
 
 			long hours = (diff - days * (1000 * 60 * 60 * 24))

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
+import com.zoway.parkmanage.utils.TimeUtil;
 import com.zoway.parkmanage.view.QueryListsActivity.MyExpandableListAdapter;
 
 public class UnhandledListActivity extends Activity {
@@ -58,8 +59,10 @@ public class UnhandledListActivity extends Activity {
 					int groupPosition, long id) {
 				// TODO Auto-generated method stub
 				ParkRecord rec = groups.get(groupPosition);
-				Intent intent = new Intent(UnhandledListActivity.this,
-						FeeEvasionActivity.class);
+				long l1 = TimeUtil.getTime().getTime();
+				long l2 = rec.getParktime().getTime();
+				int diff = (int) (l1 - l2) / (1000);
+				Intent intent = new Intent();
 				intent.putExtra("hphm", rec.getHphm());
 				Bundle b1 = new Bundle();
 				b1.putSerializable("parktime", rec.getParktime());
@@ -67,6 +70,13 @@ public class UnhandledListActivity extends Activity {
 				intent.putExtra("tid", rec.getTid());
 				intent.putExtra("recordno", rec.getRecordno());
 				intent.putExtra("fname", rec.getFilepath());
+				if (diff > 1800) {
+					intent.setClass(UnhandledListActivity.this,
+							FeeEvasionActivity.class);
+				} else {
+					intent.setClass(UnhandledListActivity.this,
+							FeeFreeActivity.class);
+				}
 				UnhandledListActivity.this.startActivity(intent);
 				return false;
 			}
@@ -79,7 +89,7 @@ public class UnhandledListActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 10);
+				List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 50);
 				for (int i = 0; i < li.size(); i++) {
 					groups.append(i, li.get(i));
 				}
@@ -95,7 +105,7 @@ public class UnhandledListActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 10);
+				List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50);
 				for (int i = 0; i < li.size(); i++) {
 					groups.append(i, li.get(i));
 				}

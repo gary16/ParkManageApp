@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.LoginWsdl;
 import com.zoway.parkmanage.service.TerminalService;
 
@@ -47,7 +48,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				Intent ii = new Intent(LoginActivity.this,
 						TerminalService.class);
 				ComponentName cnn = LoginActivity.this.startService(ii);
-
+				DbHelper.createTables();
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				LoginActivity.this.startActivity(intent);

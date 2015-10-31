@@ -2,15 +2,138 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="5dp"
     tools:context="com.zoway.parkmanage.view.FeeFreeActivity" >
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/maly1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff0878ca" >
+
+        <TextView
+            android:id="@+id/infofrguna"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="免费确认"
+            android:textColor="#ffffffff"
+            android:textSize="32sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ly1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_below="@id/maly1"
+        android:layout_marginTop="10dp"
+        android:gravity="left" >
+
+        <TextView
+            android:id="@+id/lblcartype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="10dp"
+            android:text="小型汽车"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtcarnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/lblcartype"
+            android:text="粤X123456"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblpark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtcarnumber"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="10dp"
+            android:text="车位位置"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtpark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtcarnumber"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/lblpark"
+            android:text="测试路段"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblparktime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtpark"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="停放时间"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtparktime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtpark"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/lblparktime"
+            android:text="2015年12月12日 24時60分"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblleavetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtparktime"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="离开时间"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtleavetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtparktime"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/lblleavetime"
+            android:text="2015年12月12日 24時60分"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnsure4bill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="#ff30cf86"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="免费缴费"
+        android:textColor="#ffffffff"
+        android:textSize="25sp" />
 
 </RelativeLayout>

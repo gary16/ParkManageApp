@@ -167,7 +167,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			printer.printText("\n\n");
 
 			String cUrl = String.format(
-					"http://cx.zoway.com.cn/Pay/detail/%s.do", rcno);
+					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
 			printer.feedLine(5);
 		}

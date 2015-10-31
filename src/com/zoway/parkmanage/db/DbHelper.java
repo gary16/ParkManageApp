@@ -31,8 +31,6 @@ public class DbHelper {
 		openDatabase();
 		// String deleteStr = " drop table if exists t_uploadevasion";
 		// db.execSQL(deleteStr);
-		String ct1Str = " create table  if not exists t_parkrecord (tid integer primary key AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno  text,hphm text,hphmcolor text,parktime text,leavetime text ,fees  REAL,status integer ,filepath text,isupload int ,isprint int)";
-		db.execSQL(ct1Str);
 		// String insertSql =
 		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','X12345','blue','201510231200','201510231230',30,1,'',0,0)";
 		// db.execSQL(insertSql);
@@ -60,9 +58,12 @@ public class DbHelper {
 		// insertSql =
 		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','XGK098','blue','201509241300','',30,2,'',0,0)";
 		// db.execSQL(insertSql);
-		ct1Str = "create table  if not exists t_uploadevasion (tid int primary key,recordno text,hphm text,escapetime text, uploadtime text,uploadstatus int)";
+		String ct1Str = null;
+		ct1Str = " Create TABLE if not exists  t_parkrecord  (tid integer PRIMARY KEY AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno text,hphm text,hphmcolor text,parktime text,leavetime text,fees REAL,status integer,filepath text,isupload int,isprint int)";
 		db.execSQL(ct1Str);
-		ct1Str = "create table  if not exists t_uploadpay (tid int primary key,recordno text,hphm text,fare float, uploadtime text,uploadstatus int)";
+		ct1Str = " Create  TABLE if not exists t_uploadevasion(tid int PRIMARY KEY,recordno text,hphm text,escapetime text,uploadtime text,uploadstatus int )";
+		db.execSQL(ct1Str);
+		ct1Str = " Create  TABLE if not exists t_uploadpay(tid int PRIMARY KEY,recordno text,hphm text,fare float,uploadtime text,uploadstatus int)";
 		db.execSQL(ct1Str);
 		closeDatabase();
 	}
@@ -314,15 +315,16 @@ public class DbHelper {
 		return list;
 	}
 
-	public static ParkRecord queryRecord(String hphm) {
+	public static ParkRecord queryRecordByHphm(String hphm) {
 		openDatabase();
 		db.beginTransaction();
 		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where hphm=? order by parktime desc limit 0,1";
 		Cursor cur = db.rawQuery(sql1, new String[] { hphm });
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		ParkRecord rec = null;
 		while (cur.moveToNext()) {
-			ParkRecord rec = new ParkRecord();
+			rec = new ParkRecord();
 			rec.setRecoidid(cur.getInt(0));
 			rec.setRecordno(cur.getString(1));
 			rec.setParkid(cur.getInt(2));
@@ -345,12 +347,52 @@ public class DbHelper {
 			rec.setFilepath(cur.getString(10));
 			rec.setIsprint(cur.getInt(11));
 			rec.setTid(cur.getInt(12));
-			list.add(rec);
 		}
 		db.endTransaction();
 		cur.close();
 		closeDatabase();
-		return list.get(0);
+
+		return rec;
+	}
+
+	public static ParkRecord queryRecordByTid(int tid) {
+		openDatabase();
+		db.beginTransaction();
+		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where tid=? order by parktime desc limit 0,1";
+		Cursor cur = db.rawQuery(sql1, new String[] { tid + "" });
+		List<ParkRecord> list = new ArrayList<ParkRecord>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		ParkRecord rec = null;
+		while (cur.moveToNext()) {
+			rec = new ParkRecord();
+			rec.setRecoidid(cur.getInt(0));
+			rec.setRecordno(cur.getString(1));
+			rec.setParkid(cur.getInt(2));
+			rec.setParkno(cur.getString(3));
+			rec.setHphm(cur.getString(4));
+			rec.setHphmcolor(cur.getString(5));
+			try {
+				if (cur.getString(6) != null && !cur.getString(6).equals("")) {
+					rec.setParktime(sdf.parse(cur.getString(6)));
+				}
+				if (cur.getString(7) != null && !cur.getString(7).equals("")) {
+					rec.setLeavetime(sdf.parse(cur.getString(7)));
+				}
+
+			} catch (Exception er) {
+				er.printStackTrace();
+			}
+			rec.setFees(cur.getFloat(8));
+			rec.setStatus(cur.getInt(9));
+			rec.setFilepath(cur.getString(10));
+			rec.setIsprint(cur.getInt(11));
+			rec.setTid(cur.getInt(12));
+		}
+		db.endTransaction();
+		cur.close();
+		closeDatabase();
+
+		return rec;
 	}
 
 	public static List<ParkRecord> queryInOrOut30Min(int type, int limit) {

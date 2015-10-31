@@ -50,11 +50,17 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 				intent.putExtra("rt", rt);
 				intent.putExtra("type", type);
 				intent.putExtra("fn", fn);
-				intent.putExtra("hphm", txtocrreshphm.getText().toString());
+				intent.putExtra("hphm", txtocrreshphm.getText().toString()
+						.toUpperCase());
 				this.startActivity(intent);
 			} else if (type == 2) {
-				pr = DbHelper.queryRecord(s);
-				if (pr != null) {
+				String txtHphm = txtocrreshphm.getText().toString()
+						.toUpperCase();
+				pr = DbHelper.queryRecordByHphm(txtHphm);
+				if (pr == null || pr.getStatus() != 0) {
+					Toast.makeText(OcrResultActivity.this, "该车牌没有停车记录",
+							Toast.LENGTH_LONG).show();
+				} else {
 					Intent intent = new Intent(this, PaybillActivity.class);
 					intent.putExtra("rcid", rcid);
 					intent.putExtra("rcno", pr.getRecordno());
@@ -66,11 +72,9 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 					intent.putExtra("type", type);
 					intent.putExtra("fn", fn);
 					intent.putExtra("tid", pr.getTid());
-					intent.putExtra("hphm", txtocrreshphm.getText().toString());
+					intent.putExtra("hphm", txtocrreshphm.getText().toString()
+							.toUpperCase());
 					this.startActivity(intent);
-				} else {
-					Toast.makeText(OcrResultActivity.this, "该车牌没有停车记录",
-							Toast.LENGTH_LONG).show();
 				}
 			}
 			break;
