@@ -54,6 +54,7 @@ public class QueryListsActivity extends Activity {
 		public void doPrint(Printer printer) throws Exception {
 			// TODO Auto-generated method stub
 			Format format = new Format();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 			// Use this 5x7 dot and 1 times width, 2 times height
 			format.setAscSize(Format.ASC_DOT5x7);
 			format.setAscScale(Format.ASC_SC1x2);
@@ -67,12 +68,11 @@ public class QueryListsActivity extends Activity {
 			printer.feedLine(1);
 			printer.printText("停车位置:南源路\n");
 			printer.feedLine(1);
-			printer.printText("停车时间:" + pr.getParktime() + "\n");
+			printer.printText("停车时间:" + sdf.format(pr.getParktime()) + "\n");
 			printer.feedLine(1);
-			printer.printText("离开时间:" + pr.getLeavetime() + "\n");
+			printer.printText("离开时间:" + sdf.format(pr.getLeavetime()) + "\n");
 			printer.feedLine(1);
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 			long diff = pr.getLeavetime().getTime()
 					- pr.getParktime().getTime();
 			long days = diff / (1000 * 60 * 60 * 24);

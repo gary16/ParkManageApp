@@ -43,16 +43,23 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnressure:
 			if (type == 1) {
-				Intent intent = new Intent(this, InputInfoActivity.class);
-				intent.putExtra("rcid", rcid);
-				intent.putExtra("rcno", rcno);
-				intent.putExtra("sno", sno);
-				intent.putExtra("rt", rt);
-				intent.putExtra("type", type);
-				intent.putExtra("fn", fn);
-				intent.putExtra("hphm", txtocrreshphm.getText().toString()
-						.toUpperCase());
-				this.startActivity(intent);
+				String txtHphm = txtocrreshphm.getText().toString()
+						.toUpperCase();
+				pr = DbHelper.queryRecordByHphm(txtHphm);
+				if (pr == null || pr.getStatus() != 0) {
+					Intent intent = new Intent(this, InputInfoActivity.class);
+					intent.putExtra("rcid", rcid);
+					intent.putExtra("rcno", rcno);
+					intent.putExtra("sno", sno);
+					intent.putExtra("rt", rt);
+					intent.putExtra("type", type);
+					intent.putExtra("fn", fn);
+					intent.putExtra("hphm", txtHphm);
+					this.startActivity(intent);
+				} else {
+					Toast.makeText(OcrResultActivity.this, "该车牌已有停车记录，请先处理",
+							Toast.LENGTH_LONG).show();
+				}
 			} else if (type == 2) {
 				String txtHphm = txtocrreshphm.getText().toString()
 						.toUpperCase();
@@ -66,7 +73,7 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 					intent.putExtra("rcno", pr.getRecordno());
 					intent.putExtra("sno", sno);
 					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyy年MM月dd日 HH时mm分");
+							"yyyyMMddHHmmss");
 					rt = sdf.format(pr.getParktime());
 					intent.putExtra("rt", rt);
 					intent.putExtra("type", type);

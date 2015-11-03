@@ -147,23 +147,34 @@
             android:orientation="horizontal"
             android:weightSum="2" >
 
-            <ImageButton
-                android:id="@+id/btnmainremark"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/c1" >
-            </ImageButton>
+                android:layout_weight="1" >
 
-            <ImageButton
-                android:id="@+id/btnmainpay"
+                <ImageButton
+                    android:id="@+id/btnmainremark"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                                android:layout_centerInParent="true"
+                    android:background="@drawable/c1" >
+                </ImageButton>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/c3" >
-            </ImageButton>
+                android:layout_weight="1" >
+
+                <ImageButton
+                    android:id="@+id/btnmainpay"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/c2" >
+                </ImageButton>
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -173,23 +184,35 @@
             android:orientation="horizontal"
             android:weightSum="2" >
 
-            <ImageButton
-                android:id="@+id/btnmainescape"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/c4" >
-            </ImageButton>
+                android:layout_weight="1" >
 
-            <ImageButton
-                android:id="@+id/btnmainquery"
+                <ImageButton
+                    android:id="@+id/btnmainescape"
+                      android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/c4" >
+                </ImageButton>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/c2" >
-            </ImageButton>
+                android:layout_weight="1" >
+
+                <ImageButton
+                    android:id="@+id/btnmainquery"
+                         android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/c3" >
+                </ImageButton>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -17,7 +17,7 @@
             android:layout_marginLeft="3dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="停车查询"
+            android:text="未处理查询"
             android:textColor="#ffffffff"
             android:textSize="32sp" />
     </LinearLayout>

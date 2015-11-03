@@ -1,5 +1,6 @@
 package com.zoway.parkmanage.view;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,8 +42,8 @@ public class PaybillActivity extends Activity {
 	private TextView txtmoney;
 	private Button btnsure4bill;
 	private String hphm;
-	private String parkingtime;
-	private String leavetime;
+	private Date parktime;
+	private Date leavetime;
 	private float fare;
 	private int tid;
 	private String rcno;
@@ -52,6 +53,8 @@ public class PaybillActivity extends Activity {
 		@Override
 		public void doPrint(Printer printer) throws Exception {
 			// TODO Auto-generated method stub
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 			Format format = new Format();
 			// Use this 5x7 dot and 1 times width, 2 times height
 			format.setAscSize(Format.ASC_DOT5x7);
@@ -66,14 +69,13 @@ public class PaybillActivity extends Activity {
 			printer.feedLine(1);
 			printer.printText("停车位置:南源路\n");
 			printer.feedLine(1);
-			printer.printText("停车时间:" + parkingtime + "\n");
+			printer.printText("停车时间:" + sdf.format(parktime) + "\n");
 			printer.feedLine(1);
-			printer.printText("离开时间:" + leavetime + "\n");
+			printer.printText("离开时间:" + sdf.format(leavetime) + "\n");
 			printer.feedLine(1);
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			Date d1 = sdf.parse(parkingtime);
-			Date d2 = sdf.parse(leavetime);
+			Date d1 = parktime;
+			Date d2 = leavetime;
 			long diff = d2.getTime() - d1.getTime();
 			long days = diff / (1000 * 60 * 60 * 24);
 
@@ -96,9 +98,6 @@ public class PaybillActivity extends Activity {
 		@Override
 		public void onFinish(int arg0) {
 			// TODO Auto-generated method stub
-			String ltt = leavetime.replace("年", "").replace("月", "")
-					.replace("日", "").replace("时", "").replace("分", "")
-					.replace(" ", "");
 			DbHelper.setPayRecord(tid, rcno, hphm, fare);
 			Message msg = new Message();
 			msg.what = 1;
@@ -186,10 +185,11 @@ public class PaybillActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_paybill);
 		ActivityList.pushActivity(this);
+
 		Intent intent = this.getIntent();
 		hphm = intent.getStringExtra("hphm");
 		tid = intent.getIntExtra("tid", 0);
-		parkingtime = intent.getStringExtra("rt");
+
 		rcno = intent.getStringExtra("rcno");
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
@@ -198,11 +198,21 @@ public class PaybillActivity extends Activity {
 		txtmoney = (TextView) this.findViewById(R.id.txtmoney);
 		btnsure4bill = (Button) this.findViewById(R.id.btnsure4bill);
 		txtcarnumber.setText(hphm);
-		txtparktime.setText(parkingtime);
-		txtpark.setText("南源路");
+
+		String parktimetext = intent.getStringExtra("rt");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-		leavetime = sdf.format(new Date());
-		txtleavetime.setText(leavetime);
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+		try {
+			parktime = sdf1.parse(parktimetext);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		txtparktime.setText(sdf.format(parktime));
+		txtpark.setText("南源路");
+
+		leavetime = TimeUtil.getTime();
+		txtleavetime.setText(sdf.format(leavetime));
 		Thread t1 = new Thread(new LeaveThread());
 		t1.start();
 		btnsure4bill.setOnClickListener(new OnClickListener() {

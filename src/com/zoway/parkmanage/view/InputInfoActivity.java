@@ -2,6 +2,7 @@ package com.zoway.parkmanage.view;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,6 +51,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	private String rcno = null;
 	private String sno = null;
 	private String rt = null;
+	private Date parkTime = null;
 	private String hphm = null;
 	private String fn = null;
 	private int type = 0;
@@ -58,11 +60,9 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	// size 48*48
 	private ImageButton img1;
 	private ImageButton img2;
-	private ImageButton img3;
 	private Button infosure;
 	private Bitmap bitmapSelected1 = null;
 	private Bitmap bitmapSelected2 = null;
-	private Bitmap bitmapSelected3 = null;
 	private ProgressDialog pDia;
 	private TextView txtparktime;
 	private TextView txtcarnumber;
@@ -150,16 +150,18 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			printer.printText("\n");
 			printer.printText("车牌号码:粤" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
-			printer.printText("停车时间:" + rt + "\n");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+			String datetext = sdf.format(parkTime);
+			printer.printText("停车时间:" + datetext + "\n");
 			printer.feedLine(10);
 			printer.printText("        路边停车凭条\n");
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
-			printer.printText("商户名称:测试商户\n");
+			printer.printText("商户名称:\n");
 			printer.printText("车牌号码:粤" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
-			printer.printText("停车时间:" + rt + "\n");
+			printer.printText("停车时间:" + datetext + "\n");
 			printer.printText("操作员:"
 					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
 			printer.setAutoTrunc(false);
@@ -224,9 +226,9 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				BitmapHandle.writeJpgFromBitmap(img_path + File.separator
 						+ "p2.jpg", b1, 90);
 				b1 = null;
-				String da = rt.replace("年", "-").replace("月", "-")
-						.replace("日", " ").replace("时", ":").replace("分", "");
-				DbHelper.insertRecord(rcno, hphm, "blue", da, img_path, 0, 0, 0);
+
+				DbHelper.insertRecord(rcno, hphm, "blue", parkTime, img_path,
+						0, 0, 0);
 				progress.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -252,21 +254,26 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		rcid = intent.getStringExtra("rcid");
 
 		sno = intent.getStringExtra("sno");
-
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		type = intent.getIntExtra("type", 0);
 		if (type == 4) {
 			rt = intent.getStringExtra("rt");
+			try {
+				parkTime = sdf.parse(rt);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			rcno = intent.getStringExtra("rcno");
 		} else {
-			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
-			rt = sdf1.format(TimeUtil.getTime());
+			parkTime = TimeUtil.getTime();
 			String uuid = java.util.UUID.randomUUID().toString();
 			rcno = uuid;
 		}
 		hphm = intent.getStringExtra("hphm");
 		fn = intent.getStringExtra("fn");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-		img_path = img_path + File.separator + sdf.format(new Date()) + hphm
+
+		img_path = img_path + File.separator + sdf.format(parkTime) + hphm
 				+ File.separator;
 		File fDir = new File(img_path);
 		if (!fDir.exists()) {
@@ -276,7 +283,8 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		img2 = (ImageButton) this.findViewById(R.id.parkimg2);
 		infosure = (Button) this.findViewById(R.id.btninfosure);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
-		txtparktime.setText(rt);
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
+		txtparktime.setText(sdf1.format(parkTime));
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtcarnumber.setText("粤" + hphm);
 		img1.setOnClickListener(this);

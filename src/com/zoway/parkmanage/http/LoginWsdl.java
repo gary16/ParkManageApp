@@ -85,6 +85,7 @@ public class LoginWsdl {
 							f.set(lb, sdf.parse(s));
 						} else {
 							f.set(lb, new Date());
+							lb.setLoginClientTime(new Date());
 						}
 					}
 				}

@@ -82,13 +82,15 @@ public class DbHelper {
 	}
 
 	public static boolean insertRecord(String recordno, String hphm,
-			String hphmcolor, String parktime, String filepath, int status,
+			String hphmcolor, Date parktime, String filepath, int status,
 			int isupload, int isprint) {
 		boolean flg = false;
 		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String datetext = sdf.format(parktime);
 			String inSql = " insert into t_parkrecord(recordno,hphm,hphmcolor,parktime,filepath,status,isupload,isprint) values(?,?,?,?,?,?,?,?)";
 			Object[] objArr = new Object[] { recordno, hphm, hphmcolor,
-					parktime, filepath, status, isupload, isprint };
+					datetext, filepath, status, isupload, isprint };
 			execSql(inSql, objArr);
 			flg = true;
 		} catch (Exception e) {
@@ -125,7 +127,7 @@ public class DbHelper {
 
 	public static boolean updateUploadEscapeFlag(int tid, int isupload) {
 		boolean flg = false;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String da = sdf.format(TimeUtil.getTime());
 		String s1 = "update t_uploadevasion set uploadtime=?,uploadstatus=? where tid=?";
 		execSql(s1, new Object[] { da, isupload, tid });
@@ -144,7 +146,7 @@ public class DbHelper {
 		String s1 = "update t_parkrecord set status=2 where tid=?";
 		execSql(s1, new Object[] { tid });
 		String s2 = "insert into t_uploadevasion(tid,recordno,hphm,escapetime,uploadstatus) values(?,?,?,?,0)";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String da = sdf.format(escapetime);
 		execSql(s2, new Object[] { tid, recordno, hphm, da });
 		flg = true;
@@ -159,7 +161,7 @@ public class DbHelper {
 	public static boolean setPayRecord(int tid, String recordno, String hphm,
 			float fare) {
 		boolean flg = false;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String leavetime = sdf.format(TimeUtil.getTime());
 		String s1 = "update t_parkrecord set status=1,leavetime=? where tid=?";
 		execSql(s1, new Object[] { leavetime, tid });
@@ -181,7 +183,7 @@ public class DbHelper {
 		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where status=0 and isupload=0 order by parktime limit 0,?";
 		Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		while (cur.moveToNext()) {
 			ParkRecord rec = new ParkRecord();
 			rec.setRecoidid(cur.getInt(0));
@@ -220,7 +222,7 @@ public class DbHelper {
 		String sql1 = "select tid,recordno,hphm,fare,uploadtime,uploadstatus from t_uploadpay where uploadstatus=0 order by uploadtime limit 0,?";
 		Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
 		List<PayRecord> list = new ArrayList<PayRecord>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		while (cur.moveToNext()) {
 			PayRecord par = new PayRecord();
 			par.setTid(cur.getInt(0));
@@ -249,7 +251,7 @@ public class DbHelper {
 		String sql1 = " select t.tid,t.recordno,t.hphm,t.escapetime,t.uploadtime,t.uploadstatus,s.filepath from t_uploadevasion as  t,t_parkrecord as  s where t.uploadstatus=0 and t.tid=s.tid order by t.escapetime limit 0,?";
 		Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
 		List<EscapeRecord> list = new ArrayList<EscapeRecord>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		while (cur.moveToNext()) {
 
 			EscapeRecord er = new EscapeRecord();
@@ -282,7 +284,7 @@ public class DbHelper {
 		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where status=? order by parktime limit 0,?";
 		Cursor cur = db.rawQuery(sql1, new String[] { payStatus, limit + "" });
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		while (cur.moveToNext()) {
 			ParkRecord rec = new ParkRecord();
 			rec.setRecoidid(cur.getInt(0));
@@ -321,7 +323,7 @@ public class DbHelper {
 		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where hphm=? order by parktime desc limit 0,1";
 		Cursor cur = db.rawQuery(sql1, new String[] { hphm });
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		ParkRecord rec = null;
 		while (cur.moveToNext()) {
 			rec = new ParkRecord();
@@ -361,7 +363,7 @@ public class DbHelper {
 		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where tid=? order by parktime desc limit 0,1";
 		Cursor cur = db.rawQuery(sql1, new String[] { tid + "" });
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		ParkRecord rec = null;
 		while (cur.moveToNext()) {
 			rec = new ParkRecord();
@@ -399,7 +401,7 @@ public class DbHelper {
 		openDatabase();
 		db.beginTransaction();
 		String sql1 = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String pt = sdf.format(TimeUtil.getTime());
 		// in 30s
 		if (type == 0) {

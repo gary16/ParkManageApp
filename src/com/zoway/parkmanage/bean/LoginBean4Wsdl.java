@@ -14,6 +14,18 @@ public class LoginBean4Wsdl {
 	private static Date loginServerTime;
 	private static Date loginClientTime;
 
+	static {
+		loginClientTime = new Date();
+	}
+
+	public static void setLoginServerTime(Date loginServerTime) {
+		LoginBean4Wsdl.loginServerTime = loginServerTime;
+	}
+
+	public static void setLoginClientTime(Date loginClientTime) {
+		LoginBean4Wsdl.loginClientTime = loginClientTime;
+	}
+
 	public static Worker getWorker() {
 		return worker;
 	}
