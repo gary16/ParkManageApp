@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_ly"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zoway.parkmanage.view.QueryListsActivity" >
@@ -27,21 +28,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly1"
+        android:layout_marginTop="5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/btnunhandled"
+            android:id="@+id/btnpayfees"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="已缴费" >
+            android:layout_height="34dp"
+            android:layout_marginLeft="3dp"
+            android:background="#ff30cf86"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="已缴费"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" >
         </Button>
 
         <Button
-            android:id="@+id/btnhandled"
+            android:id="@+id/btnescapefees"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="已逃费" >
+            android:layout_height="34dp"
+            android:layout_marginLeft="3dp"
+            android:background="#ff30cf86"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="已逃费"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" >
         </Button>
+
+        <EditText
+            android:id="@+id/edtquery"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
     </LinearLayout>
 
     <ExpandableListView

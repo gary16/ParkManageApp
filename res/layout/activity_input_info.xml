@@ -136,7 +136,7 @@
             android:background="#ff30cf86"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="		取消		"
+            android:text="		取消		 "
             android:textColor="#ffffffff"
             android:textSize="25sp" />
     </LinearLayout>

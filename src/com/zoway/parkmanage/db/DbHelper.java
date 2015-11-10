@@ -163,8 +163,8 @@ public class DbHelper {
 		boolean flg = false;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String leavetime = sdf.format(TimeUtil.getTime());
-		String s1 = "update t_parkrecord set status=1,leavetime=? where tid=?";
-		execSql(s1, new Object[] { leavetime, tid });
+		String s1 = "update t_parkrecord set status=1,leavetime=?,fees=? where tid=?";
+		execSql(s1, new Object[] { leavetime, fare, tid });
 		String s2 = "insert into t_uploadpay(tid,recordno,hphm,fare,uploadtime,uploadstatus) values(?,?,?,?,?,0)";
 
 		execSql(s2, new Object[] { tid, recordno, hphm, fare, leavetime });
@@ -278,11 +278,21 @@ public class DbHelper {
 		return list;
 	}
 
-	public static List<ParkRecord> queryRecordList(String payStatus, int limit) {
+	public static List<ParkRecord> queryRecordList(String payStatus, int limit,
+			String hphmStr) {
 		openDatabase();
 		db.beginTransaction();
-		String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where status=? order by parktime limit 0,?";
-		Cursor cur = db.rawQuery(sql1, new String[] { payStatus, limit + "" });
+		Cursor cur = null;
+		String sqlStr = null;
+		if (hphmStr == null || hphmStr.equals("")) {
+			sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  order by parktime limit 0,? ";
+			cur = db.rawQuery(sqlStr, new String[] { payStatus, limit + "" });
+		} else {
+			hphmStr = "%" + hphmStr + "%";
+			sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  and hphm like ? order by parktime limit 0,? ";
+			cur = db.rawQuery(sqlStr, new String[] { payStatus, hphmStr,
+					limit + "" });
+		}
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		while (cur.moveToNext()) {

@@ -61,6 +61,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	private ImageButton img1;
 	private ImageButton img2;
 	private Button infosure;
+	private Button btninfocancel;
 	private Bitmap bitmapSelected1 = null;
 	private Bitmap bitmapSelected2 = null;
 	private ProgressDialog pDia;
@@ -141,18 +142,8 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			// TODO Auto-generated method stub
 			Format format = new Format();
 			// Use this 5x7 dot and 1 times width, 2 times height
-			format.setAscSize(Format.ASC_DOT5x7);
-			format.setAscScale(Format.ASC_SC1x2);
-			printer.setFormat(format);
-			printer.printText("        管理员凭条\n");
-			format.setAscScale(Format.ASC_SC1x1);
-			printer.setFormat(format);
-			printer.printText("\n");
-			printer.printText("车牌号码:粤" + hphm + "\n");
-			printer.printText("停车位置:南源路\n");
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 			String datetext = sdf.format(parkTime);
-			printer.printText("停车时间:" + datetext + "\n");
 			printer.feedLine(10);
 			printer.printText("        路边停车凭条\n");
 			format.setAscScale(Format.ASC_SC1x1);
@@ -234,9 +225,10 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// Thread tt1 = new Thread(new UploadDataThread());
-			// tt1.start();
-
+			break;
+		case R.id.btninfocancel:
+			int iiii = 0;
+			this.onBackPressed();
 			break;
 		default:
 			break;
@@ -281,7 +273,10 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		}
 		img1 = (ImageButton) this.findViewById(R.id.parkimg1);
 		img2 = (ImageButton) this.findViewById(R.id.parkimg2);
+
 		infosure = (Button) this.findViewById(R.id.btninfosure);
+		btninfocancel = (Button) this.findViewById(R.id.btninfocancel);
+
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
 		txtparktime.setText(sdf1.format(parkTime));
@@ -290,6 +285,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		img1.setOnClickListener(this);
 		img2.setOnClickListener(this);
 		infosure.setOnClickListener(this);
+		btninfocancel.setOnClickListener(this);
 
 	}
 

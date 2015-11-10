@@ -1,7 +1,6 @@
 package com.zoway.parkmanage.view;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -11,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.landicorp.android.eptapi.DeviceService;
@@ -36,18 +37,21 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
+import com.zoway.parkmanage.utils.LogUtils;
 
 public class QueryListsActivity extends Activity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
 	private MyExpandableListAdapter madapter;
-	private Button btnunhandled;
-	private Button btnhandled;
-	private EditText txtQuery;
-	private Button btnquery;
+	private Button btnpayfees;
+	private Button btnescapefees;
+	private EditText edtquery;
+	private String qryStr = "";
 	private ProgressDialog pDia;
 	private ParkRecord pr;
+	private View root_ly;
+
 	private Printer.Progress progress = new Printer.Progress() {
 
 		@Override
@@ -199,7 +203,7 @@ public class QueryListsActivity extends Activity {
 		ActivityList.pushActivity(this);
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
 
-		List<ParkRecord> li = DbHelper.queryRecordList("1", 50);
+		List<ParkRecord> li = DbHelper.queryRecordList("1", 50, null);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -207,14 +211,14 @@ public class QueryListsActivity extends Activity {
 		lview.setGroupIndicator(null);
 		madapter = new MyExpandableListAdapter();
 		lview.setAdapter(madapter);
-		btnunhandled = (Button) this.findViewById(R.id.btnunhandled);
-		btnunhandled.setOnClickListener(new OnClickListener() {
 
+		btnpayfees = (Button) this.findViewById(R.id.btnpayfees);
+		btnpayfees.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				List<ParkRecord> li = DbHelper.queryRecordList("1", 50);
+				List<ParkRecord> li = DbHelper.queryRecordList("1", 50, null);
 				for (int i = 0; i < li.size(); i++) {
 					groups.append(i, li.get(i));
 				}
@@ -223,14 +227,14 @@ public class QueryListsActivity extends Activity {
 				lview.setAdapter(madapter);
 			}
 		});
-		btnhandled = (Button) this.findViewById(R.id.btnhandled);
-		btnhandled.setOnClickListener(new OnClickListener() {
 
+		btnescapefees = (Button) this.findViewById(R.id.btnescapefees);
+		btnescapefees.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				groups.clear();
-				List<ParkRecord> li = DbHelper.queryRecordList("2", 50);
+				List<ParkRecord> li = DbHelper.queryRecordList("2", 50, null);
 				for (int i = 0; i < li.size(); i++) {
 					groups.append(i, li.get(i));
 				}
@@ -239,6 +243,71 @@ public class QueryListsActivity extends Activity {
 				lview.setAdapter(madapter);
 			}
 		});
+		edtquery = (EditText) this.findViewById(R.id.edtquery);
+		edtquery.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				// TODO Auto-generated method stub
+				if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+					String curStr = edtquery.getText().toString()
+							.replace("\n", "");
+					if (!curStr.equals(qryStr)) {
+						groups.clear();
+						List<ParkRecord> li = DbHelper.queryRecordList("1", 50,
+								curStr);
+						for (int i = 0; i < li.size(); i++) {
+							groups.append(i, li.get(i));
+						}
+
+						madapter = new MyExpandableListAdapter();
+						lview.setAdapter(madapter);
+						qryStr = curStr;
+
+					}
+					edtquery.clearFocus();
+					return true;
+				} else {
+					return false;
+				}
+
+			}
+		});
+		// root_ly = this.findViewById(R.id.root_ly);
+		//
+		// // 监控虚拟键盘s
+		// root_ly.getViewTreeObserver().addOnGlobalLayoutListener(
+		// new OnGlobalLayoutListener() {
+		//
+		// @Override
+		// public void onGlobalLayout() {
+		//
+		// // 比较Activity根布局与当前布局的大小
+		// int heightDiff = root_ly.getRootView().getHeight()
+		// - root_ly.getHeight();
+		// if (heightDiff > 100) {
+		// LogUtils.i(QueryListsActivity.class, " show :"
+		// + (new Date()).toString());
+		// } else {
+		// String curStr = edtquery.getText().toString();
+		// if (!curStr.equals(qryStr)) {
+		// groups.clear();
+		// List<ParkRecord> li = DbHelper.queryRecordList(
+		// "1", 50, curStr);
+		// for (int i = 0; i < li.size(); i++) {
+		// groups.append(i, li.get(i));
+		// }
+		//
+		// madapter = new MyExpandableListAdapter();
+		// lview.setAdapter(madapter);
+		// qryStr = curStr;
+		// } else {
+		//
+		// }
+		// }
+		// }
+		// });
 	}
 
 	@Override
@@ -303,18 +372,18 @@ public class QueryListsActivity extends Activity {
 			btnprint.setText("补打凭条");
 			btnprint.setLayoutParams(lp1);
 			btnprint.setOnClickListener(new ClickFun(groupPosition));
-			Button btndetail = new Button(QueryListsActivity.this);
-			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp2.addRule(RelativeLayout.RIGHT_OF, v1.getId());
-			btndetail.setId(3);
-			btndetail.setLayoutParams(lp2);
-			btndetail.setText("查看详情");
-
+			// Button btndetail = new Button(QueryListsActivity.this);
+			// RelativeLayout.LayoutParams lp2 = new
+			// RelativeLayout.LayoutParams(
+			// RelativeLayout.LayoutParams.WRAP_CONTENT,
+			// RelativeLayout.LayoutParams.WRAP_CONTENT);
+			// lp2.addRule(RelativeLayout.RIGHT_OF, v1.getId());
+			// btndetail.setId(3);
+			// btndetail.setLayoutParams(lp2);
+			// btndetail.setText("查看详情");
+			// rl.addView(btndetail);
 			rl.addView(v1);
 			rl.addView(btnprint);
-			rl.addView(btndetail);
 
 			return rl;
 		}

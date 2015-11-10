@@ -1,20 +1,12 @@
 package com.zoway.parkmanage.view;
 
 import java.text.SimpleDateFormat;
-
-import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.R.array;
-import com.zoway.parkmanage.R.id;
-import com.zoway.parkmanage.R.layout;
-import com.zoway.parkmanage.R.menu;
-import com.zoway.parkmanage.bean.ParkRecord;
-import com.zoway.parkmanage.db.DbHelper;
-import com.zoway.parkmanage.utils.PosUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.bean.ParkRecord;
+import com.zoway.parkmanage.db.DbHelper;
 
 public class OcrResultActivity extends Activity implements OnClickListener {
 	private Spinner mSpinner;
@@ -42,48 +38,56 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnressure:
-			if (type == 1) {
-				String txtHphm = txtocrreshphm.getText().toString()
-						.toUpperCase();
-				pr = DbHelper.queryRecordByHphm(txtHphm);
-				if (pr == null || pr.getStatus() != 0) {
-					Intent intent = new Intent(this, InputInfoActivity.class);
-					intent.putExtra("rcid", rcid);
-					intent.putExtra("rcno", rcno);
-					intent.putExtra("sno", sno);
-					intent.putExtra("rt", rt);
-					intent.putExtra("type", type);
-					intent.putExtra("fn", fn);
-					intent.putExtra("hphm", txtHphm);
-					this.startActivity(intent);
-				} else {
-					Toast.makeText(OcrResultActivity.this, "该车牌已有停车记录，请先处理",
-							Toast.LENGTH_LONG).show();
+			String txtHphm = txtocrreshphm.getText().toString().toUpperCase();
+			Pattern regex = Pattern
+					.compile("^[A-HJ-Z][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9]$");
+			Matcher mth = regex.matcher(txtHphm);
+			if (mth.matches()) {
+				if (type == 1) {
+					pr = DbHelper.queryRecordByHphm(txtHphm);
+					if (pr == null || pr.getStatus() != 0) {
+						Intent intent = new Intent(this,
+								InputInfoActivity.class);
+						intent.putExtra("rcid", rcid);
+						intent.putExtra("rcno", rcno);
+						intent.putExtra("sno", sno);
+						intent.putExtra("rt", rt);
+						intent.putExtra("type", type);
+						intent.putExtra("fn", fn);
+						intent.putExtra("hphm", txtHphm);
+						this.startActivity(intent);
+					} else {
+						Toast.makeText(OcrResultActivity.this,
+								"该车牌已有停车记录，请先处理", Toast.LENGTH_LONG).show();
+					}
+				} else if (type == 2) {
+
+					pr = DbHelper.queryRecordByHphm(txtHphm);
+					if (pr == null || pr.getStatus() != 0) {
+						Toast.makeText(OcrResultActivity.this, "该车牌没有停车记录",
+								Toast.LENGTH_LONG).show();
+					} else {
+						Intent intent = new Intent(this, PaybillActivity.class);
+						intent.putExtra("rcid", rcid);
+						intent.putExtra("rcno", pr.getRecordno());
+						intent.putExtra("sno", sno);
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyyMMddHHmmss");
+						rt = sdf.format(pr.getParktime());
+						intent.putExtra("rt", rt);
+						intent.putExtra("type", type);
+						intent.putExtra("fn", fn);
+						intent.putExtra("tid", pr.getTid());
+						intent.putExtra("hphm", txtocrreshphm.getText()
+								.toString().toUpperCase());
+						this.startActivity(intent);
+					}
 				}
-			} else if (type == 2) {
-				String txtHphm = txtocrreshphm.getText().toString()
-						.toUpperCase();
-				pr = DbHelper.queryRecordByHphm(txtHphm);
-				if (pr == null || pr.getStatus() != 0) {
-					Toast.makeText(OcrResultActivity.this, "该车牌没有停车记录",
-							Toast.LENGTH_LONG).show();
-				} else {
-					Intent intent = new Intent(this, PaybillActivity.class);
-					intent.putExtra("rcid", rcid);
-					intent.putExtra("rcno", pr.getRecordno());
-					intent.putExtra("sno", sno);
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyyMMddHHmmss");
-					rt = sdf.format(pr.getParktime());
-					intent.putExtra("rt", rt);
-					intent.putExtra("type", type);
-					intent.putExtra("fn", fn);
-					intent.putExtra("tid", pr.getTid());
-					intent.putExtra("hphm", txtocrreshphm.getText().toString()
-							.toUpperCase());
-					this.startActivity(intent);
-				}
+			} else {
+				Toast.makeText(OcrResultActivity.this, "请按正确格式输入车牌",
+						Toast.LENGTH_LONG).show();
 			}
+
 			break;
 		case R.id.btnrescancel:
 			Intent intent1 = new Intent(this, TakeOcrPhotoActivity.class);
