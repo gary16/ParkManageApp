@@ -6,9 +6,13 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -37,7 +41,6 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
-import com.zoway.parkmanage.utils.LogUtils;
 
 public class QueryListsActivity extends Activity {
 
@@ -48,6 +51,8 @@ public class QueryListsActivity extends Activity {
 	private Button btnescapefees;
 	private EditText edtquery;
 	private String qryStr = "";
+	private int qryStrLen = 0;
+	private int curFlg = 1;
 	private ProgressDialog pDia;
 	private ParkRecord pr;
 	private View root_ly;
@@ -203,7 +208,7 @@ public class QueryListsActivity extends Activity {
 		ActivityList.pushActivity(this);
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
 
-		List<ParkRecord> li = DbHelper.queryRecordList("1", 50, null);
+		List<ParkRecord> li = DbHelper.queryRecordList("1", 100, null);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -217,14 +222,23 @@ public class QueryListsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				groups.clear();
-				List<ParkRecord> li = DbHelper.queryRecordList("1", 50, null);
-				for (int i = 0; i < li.size(); i++) {
-					groups.append(i, li.get(i));
-				}
+				if (curFlg == 2) {
+					groups.clear();
+					String curStr = edtquery.getText().toString();
+					List<ParkRecord> li = DbHelper.queryRecordList("1", 100,
+							curStr);
+					for (int i = 0; i < li.size(); i++) {
+						groups.append(i, li.get(i));
+					}
 
-				madapter = new MyExpandableListAdapter();
-				lview.setAdapter(madapter);
+					madapter = new MyExpandableListAdapter();
+					lview.setAdapter(madapter);
+					curFlg = 1;
+					btnpayfees.setBackgroundColor(0xffcccc99);
+					btnpayfees.setTextColor(0xff777777);
+					btnescapefees.setBackgroundColor(0xfff9c164);
+					btnescapefees.setTextColor(0xffffffff);
+				}
 			}
 		});
 
@@ -233,30 +247,38 @@ public class QueryListsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				groups.clear();
-				List<ParkRecord> li = DbHelper.queryRecordList("2", 50, null);
-				for (int i = 0; i < li.size(); i++) {
-					groups.append(i, li.get(i));
-				}
+				if (curFlg == 1) {
+					groups.clear();
+					String curStr = edtquery.getText().toString();
+					List<ParkRecord> li = DbHelper.queryRecordList("2", 100,
+							curStr);
+					for (int i = 0; i < li.size(); i++) {
+						groups.append(i, li.get(i));
+					}
 
-				madapter = new MyExpandableListAdapter();
-				lview.setAdapter(madapter);
+					madapter = new MyExpandableListAdapter();
+					lview.setAdapter(madapter);
+					curFlg = 2;
+					btnescapefees.setBackgroundColor(0xffcccc99);
+					btnescapefees.setTextColor(0xff777777);
+					btnpayfees.setBackgroundColor(0xfff9c164);
+					btnpayfees.setTextColor(0xffffffff);
+				}
 			}
 		});
 		edtquery = (EditText) this.findViewById(R.id.edtquery);
 		edtquery.setOnEditorActionListener(new OnEditorActionListener() {
-
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				// TODO Auto-generated method stub
 				if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-					String curStr = edtquery.getText().toString()
-							.replace("\n", "");
+					String curStr = edtquery.getText().toString().toUpperCase();
 					if (!curStr.equals(qryStr)) {
 						groups.clear();
-						List<ParkRecord> li = DbHelper.queryRecordList("1", 50,
-								curStr);
+						String status = curFlg + "";
+						List<ParkRecord> li = DbHelper.queryRecordList(status,
+								100, curStr);
 						for (int i = 0; i < li.size(); i++) {
 							groups.append(i, li.get(i));
 						}
@@ -264,7 +286,7 @@ public class QueryListsActivity extends Activity {
 						madapter = new MyExpandableListAdapter();
 						lview.setAdapter(madapter);
 						qryStr = curStr;
-
+						qryStrLen = qryStr.length();
 					}
 					edtquery.clearFocus();
 					return true;
@@ -274,40 +296,6 @@ public class QueryListsActivity extends Activity {
 
 			}
 		});
-		// root_ly = this.findViewById(R.id.root_ly);
-		//
-		// // 监控虚拟键盘s
-		// root_ly.getViewTreeObserver().addOnGlobalLayoutListener(
-		// new OnGlobalLayoutListener() {
-		//
-		// @Override
-		// public void onGlobalLayout() {
-		//
-		// // 比较Activity根布局与当前布局的大小
-		// int heightDiff = root_ly.getRootView().getHeight()
-		// - root_ly.getHeight();
-		// if (heightDiff > 100) {
-		// LogUtils.i(QueryListsActivity.class, " show :"
-		// + (new Date()).toString());
-		// } else {
-		// String curStr = edtquery.getText().toString();
-		// if (!curStr.equals(qryStr)) {
-		// groups.clear();
-		// List<ParkRecord> li = DbHelper.queryRecordList(
-		// "1", 50, curStr);
-		// for (int i = 0; i < li.size(); i++) {
-		// groups.append(i, li.get(i));
-		// }
-		//
-		// madapter = new MyExpandableListAdapter();
-		// lview.setAdapter(madapter);
-		// qryStr = curStr;
-		// } else {
-		//
-		// }
-		// }
-		// }
-		// });
 	}
 
 	@Override
@@ -433,7 +421,19 @@ public class QueryListsActivity extends Activity {
 			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
 					RelativeLayout.LayoutParams.WRAP_CONTENT,
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			tv1.setText(groups.get(groupPosition).getHphm());
+
+			String txt = groups.get(groupPosition).getHphm().toUpperCase();
+			SpannableString hphmsp = new SpannableString(txt);
+
+			if (!qryStr.equals("")) {
+				int idx = txt.indexOf(qryStr);
+				if (idx > -1) {
+					hphmsp.setSpan(new ForegroundColorSpan(Color.RED), idx, idx
+							+ qryStrLen, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
+			}
+
+			tv1.setText(hphmsp);
 			tv1.setTextSize(20);
 			tv1.setId(1);
 
@@ -461,7 +461,6 @@ public class QueryListsActivity extends Activity {
 		public boolean hasStableIds() {
 			return true;
 		}
-
 	}
 
 }

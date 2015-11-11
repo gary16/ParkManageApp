@@ -61,7 +61,7 @@ public class TerminalService extends Service {
 						w = 0;
 					}
 					w++;
-					Thread.sleep(5000);
+					Thread.sleep(1000);
 				} catch (Exception er) {
 
 				}

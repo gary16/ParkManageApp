@@ -144,7 +144,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			// Use this 5x7 dot and 1 times width, 2 times height
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 			String datetext = sdf.format(parkTime);
-			printer.feedLine(10);
 			printer.printText("        路边停车凭条\n");
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
@@ -162,7 +161,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			String cUrl = String.format(
 					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(5);
+			printer.feedLine(3);
 		}
 
 		@Override
