@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
+import com.zoway.parkmanage.utils.TimeUtil;
 
 public class QueryListsActivity extends Activity {
 
@@ -53,151 +55,18 @@ public class QueryListsActivity extends Activity {
 	private String qryStr = "";
 	private int qryStrLen = 0;
 	private int curFlg = 1;
-	private ProgressDialog pDia;
-	private ParkRecord pr;
-	private View root_ly;
-
-	private Printer.Progress progress = new Printer.Progress() {
-
-		@Override
-		public void doPrint(Printer printer) throws Exception {
-			// TODO Auto-generated method stub
-			Format format = new Format();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			// Use this 5x7 dot and 1 times width, 2 times height
-			format.setAscSize(Format.ASC_DOT5x7);
-			format.setAscScale(Format.ASC_SC1x2);
-			printer.setFormat(format);
-			printer.printText("        收费凭条\n");
-			format.setAscScale(Format.ASC_SC1x1);
-			printer.setFormat(format);
-			printer.printText("\n");
-			printer.feedLine(1);
-			printer.printText("车牌号码:粤" + pr.getHphm() + "\n");
-			printer.feedLine(1);
-			printer.printText("停车位置:南源路\n");
-			printer.feedLine(1);
-			printer.printText("停车时间:" + sdf.format(pr.getParktime()) + "\n");
-			printer.feedLine(1);
-			printer.printText("离开时间:" + sdf.format(pr.getLeavetime()) + "\n");
-			printer.feedLine(1);
-
-			long diff = pr.getLeavetime().getTime()
-					- pr.getParktime().getTime();
-			long days = diff / (1000 * 60 * 60 * 24);
-
-			long hours = (diff - days * (1000 * 60 * 60 * 24))
-					/ (1000 * 60 * 60);
-			long minutes = (diff - days * (1000 * 60 * 60 * 24) - hours
-					* (1000 * 60 * 60))
-					/ (1000 * 60);
-			printer.printText("停车时长:" + days + "日" + hours + "时" + minutes
-					+ "分");
-			printer.feedLine(1);
-			printer.printText("停车费用:" + pr.getFees() + "\n");
-			printer.feedLine(1);
-			printer.printText("操作员:"
-					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
-			printer.setAutoTrunc(false);
-			printer.feedLine(5);
-		}
-
-		@Override
-		public void onFinish(int arg0) {
-			// TODO Auto-generated method stub
-			Message msg = new Message();
-			msg.what = 1;
-			handler.sendMessage(msg);
-		}
-
-		@Override
-		public void onCrash() {
-			// TODO Auto-generated method stub
-		}
-	};
-
-	private Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO 接收消息并且去更新UI线程上的控件内容
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case 1:
-				pDia.dismiss();
-				Toast.makeText(QueryListsActivity.this, "处理成功",
-						Toast.LENGTH_LONG).show();
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				Intent intent = new Intent(QueryListsActivity.this,
-						QueryListsActivity.class);
-				QueryListsActivity.this.startActivity(intent);
-				break;
-			case 2:
-				pDia.dismiss();
-				Toast.makeText(QueryListsActivity.this, "处理不成功",
-						Toast.LENGTH_LONG).show();
-				break;
-			}
-
-		}
-	};
-
-	public void runOnUiThreadDelayed(Runnable r, int delayMillis) {
-		handler.postDelayed(r, delayMillis);
-	}
-
-	/*
-	 * To gain control of the device service, you need invoke this method before
-	 * any device operation.
-	 */
-	public void bindDeviceService() {
-		try {
-			DeviceService.login(this);
-		} catch (RequestException e) {
-			// Rebind after a few milliseconds,
-			// If you want this application keep the right of the device service
-			runOnUiThreadDelayed(new Runnable() {
-				@Override
-				public void run() {
-					bindDeviceService();
-				}
-			}, 300);
-			e.printStackTrace();
-		} catch (ServiceOccupiedException e) {
-			e.printStackTrace();
-		} catch (ReloginException e) {
-			e.printStackTrace();
-		} catch (UnsupportMultiProcess e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Release the right of using the device.
-	 */
-	public void unbindDeviceService() {
-		DeviceService.logout();
-	}
 
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 
 		super.onPause();
-		unbindDeviceService();
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		bindDeviceService();
 	}
 
 	@Override
@@ -216,7 +85,24 @@ public class QueryListsActivity extends Activity {
 		lview.setGroupIndicator(null);
 		madapter = new MyExpandableListAdapter();
 		lview.setAdapter(madapter);
+		lview.setOnGroupClickListener(new OnGroupClickListener() {
 
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v,
+					int groupPosition, long id) {
+				// TODO Auto-generated method stub
+				ParkRecord rec = groups.get(groupPosition);
+				if (curFlg == 1) {
+					Intent i = new Intent(QueryListsActivity.this,
+							RecordInfoActivity.class);
+					Bundle b = new Bundle();
+					b.putSerializable("pr", rec);
+					i.putExtras(b);
+					QueryListsActivity.this.startActivity(i);
+				}
+				return false;
+			}
+		});
 		btnpayfees = (Button) this.findViewById(R.id.btnpayfees);
 		btnpayfees.setOnClickListener(new OnClickListener() {
 			@Override
@@ -336,68 +222,13 @@ public class QueryListsActivity extends Activity {
 		}
 
 		public int getChildrenCount(int groupPosition) {
-			return 1;
+			return 0;
 		}
 
 		public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
 
-			RelativeLayout rl = new RelativeLayout(QueryListsActivity.this);
-
-			View v1 = new View(QueryListsActivity.this);
-			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(0,
-					0);
-			lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-			v1.setId(1);
-			v1.setLayoutParams(lp);
-
-			Button btnprint = new Button(QueryListsActivity.this);
-			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp1.addRule(RelativeLayout.LEFT_OF, v1.getId());
-			btnprint.setId(2);
-			btnprint.setText("补打凭条");
-			btnprint.setLayoutParams(lp1);
-			btnprint.setOnClickListener(new ClickFun(groupPosition));
-			// Button btndetail = new Button(QueryListsActivity.this);
-			// RelativeLayout.LayoutParams lp2 = new
-			// RelativeLayout.LayoutParams(
-			// RelativeLayout.LayoutParams.WRAP_CONTENT,
-			// RelativeLayout.LayoutParams.WRAP_CONTENT);
-			// lp2.addRule(RelativeLayout.RIGHT_OF, v1.getId());
-			// btndetail.setId(3);
-			// btndetail.setLayoutParams(lp2);
-			// btndetail.setText("查看详情");
-			// rl.addView(btndetail);
-			rl.addView(v1);
-			rl.addView(btnprint);
-
-			return rl;
-		}
-
-		public class ClickFun implements OnClickListener {
-
-			private int cgroupPosition;
-
-			public ClickFun(int groupPosition) {
-				cgroupPosition = groupPosition;
-			}
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				pr = groups.get(cgroupPosition);
-				pDia = ProgressDialog.show(QueryListsActivity.this, "打印停车纸",
-						"正在打印中", true, false);
-				try {
-					progress.start();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
+			return null;
 		}
 
 		public Object getGroup(int groupPosition) {

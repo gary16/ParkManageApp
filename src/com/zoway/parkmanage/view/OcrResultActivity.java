@@ -43,6 +43,7 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 					.compile("^[A-HJ-Z][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9]$");
 			Matcher mth = regex.matcher(txtHphm);
 			if (mth.matches()) {
+				txtHphm = mSpinner.getSelectedItem().toString() + txtHphm;
 				if (type == 1) {
 					pr = DbHelper.queryRecordByHphm(txtHphm);
 					if (pr == null || pr.getStatus() != 0) {
@@ -61,7 +62,6 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 								"该车牌已有停车记录，请先处理", Toast.LENGTH_LONG).show();
 					}
 				} else if (type == 2) {
-
 					pr = DbHelper.queryRecordByHphm(txtHphm);
 					if (pr == null || pr.getStatus() != 0) {
 						Toast.makeText(OcrResultActivity.this, "该车牌没有停车记录",
@@ -78,8 +78,7 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 						intent.putExtra("type", type);
 						intent.putExtra("fn", fn);
 						intent.putExtra("tid", pr.getTid());
-						intent.putExtra("hphm", txtocrreshphm.getText()
-								.toString().toUpperCase());
+						intent.putExtra("hphm", txtHphm);
 						this.startActivity(intent);
 					}
 				}

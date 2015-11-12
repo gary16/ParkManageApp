@@ -149,7 +149,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			printer.setFormat(format);
 			printer.printText("\n");
 			printer.printText("商户名称:\n");
-			printer.printText("车牌号码:粤" + hphm + "\n");
+			printer.printText("车牌号码:" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + datetext + "\n");
 			printer.printText("操作员:"
@@ -161,7 +161,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			String cUrl = String.format(
 					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(3);
+			printer.feedLine(5);
 		}
 
 		@Override
@@ -280,7 +280,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
 		txtparktime.setText(sdf1.format(parkTime));
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
-		txtcarnumber.setText("粤" + hphm);
+		txtcarnumber.setText( hphm);
 		img1.setOnClickListener(this);
 		img2.setOnClickListener(this);
 		infosure.setOnClickListener(this);

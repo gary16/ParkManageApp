@@ -1,8 +1,14 @@
 package com.zoway.parkmanage.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ParkRecord {
+public class ParkRecord implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	int tid;
 	int recoidid;

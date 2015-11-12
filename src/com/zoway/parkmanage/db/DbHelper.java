@@ -21,7 +21,7 @@ public class DbHelper {
 	private static String dbpath = PathUtils.getSdPath() + File.separator
 			+ "parkmanage.db";
 
-	private static synchronized void openDatabase() {
+	private static void openDatabase() {
 		if (db == null) {
 			db = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
 		}
@@ -68,7 +68,7 @@ public class DbHelper {
 		closeDatabase();
 	}
 
-	private static synchronized void execSql(String sql, Object[] bindArgs) {
+	private static void execSql(String sql, Object[] bindArgs) {
 		openDatabase();
 		db.beginTransaction();
 		if (bindArgs == null || bindArgs.length == 0) {
@@ -81,9 +81,9 @@ public class DbHelper {
 		closeDatabase();
 	}
 
-	public static boolean insertRecord(String recordno, String hphm,
-			String hphmcolor, Date parktime, String filepath, int status,
-			int isupload, int isprint) {
+	public static synchronized boolean insertRecord(String recordno,
+			String hphm, String hphmcolor, Date parktime, String filepath,
+			int status, int isupload, int isprint) {
 		boolean flg = false;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -99,7 +99,7 @@ public class DbHelper {
 		return flg;
 	}
 
-	public static boolean updateUploadFlag(int tid, int isupload) {
+	public static synchronized boolean updateUploadFlag(int tid, int isupload) {
 		boolean flg = false;
 		try {
 			String s1 = "update t_parkrecord set isupload=? where tid=?";
@@ -111,7 +111,7 @@ public class DbHelper {
 		return flg;
 	}
 
-	public static boolean updateUploadPayFlag(int tid, int isupload) {
+	public static synchronized boolean updateUploadPayFlag(int tid, int isupload) {
 		boolean flg = false;
 		try {
 			String s1 = "update t_uploadpay set uploadstatus=? where tid=?";
@@ -123,7 +123,8 @@ public class DbHelper {
 		return flg;
 	}
 
-	public static boolean updateUploadEscapeFlag(int tid, int isupload) {
+	public static synchronized boolean updateUploadEscapeFlag(int tid,
+			int isupload) {
 		boolean flg = false;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -137,8 +138,8 @@ public class DbHelper {
 		return flg;
 	}
 
-	public static boolean setEscapeRecord(int tid, String recordno,
-			String hphm, Date escapetime) {
+	public static synchronized boolean setEscapeRecord(int tid,
+			String recordno, String hphm, Date escapetime) {
 		boolean flg = false;
 		try {
 			String s1 = "update t_parkrecord set status=2 where tid=?";
@@ -154,8 +155,8 @@ public class DbHelper {
 		return flg;
 	}
 
-	public static boolean setPayRecord(int tid, String recordno, String hphm,
-			float fare) {
+	public static synchronized boolean setPayRecord(int tid, String recordno,
+			String hphm, float fare) {
 		boolean flg = false;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -172,7 +173,7 @@ public class DbHelper {
 		return flg;
 	}
 
-	public static List<ParkRecord> queryNeedUpload(int limit) {
+	public static synchronized List<ParkRecord> queryNeedUpload(int limit) {
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		try {
 			openDatabase();
@@ -218,7 +219,7 @@ public class DbHelper {
 		return list;
 	}
 
-	public static List<PayRecord> queryNeedUploadPay(int limit) {
+	public static synchronized List<PayRecord> queryNeedUploadPay(int limit) {
 		List<PayRecord> list = new ArrayList<PayRecord>();
 		try {
 			openDatabase();
@@ -253,7 +254,8 @@ public class DbHelper {
 		return list;
 	}
 
-	public static List<EscapeRecord> queryNeedUploadEvasion(int limit) {
+	public static synchronized List<EscapeRecord> queryNeedUploadEvasion(
+			int limit) {
 		List<EscapeRecord> list = new ArrayList<EscapeRecord>();
 		try {
 			openDatabase();
@@ -292,8 +294,8 @@ public class DbHelper {
 		return list;
 	}
 
-	public static List<ParkRecord> queryRecordList(String payStatus, int limit,
-			String hphmStr) {
+	public static synchronized List<ParkRecord> queryRecordList(
+			String payStatus, int limit, String hphmStr) {
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		try {
 			openDatabase();
@@ -350,7 +352,7 @@ public class DbHelper {
 		return list;
 	}
 
-	public static ParkRecord queryRecordByHphm(String hphm) {
+	public static synchronized ParkRecord queryRecordByHphm(String hphm) {
 		ParkRecord rec = null;
 		try {
 			openDatabase();
@@ -395,7 +397,7 @@ public class DbHelper {
 		return rec;
 	}
 
-	public static ParkRecord queryRecordByTid(int tid) {
+	public static synchronized ParkRecord queryRecordByTid(int tid) {
 		ParkRecord rec = null;
 		try {
 			openDatabase();
@@ -440,8 +442,8 @@ public class DbHelper {
 		return rec;
 	}
 
-	public static List<ParkRecord> queryInOrOut30Min(int type, int limit,
-			String qryStr) {
+	public static synchronized List<ParkRecord> queryInOrOut30Min(int type,
+			int limit, String qryStr) {
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		try {
 			openDatabase();

@@ -17,11 +17,11 @@ import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.EscapeWsdl;
 import com.zoway.parkmanage.http.ParkWsdl;
 import com.zoway.parkmanage.http.PayWsdl;
+import com.zoway.parkmanage.utils.LogUtils;
 
 public class TerminalService extends Service {
 
 	private boolean flg1 = true;
-	private boolean flg2 = true;
 
 	@Override
 	public void onCreate() {
@@ -54,14 +54,16 @@ public class TerminalService extends Service {
 
 			while (flg1) {
 				try {
-					uploadParkingRecord();
-					uploadPayRecord();
-					if (w % 5 == 0) {
+					if (w % 3 == 0) {
+						uploadParkingRecord();
+						uploadPayRecord();
+					}
+					if (w % 30 == 0) {
 						uploadEscapeRecord();
 						w = 0;
 					}
 					w++;
-					Thread.sleep(1000);
+					Thread.sleep(10000);
 				} catch (Exception er) {
 
 				}

@@ -65,7 +65,7 @@ public class PaybillActivity extends Activity {
 			printer.setFormat(format);
 			printer.printText("\n");
 			printer.feedLine(1);
-			printer.printText("车牌号码:粤" + hphm + "\n");
+			printer.printText("车牌号码:" + hphm + "\n");
 			printer.feedLine(1);
 			printer.printText("停车位置:南源路\n");
 			printer.feedLine(1);

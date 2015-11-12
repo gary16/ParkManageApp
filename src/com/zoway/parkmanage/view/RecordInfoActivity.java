@@ -1,28 +1,19 @@
 package com.zoway.parkmanage.view;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,27 +24,20 @@ import com.landicorp.android.eptapi.exception.ReloginException;
 import com.landicorp.android.eptapi.exception.RequestException;
 import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
 import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
-import com.landicorp.android.eptapi.utils.QrCode;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
-import com.zoway.parkmanage.db.DbHelper;
-import com.zoway.parkmanage.image.BitmapHandle;
+import com.zoway.parkmanage.bean.ParkRecord;
 
-public class FeeEvasionActivity extends Activity {
+public class RecordInfoActivity extends Activity {
 
-	private ImageButton btnTakeEvapto;
-	private Button btnsure4bill;
-	private Button btnprintqcode;
-	private int tid;
-	private String hphm;
-	private Date parktime;
-	private String recordno;
-	private String img_path;
-	private final int REQIMG = 0x12345678;
 	private TextView txtcarnumber;
 	private TextView txtpark;
 	private TextView txtparktime;
+	private TextView txtleavetime;
+	private TextView txtmoney;
+	private Button btnsure4print;
 	private ProgressDialog pDia;
+	private ParkRecord pr;
 
 	private Printer.Progress progress = new Printer.Progress() {
 
@@ -61,27 +45,42 @@ public class FeeEvasionActivity extends Activity {
 		public void doPrint(Printer printer) throws Exception {
 			// TODO Auto-generated method stub
 			Format format = new Format();
-			// Use this 5x7 dot and 1 times width, 2 times height
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			String datetext = sdf.format(parktime);
-			printer.printText("        路边停车凭条\n");
+			// Use this 5x7 dot and 1 times width, 2 times height
+			format.setAscSize(Format.ASC_DOT5x7);
+			format.setAscScale(Format.ASC_SC1x2);
+			printer.setFormat(format);
+			printer.printText("        收费凭条\n");
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
-			printer.printText("商户名称:\n");
-			printer.printText("车牌号码:" + hphm + "\n");
+			printer.feedLine(1);
+			printer.printText("车牌号码:" + pr.getHphm() + "\n");
+			printer.feedLine(1);
 			printer.printText("停车位置:南源路\n");
-			printer.printText("停车时间:" + datetext + "\n");
+			printer.feedLine(1);
+			printer.printText("停车时间:" + sdf.format(pr.getParktime()) + "\n");
+			printer.feedLine(1);
+			printer.printText("离开时间:" + sdf.format(pr.getLeavetime()) + "\n");
+			printer.feedLine(1);
+
+			long diff = pr.getLeavetime().getTime()
+					- pr.getParktime().getTime();
+			long days = diff / (1000 * 60 * 60 * 24);
+
+			long hours = (diff - days * (1000 * 60 * 60 * 24))
+					/ (1000 * 60 * 60);
+			long minutes = (diff - days * (1000 * 60 * 60 * 24) - hours
+					* (1000 * 60 * 60))
+					/ (1000 * 60);
+			printer.printText("停车时长:" + days + "日" + hours + "时" + minutes
+					+ "分");
+			printer.feedLine(1);
+			printer.printText("停车费用:" + pr.getFees() + "\n");
+			printer.feedLine(1);
 			printer.printText("操作员:"
 					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
 			printer.setAutoTrunc(false);
-			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
-			printer.printText("\n\n");
-
-			String cUrl = String
-					.format("http://cx.zoway.com.cn:81/ParkRecord/show/%s.do",
-							recordno);
-			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
 			printer.feedLine(5);
 		}
 
@@ -108,7 +107,7 @@ public class FeeEvasionActivity extends Activity {
 			switch (msg.what) {
 			case 1:
 				pDia.dismiss();
-				Toast.makeText(FeeEvasionActivity.this, "打印成功",
+				Toast.makeText(RecordInfoActivity.this, "打印成功",
 						Toast.LENGTH_LONG).show();
 				try {
 					Thread.sleep(1000);
@@ -117,13 +116,13 @@ public class FeeEvasionActivity extends Activity {
 					e.printStackTrace();
 				}
 
-				Intent intent = new Intent(FeeEvasionActivity.this,
+				Intent intent = new Intent(RecordInfoActivity.this,
 						QueryListsActivity.class);
-				FeeEvasionActivity.this.startActivity(intent);
+				RecordInfoActivity.this.startActivity(intent);
 				break;
 			case 2:
 				pDia.dismiss();
-				Toast.makeText(FeeEvasionActivity.this, "打印不成功",
+				Toast.makeText(RecordInfoActivity.this, "打印不成功",
 						Toast.LENGTH_LONG).show();
 				break;
 			}
@@ -187,54 +186,23 @@ public class FeeEvasionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_fee_evasion);
+		setContentView(R.layout.activity_record_info);
 		ActivityList.pushActivity(this);
+
+		Intent intent = this.getIntent();
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
-		btnTakeEvapto = (ImageButton) this.findViewById(R.id.btnTakeEvapto);
-		btnsure4bill = (Button) this.findViewById(R.id.btnsure4bill);
-		btnprintqcode = (Button) this.findViewById(R.id.btnprintqcode);
-		Intent ii = this.getIntent();
-		hphm = ii.getStringExtra("hphm");
-		parktime = (Date) ii.getSerializableExtra("parktime");
-		img_path = ii.getStringExtra("fname");
-		recordno = ii.getStringExtra("recordno");
-		tid = ii.getIntExtra("tid", 0);
-		txtcarnumber.setText(hphm);
-		txtpark.setText("南源路");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-		txtparktime.setText(sdf.format(parktime));
+		txtleavetime = (TextView) this.findViewById(R.id.txtleavetime);
+		txtmoney = (TextView) this.findViewById(R.id.txtmoney);
+		btnsure4print = (Button) this.findViewById(R.id.btnsure4print);
+		btnsure4print.setOnClickListener(new OnClickListener() {
 
-		btnTakeEvapto.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				intent.putExtra(MediaStore.EXTRA_OUTPUT,
-						Uri.fromFile(new File(img_path, "p4ori.jpg")));
-				startActivityForResult(intent, REQIMG);
-
-			}
-		});
-		btnsure4bill.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				DbHelper.setEscapeRecord(tid, recordno, hphm, new Date());
-				Toast.makeText(FeeEvasionActivity.this, "修改逃费成功",
-						Toast.LENGTH_LONG).show();
-				Intent i = new Intent(FeeEvasionActivity.this,
-						UnhandledListActivity.class);
-				FeeEvasionActivity.this.startActivity(i);
-			}
-		});
-		btnprintqcode.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// TODO Auto-generated method stub
-				pDia = ProgressDialog.show(FeeEvasionActivity.this, "打印凭条",
+				pDia = ProgressDialog.show(RecordInfoActivity.this, "打印凭条",
 						"正在打印中", true, false);
 				try {
 					progress.start();
@@ -244,71 +212,19 @@ public class FeeEvasionActivity extends Activity {
 				}
 			}
 		});
-	}
-
-	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		super.onBackPressed();
-		Intent ii = new Intent(this, UnhandledListActivity.class);
-		this.startActivity(ii);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_CANCELED)
-			return;
-		else {
-			switch (requestCode) {
-			case REQIMG:
-				try {
-					InputStream is = getContentResolver().openInputStream(
-							Uri.fromFile(new File(img_path, "p4ori.jpg")));
-					Bitmap bitmapSelected1 = BitmapHandle.getReduceBitmap(is,
-							false, 5, 90);
-					this.btnTakeEvapto.setImageBitmap(bitmapSelected1);
-					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
-							+ "p4.jpg", bitmapSelected1, 90);
-					File f = new File(img_path + File.separator + "p4ori.jpg");
-					if (f.exists()) {
-						f.delete();
-					}
-					if (bitmapSelected1 != null) {
-						bitmapSelected1 = null;
-					}
-				} catch (Exception er) {
-					er.printStackTrace();
-				}
-
-				break;
-			default:
-				break;
-			}
-			System.gc();
-			super.onActivityResult(requestCode, resultCode, data);
-		}
-	}
-
-	private Bitmap getReduceBitmap(Uri uri) {
-		Bitmap bitmap = null;
-		try {
-			BitmapFactory.Options options = new BitmapFactory.Options();
-
-			options.inJustDecodeBounds = false;
-
-			options.inSampleSize = 5;
-			bitmap = BitmapFactory.decodeStream(getContentResolver()
-					.openInputStream(uri), null, options);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return bitmap;
+		pr = (ParkRecord) this.getIntent().getSerializableExtra("pr");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+		txtcarnumber.setText(pr.getHphm());
+		txtpark.setText("南源路");
+		txtparktime.setText(sdf.format(pr.getParktime()));
+		txtleavetime.setText(sdf.format(pr.getLeavetime()));
+		txtmoney.setText(pr.getFees() + "元");
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.fee_evasion, menu);
+		getMenuInflater().inflate(R.menu.record_info, menu);
 		return true;
 	}
 

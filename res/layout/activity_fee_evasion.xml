@@ -18,7 +18,7 @@
             android:layout_marginLeft="3dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="逃费处理"
+            android:text="30分钟外"
             android:textColor="#ffffffff"
             android:textSize="32sp" />
     </LinearLayout>
@@ -110,24 +110,43 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btnsure4bill"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ly3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="#ff30cf86"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="逃费确认"
-        android:textColor="#ffffffff"
-        android:textSize="25sp" />
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/btnsure4bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ff30cf86"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="逃费确认"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/btnprintqcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:background="#ff30cf86"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="打印回执"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/ly2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btnsure4bill"
+        android:layout_above="@id/ly3"
         android:layout_below="@id/ly1"
         android:layout_marginTop="5dp"
         android:background="@drawable/content_bg"

@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
-    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -102,8 +103,12 @@
             android:label="@string/title_activity_unhandled_list" >
         </activity>
         <activity
-            android:name="com.zoway.parkmanage.view.FeeFreeActivity"
+            android:name=".view.FeeFreeActivity"
             android:label="@string/title_activity_fee_free" >
+        </activity>
+        <activity
+            android:name="com.zoway.parkmanage.view.RecordInfoActivity"
+            android:label="@string/title_activity_record_info" >
         </activity>
     </application>
 
