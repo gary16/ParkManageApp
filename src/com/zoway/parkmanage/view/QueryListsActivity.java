@@ -18,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -44,7 +45,7 @@ import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.utils.TimeUtil;
 
-public class QueryListsActivity extends Activity {
+public class QueryListsActivity extends  BaseActivity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
@@ -72,9 +73,7 @@ public class QueryListsActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_query_lists);
-		ActivityList.pushActivity(this);
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
 
 		List<ParkRecord> li = DbHelper.queryRecordList("1", 100, null);
@@ -294,4 +293,5 @@ public class QueryListsActivity extends Activity {
 		}
 	}
 
+ 
 }

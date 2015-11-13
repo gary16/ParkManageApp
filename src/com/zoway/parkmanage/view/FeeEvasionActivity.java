@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -39,7 +40,7 @@ import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.image.BitmapHandle;
 
-public class FeeEvasionActivity extends Activity {
+public class FeeEvasionActivity extends BaseActivity {
 
 	private ImageButton btnTakeEvapto;
 	private Button btnsure4bill;
@@ -68,7 +69,7 @@ public class FeeEvasionActivity extends Activity {
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
-			printer.printText("商户名称:\n");
+			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
 			printer.printText("车牌号码:" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + datetext + "\n");
@@ -118,7 +119,7 @@ public class FeeEvasionActivity extends Activity {
 				}
 
 				Intent intent = new Intent(FeeEvasionActivity.this,
-						QueryListsActivity.class);
+						UnhandledListActivity.class);
 				FeeEvasionActivity.this.startActivity(intent);
 				break;
 			case 2:
@@ -186,9 +187,7 @@ public class FeeEvasionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_fee_evasion);
-		ActivityList.pushActivity(this);
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
@@ -323,4 +322,5 @@ public class FeeEvasionActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }

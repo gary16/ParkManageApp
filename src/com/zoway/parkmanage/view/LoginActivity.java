@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -24,7 +25,7 @@ import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.LoginWsdl;
 import com.zoway.parkmanage.service.TerminalService;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	private TextView txtunam;
 	private TextView txtpass;
@@ -126,11 +127,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// this is a comment
 		super.onCreate(savedInstanceState);
-		// DbHelper.openDatabase(this);
-		ActivityList.pushActivity(this);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 		btnloginsure = (Button) this.findViewById(R.id.btnloginsure);
 		txtunam = (TextView) this.findViewById(R.id.txtunam);
@@ -159,4 +156,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

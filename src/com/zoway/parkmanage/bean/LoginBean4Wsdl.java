@@ -13,7 +13,8 @@ public class LoginBean4Wsdl {
 	private static String Exception;
 	private static Date loginServerTime;
 	private static Date loginClientTime;
-
+	private static int CompanyId;
+	private static String CompanyName;
 	static {
 		loginClientTime = new Date();
 	}
@@ -62,4 +63,19 @@ public class LoginBean4Wsdl {
 		return Exception;
 	}
 
+	public static int getCompanyId() {
+		return CompanyId;
+	}
+
+	public static void setCompanyId(int companyId) {
+		CompanyId = companyId;
+	}
+
+	public static String getCompanyName() {
+		return CompanyName;
+	}
+
+	public static void setCompanyName(String companyName) {
+		CompanyName = companyName;
+	}
 }

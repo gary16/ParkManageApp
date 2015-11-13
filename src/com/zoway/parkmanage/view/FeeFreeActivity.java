@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.db.DbHelper;
 
-public class FeeFreeActivity extends Activity {
+public class FeeFreeActivity extends BaseActivity {
 
 	private TextView txtcarnumber;
 	private TextView txtpark;
@@ -56,7 +57,7 @@ public class FeeFreeActivity extends Activity {
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
-			printer.printText("商户名称:\n");
+			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
 			printer.printText("车牌号码:" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + datetext + "\n");
@@ -106,7 +107,7 @@ public class FeeFreeActivity extends Activity {
 				}
 
 				Intent intent = new Intent(FeeFreeActivity.this,
-						QueryListsActivity.class);
+						UnhandledListActivity.class);
 				FeeFreeActivity.this.startActivity(intent);
 				break;
 			case 2:
@@ -174,8 +175,6 @@ public class FeeFreeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_fee_free);
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
@@ -188,7 +187,7 @@ public class FeeFreeActivity extends Activity {
 		parktime = (Date) ii.getSerializableExtra("parktime");
 		recordno = ii.getStringExtra("recordno");
 		tid = ii.getIntExtra("tid", 0);
-		txtcarnumber.setText( hphm);
+		txtcarnumber.setText(hphm);
 		txtpark.setText("南源路");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		txtparktime.setText(sdf.format(parktime));
@@ -241,4 +240,6 @@ public class FeeFreeActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+
 }

@@ -16,6 +16,7 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.wintone.plateid.PlateCfgParameter;
@@ -26,7 +27,7 @@ import com.zoway.parkmanage.image.BitmapHandle;
 import com.zoway.parkmanage.image.HphmRegonize;
 import com.zoway.parkmanage.utils.LogUtils;
 
-public class ShowOcrPhotoActivity extends Activity {
+public class ShowOcrPhotoActivity extends BaseActivity {
 
 	private String rcid = null;
 	private String rcno = null;
@@ -205,8 +206,6 @@ public class ShowOcrPhotoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_show_ocr_photo);
 		ImageView iv1 = (ImageView) this.findViewById(R.id.imageView1);
 
@@ -248,4 +247,6 @@ public class ShowOcrPhotoActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+ 
 }

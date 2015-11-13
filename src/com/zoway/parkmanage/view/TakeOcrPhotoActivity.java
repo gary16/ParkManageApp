@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -28,7 +29,8 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.image.BitmapHandle;
 import com.zoway.parkmanage.utils.PathUtils;
 
-public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
+public class TakeOcrPhotoActivity extends BaseActivity implements
+		OnClickListener {
 
 	private final String TAG = "TakePhotoActivity";
 	private String rcid = null;
@@ -101,8 +103,6 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		ActivityList.pushActivity(this);
 		Intent i = this.getIntent();
 		rcid = i.getStringExtra("rcid");
 		rcno = i.getStringExtra("rcno");
@@ -263,6 +263,10 @@ public class TakeOcrPhotoActivity extends Activity implements OnClickListener {
 			// Camera is not available (in use or does not exist)
 		}
 		return c; // returns null if camera is unavailable
+	}
+
+	@Override
+	public void onAttachedToWindow() {
 	}
 
 }

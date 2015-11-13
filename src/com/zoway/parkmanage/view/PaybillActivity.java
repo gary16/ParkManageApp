@@ -13,6 +13,7 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -33,7 +34,7 @@ import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.LeaveWsdl;
 import com.zoway.parkmanage.utils.TimeUtil;
 
-public class PaybillActivity extends Activity {
+public class PaybillActivity extends BaseActivity {
 
 	private TextView txtcarnumber;
 	private TextView txtpark;
@@ -182,14 +183,10 @@ public class PaybillActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_paybill);
-		ActivityList.pushActivity(this);
-
 		Intent intent = this.getIntent();
 		hphm = intent.getStringExtra("hphm");
 		tid = intent.getIntExtra("tid", 0);
-
 		rcno = intent.getStringExtra("rcno");
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
@@ -324,4 +321,5 @@ public class PaybillActivity extends Activity {
 		bindDeviceService();
 	}
 
+ 
 }

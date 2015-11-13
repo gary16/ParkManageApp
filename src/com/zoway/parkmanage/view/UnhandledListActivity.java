@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -33,7 +34,7 @@ import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.utils.TimeUtil;
 import com.zoway.parkmanage.view.QueryListsActivity.MyExpandableListAdapter;
 
-public class UnhandledListActivity extends Activity {
+public class UnhandledListActivity extends BaseActivity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
@@ -48,8 +49,6 @@ public class UnhandledListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_unhandled_list);
 		groups.clear();
 		List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 50, null);

@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -28,7 +29,7 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
 
-public class RecordInfoActivity extends Activity {
+public class RecordInfoActivity extends BaseActivity {
 
 	private TextView txtcarnumber;
 	private TextView txtpark;
@@ -185,10 +186,7 @@ public class RecordInfoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_record_info);
-		ActivityList.pushActivity(this);
-
 		Intent intent = this.getIntent();
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
@@ -239,4 +237,6 @@ public class RecordInfoActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+ 
 }

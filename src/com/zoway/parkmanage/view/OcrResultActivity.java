@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,7 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
 
-public class OcrResultActivity extends Activity implements OnClickListener {
+public class OcrResultActivity extends BaseActivity implements OnClickListener {
 	private Spinner mSpinner;
 	private String rcid = null;
 	private String rcno = null;
@@ -117,8 +118,6 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.activity_ocr_result);
 		Intent intent = this.getIntent();
 		s = intent.getStringExtra("s");
@@ -165,4 +164,5 @@ public class OcrResultActivity extends Activity implements OnClickListener {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpinner.setAdapter(adapter);
 	}
+
 }

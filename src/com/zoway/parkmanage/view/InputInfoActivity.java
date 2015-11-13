@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -42,7 +43,7 @@ import com.zoway.parkmanage.image.BitmapHandle;
 import com.zoway.parkmanage.utils.PathUtils;
 import com.zoway.parkmanage.utils.TimeUtil;
 
-public class InputInfoActivity extends Activity implements OnClickListener {
+public class InputInfoActivity extends BaseActivity implements OnClickListener {
 
 	public final int REQIMG1 = 0X01;
 	public final int REQIMG2 = 0X02;
@@ -148,7 +149,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 			format.setAscScale(Format.ASC_SC1x1);
 			printer.setFormat(format);
 			printer.printText("\n");
-			printer.printText("商户名称:\n");
+			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
 			printer.printText("车牌号码:" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + datetext + "\n");
@@ -237,9 +238,6 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		ActivityList.pushActivity(this);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_input_info);
 		Intent intent = this.getIntent();
 		rcid = intent.getStringExtra("rcid");
@@ -280,7 +278,7 @@ public class InputInfoActivity extends Activity implements OnClickListener {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
 		txtparktime.setText(sdf1.format(parkTime));
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
-		txtcarnumber.setText( hphm);
+		txtcarnumber.setText(hphm);
 		img1.setOnClickListener(this);
 		img2.setOnClickListener(this);
 		infosure.setOnClickListener(this);

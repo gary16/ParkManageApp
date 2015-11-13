@@ -5,27 +5,25 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.service.TerminalService;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
 	private ExpandableListView lview;
 	private MainListAdapter madapter;
@@ -36,34 +34,16 @@ public class MainActivity extends Activity {
 	private ImageButton btnmainquery;
 	private TextView matxtlgtime;
 
-	//
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		SparseArray<Group> groups = createData();
-
 		malogout = (Button) this.findViewById(R.id.malogout);
 		btnmainremark = (ImageButton) this.findViewById(R.id.btnmainremark);
 		btnmainpay = (ImageButton) this.findViewById(R.id.btnmainpay);
 		btnmainescape = (ImageButton) this.findViewById(R.id.btnmainescape);
 		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
-		// lview = (ExpandableListView) this
-		// .findViewById(R.id.expandableListView1);
-
-		// lview.setGroupIndicator(null);
-		// madapter = new MainListAdapter(this, groups);
-		// lview.setAdapter(madapter);
-
-		// lview.setOnGroupExpandListener(new OnGroupExpandListener() {
-		//
-		// @Override
-		// public void onGroupExpand(int groupPosition) {
-		//
-		// }
-		// });
 
 		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
@@ -199,4 +179,5 @@ public class MainActivity extends Activity {
 
 		return groups;
 	}
+
 }
