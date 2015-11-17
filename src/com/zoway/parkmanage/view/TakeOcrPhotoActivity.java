@@ -121,7 +121,7 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 		sno = i.getStringExtra("sno");
 		rt = i.getStringExtra("rt");
 		type = i.getIntExtra("type", 0);
-
+		mPicture = new pitcCallback();
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 
 		preview.addView(drv);
 		preview.bringChildToFront(tkephotoly1);
-		mPicture = new pitcCallback();
+
 	}
 
 	private class pitcCallback implements PictureCallback {
