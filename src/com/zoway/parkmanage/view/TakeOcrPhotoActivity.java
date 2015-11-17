@@ -121,6 +121,7 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 		sno = i.getStringExtra("sno");
 		rt = i.getStringExtra("rt");
 		type = i.getIntExtra("type", 0);
+		mPicture = new pitcCallback();
 
 	}
 
@@ -128,7 +129,6 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-
 		setContentView(R.layout.activity_take_photo);
 		// Create an instance of Camera
 		mCamera = getCameraInstance();
@@ -138,6 +138,8 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 		preview = (FrameLayout) findViewById(R.id.camera_preview);
 
 		LinearLayout tkephotoly1 = (LinearLayout) findViewById(R.id.tkephotoly2);
+
+		preview.addView(mPreview);
 
 		btnTakePhoto = (Button) this.findViewById(R.id.btncapture);
 		btnTakePhoto.setOnClickListener(this);
@@ -150,8 +152,6 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 
 		btnctrllight = (Button) this.findViewById(R.id.btnctrllight);
 		btnctrllight.setOnClickListener(this);
-
-		preview.addView(mPreview);
 
 		if (sno != null && rt != null) {
 			if (type == 4) {
@@ -167,7 +167,7 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 
 		preview.addView(drv);
 		preview.bringChildToFront(tkephotoly1);
-		mPicture = new pitcCallback();
+
 	}
 
 	private class pitcCallback implements PictureCallback {
