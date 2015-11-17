@@ -94,21 +94,6 @@ public class CameraPreview extends SurfaceView implements Callback {
 		// start preview with new settings
 		try {
 
-			// Parameters mparam = mCamera.getParameters();
-			// boolean b = mparam.isSmoothZoomSupported();
-			// boolean c = mparam.isZoomSupported();
-			// mparam.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-			// mparam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-			// List l = mparam.getSupportedPictureSizes();
-			// // Size s = mparam.getPictureSize();
-			// maxzoom = mparam.getMaxZoom();
-			// mparam.setPictureFormat(PixelFormat.JPEG);
-			// // mparam.setRotation(90);
-			// // mparam.setPictureSize(1920, 1080);
-			// mparam.setPictureSize(1600, 1200);
-			//
-			// mCamera.setParameters(mparam);
-			// mCamera.setDisplayOrientation(90);
 			mCamera.setPreviewDisplay(mHolder);
 
 			mCamera.startPreview();
