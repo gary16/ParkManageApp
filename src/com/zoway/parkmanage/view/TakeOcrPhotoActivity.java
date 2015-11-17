@@ -45,6 +45,8 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 	private Button btnTakePhoto;
 	private Button btnUpZoom;
 	private Button btnDownZoom;
+	private Button btnctrllight;
+	private int lightflg = 1;
 	private PictureCallback mPicture;
 	private FrameLayout preview;
 	private String imgBasePath = PathUtils.getTmpImagePath();
@@ -96,6 +98,16 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 		case R.id.btndownzoom:
 			mPreview.setZoomView(-8);
 			break;
+		case R.id.btnctrllight:
+			if (lightflg == 1) {
+				mPreview.openFlahsLight();
+				lightflg = 2;
+				btnctrllight.setText("¹ØµÆ");
+			} else if (lightflg == 2) {
+				mPreview.closeFlashLigth();
+				lightflg = 1;
+				btnctrllight.setText("¿ªµÆ");
+			}
 		}
 
 	}
@@ -135,6 +147,9 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 
 		btnDownZoom = (Button) this.findViewById(R.id.btndownzoom);
 		btnDownZoom.setOnClickListener(this);
+
+		btnctrllight = (Button) this.findViewById(R.id.btnctrllight);
+		btnctrllight.setOnClickListener(this);
 
 		preview.addView(mPreview);
 

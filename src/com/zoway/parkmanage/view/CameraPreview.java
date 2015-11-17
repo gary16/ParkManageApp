@@ -38,6 +38,7 @@ public class CameraPreview extends SurfaceView implements Callback {
 			boolean b = mparam.isSmoothZoomSupported();
 			boolean c = mparam.isZoomSupported();
 			mparam.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+			mparam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
 			List l = mparam.getSupportedPictureSizes();
 			// Size s = mparam.getPictureSize();
 			maxzoom = mparam.getMaxZoom();
@@ -45,6 +46,7 @@ public class CameraPreview extends SurfaceView implements Callback {
 			// mparam.setRotation(90);
 			// mparam.setPictureSize(1920, 1080);
 			mparam.setPictureSize(1600, 1200);
+
 			mCamera.setParameters(mparam);
 			mCamera.setDisplayOrientation(90);
 			mCamera.setPreviewDisplay(holder);
@@ -62,7 +64,6 @@ public class CameraPreview extends SurfaceView implements Callback {
 			// preview surface does not exist
 			return;
 		}
-
 		// stop preview before making changes
 		try {
 			// mCamera.stopPreview();
@@ -93,7 +94,24 @@ public class CameraPreview extends SurfaceView implements Callback {
 
 		// start preview with new settings
 		try {
+
+			Parameters mparam = mCamera.getParameters();
+			boolean b = mparam.isSmoothZoomSupported();
+			boolean c = mparam.isZoomSupported();
+			mparam.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+			mparam.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+			List l = mparam.getSupportedPictureSizes();
+			// Size s = mparam.getPictureSize();
+			maxzoom = mparam.getMaxZoom();
+			mparam.setPictureFormat(PixelFormat.JPEG);
+			// mparam.setRotation(90);
+			// mparam.setPictureSize(1920, 1080);
+			mparam.setPictureSize(1600, 1200);
+
+			mCamera.setParameters(mparam);
+			mCamera.setDisplayOrientation(90);
 			mCamera.setPreviewDisplay(mHolder);
+
 			mCamera.startPreview();
 
 		} catch (Exception e) {
@@ -123,6 +141,28 @@ public class CameraPreview extends SurfaceView implements Callback {
 			mCamera.startPreview();
 		} catch (Exception e) {
 			Log.d("", "Error starting camera preview: " + e.getMessage());
+		}
+	}
+
+	// 开启设备的闪关灯；
+	public void openFlahsLight() {
+		if (mCamera != null) {
+			Camera.Parameters parameters = mCamera.getParameters();
+			parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+			mCamera.setParameters(parameters);
+			mCamera.startPreview();
+		}
+
+	}
+
+	public void closeFlashLigth() {
+		if (mCamera != null) {
+			mCamera.stopPreview();
+			Camera.Parameters parameters = mCamera.getParameters();
+			parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+			mCamera.setParameters(parameters);
+			mCamera.startPreview();
+
 		}
 	}
 

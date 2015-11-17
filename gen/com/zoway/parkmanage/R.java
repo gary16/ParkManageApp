@@ -53,21 +53,22 @@ public final class R {
         public static final int userbig=0x7f020016;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b004c;
+        public static final int action_settings=0x7f0b004d;
         public static final int btnTakeEvapto=0x7f0b000e;
-        public static final int btncapture=0x7f0b0040;
-        public static final int btndownzoom=0x7f0b0041;
+        public static final int btncapture=0x7f0b0041;
+        public static final int btnctrllight=0x7f0b0040;
+        public static final int btndownzoom=0x7f0b0042;
         public static final int btnescapefees=0x7f0b0039;
-        public static final int btnin30min=0x7f0b0044;
+        public static final int btnin30min=0x7f0b0045;
         public static final int btninfocancel=0x7f0b0013;
         public static final int btninfosure=0x7f0b0012;
-        public static final int btninputdata=0x7f0b0048;
+        public static final int btninputdata=0x7f0b0049;
         public static final int btnloginsure=0x7f0b001c;
         public static final int btnmainescape=0x7f0b002a;
         public static final int btnmainpay=0x7f0b0029;
         public static final int btnmainquery=0x7f0b002b;
         public static final int btnmainremark=0x7f0b0028;
-        public static final int btnout30min=0x7f0b0045;
+        public static final int btnout30min=0x7f0b0046;
         public static final int btnpayfees=0x7f0b0038;
         public static final int btnprintqcode=0x7f0b000c;
         public static final int btnrescancel=0x7f0b0032;
@@ -111,25 +112,25 @@ public final class R {
         public static final int parkimg4=0x7f0b0017;
         public static final int reclist=0x7f0b003b;
         public static final int root_ly=0x7f0b0037;
-        public static final int tiv1=0x7f0b0049;
-        public static final int tiv2=0x7f0b004b;
+        public static final int tiv1=0x7f0b004a;
+        public static final int tiv2=0x7f0b004c;
         public static final int tkephotoly1=0x7f0b002c;
         public static final int tkephotoly2=0x7f0b002d;
         public static final int tkephotoly3=0x7f0b0033;
-        public static final int ttv1=0x7f0b004a;
+        public static final int ttv1=0x7f0b004b;
         public static final int txtcarnumber=0x7f0b0004;
         public static final int txtcartype=0x7f0b0003;
         public static final int txtleavetime=0x7f0b0011;
-        public static final int txtlistinfo=0x7f0b0046;
-        public static final int txtlistinfo2=0x7f0b0047;
+        public static final int txtlistinfo=0x7f0b0047;
+        public static final int txtlistinfo2=0x7f0b0048;
         public static final int txtmoney=0x7f0b0035;
         public static final int txtocrreshphm=0x7f0b0030;
         public static final int txtpark=0x7f0b0006;
         public static final int txtparktime=0x7f0b0008;
         public static final int txtpass=0x7f0b001b;
         public static final int txtunam=0x7f0b0019;
-        public static final int unhandlely1=0x7f0b0042;
-        public static final int unhandlely2=0x7f0b0043;
+        public static final int unhandlely1=0x7f0b0043;
+        public static final int unhandlely2=0x7f0b0044;
     }
     public static final class layout {
         public static final int activity_fee_evasion=0x7f030000;
