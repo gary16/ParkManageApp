@@ -58,6 +58,7 @@ public class FeeFreeActivity extends BaseActivity {
 			printer.setFormat(format);
 			printer.printText("\n");
 			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
+			printer.printText("电话号码:26337118\n");
 			printer.printText("车牌号码:" + hphm + "\n");
 			printer.printText("停车位置:南源路\n");
 			printer.printText("停车时间:" + datetext + "\n");
@@ -240,6 +241,5 @@ public class FeeFreeActivity extends BaseActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 
 }

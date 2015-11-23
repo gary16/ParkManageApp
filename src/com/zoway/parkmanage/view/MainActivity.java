@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.service.TerminalService;
 
 public class MainActivity extends BaseActivity {
@@ -33,6 +34,8 @@ public class MainActivity extends BaseActivity {
 	private ImageButton btnmainescape;
 	private ImageButton btnmainquery;
 	private TextView matxtlgtime;
+	private TextView matxtun;
+	private TextView matxtworkpls;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +49,14 @@ public class MainActivity extends BaseActivity {
 		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
 
 		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
+		matxtun = (TextView) this.findViewById(R.id.matxtun);
+		matxtworkpls = (TextView) this.findViewById(R.id.matxtworkpls);
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		Date df = Calendar.getInstance().getTime();
 		matxtlgtime.setText(sdf.format(df));
-
+		matxtun.setText(LoginBean4Wsdl.getWorker().getWorkerName());
+		matxtworkpls.setText(LoginBean4Wsdl.getParkName());
 		malogout.setOnClickListener(new OnClickListener() {
 
 			@Override
