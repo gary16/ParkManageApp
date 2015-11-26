@@ -186,7 +186,9 @@ public class ShowOcrPhotoActivity extends BaseActivity {
 			Message msg1 = new Message();
 			msg1.what = 2;
 			if (fieldvalue[0] != null) {
-				msg1.obj = fieldvalue[0].substring(1, fieldvalue[0].length());
+				int len = fieldvalue[0].length() > 7 ? 7 : fieldvalue[0]
+						.length();
+				msg1.obj = fieldvalue[0].substring(1, len);
 			} else {
 				msg1.obj = "?????";
 			}
@@ -248,5 +250,4 @@ public class ShowOcrPhotoActivity extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
- 
 }
