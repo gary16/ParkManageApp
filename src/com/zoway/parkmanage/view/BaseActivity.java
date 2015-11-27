@@ -18,7 +18,6 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
 

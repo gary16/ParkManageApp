@@ -203,6 +203,7 @@ public class FeeFreeActivity extends BaseActivity {
 				Intent i = new Intent(FeeFreeActivity.this,
 						UnhandledListActivity.class);
 				FeeFreeActivity.this.startActivity(i);
+				FeeFreeActivity.this.finish();
 			}
 		});
 		btnprintqcode.setOnClickListener(new OnClickListener() {
@@ -240,6 +241,5 @@ public class FeeFreeActivity extends BaseActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 
 }

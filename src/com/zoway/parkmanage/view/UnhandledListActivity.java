@@ -177,6 +177,7 @@ public class UnhandledListActivity extends BaseActivity {
 		super.onBackPressed();
 		Intent ii = new Intent(this, MainActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	@Override

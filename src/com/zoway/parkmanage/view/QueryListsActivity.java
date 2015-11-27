@@ -45,7 +45,7 @@ import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.utils.TimeUtil;
 
-public class QueryListsActivity extends  BaseActivity {
+public class QueryListsActivity extends BaseActivity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
@@ -189,6 +189,7 @@ public class QueryListsActivity extends  BaseActivity {
 		super.onBackPressed();
 		Intent ii = new Intent(this, MainActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	@Override
@@ -293,5 +294,4 @@ public class QueryListsActivity extends  BaseActivity {
 		}
 	}
 
- 
 }

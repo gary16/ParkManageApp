@@ -216,6 +216,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.btninfocancel:
 			this.onBackPressed();
+			this.finish();
 			break;
 		default:
 			break;
@@ -301,7 +302,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 							Uri.fromFile(new File(img_path, "p1ori.jpg")));
 					bitmapSelected1 = BitmapHandle.getReduceBitmap(is, false,
 							5, 90);
-					// this.img1.setImageBitmap(bitmapSelected1);
+					this.img1.setImageBitmap(bitmapSelected1);
 					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
 							+ "p1.jpg", bitmapSelected1, 90);
 					File f = new File(img_path + File.separator + "p1ori.jpg");

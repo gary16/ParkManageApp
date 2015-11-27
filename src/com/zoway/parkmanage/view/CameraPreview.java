@@ -21,7 +21,6 @@ public class CameraPreview extends SurfaceView implements Callback {
 	public CameraPreview(Context context, Camera camera) {
 		super(context);
 		mCamera = camera;
-
 		// Install a SurfaceHolder.Callback so we get notified when the
 		// underlying surface is created and destroyed.
 		mHolder = getHolder();
@@ -52,7 +51,7 @@ public class CameraPreview extends SurfaceView implements Callback {
 
 			mCamera.startPreview();
 			Log.d("...", "create preview success");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.d("", "Error setting camera preview: " + e.getMessage());
 		}
 	}

@@ -90,6 +90,7 @@ public class ShowOcrPhotoActivity extends BaseActivity {
 				// pDia.dismiss();
 				intent.putExtra("s", s);
 				ShowOcrPhotoActivity.this.startActivity(intent);
+				ShowOcrPhotoActivity.this.finish();
 				break;
 			default:
 				break;
@@ -104,6 +105,7 @@ public class ShowOcrPhotoActivity extends BaseActivity {
 		super.onBackPressed();
 		Intent ii = new Intent(this, MainActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	public ServiceConnection recogConn = new ServiceConnection() {
