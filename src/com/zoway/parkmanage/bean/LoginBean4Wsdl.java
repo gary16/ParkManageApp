@@ -11,17 +11,10 @@ public class LoginBean4Wsdl {
 	private static String ParkName;
 	private static String SectionName;
 	private static String Exception;
-	private static Date loginServerTime;
-	private static Date loginClientTime;
+	private static Date LoginTime;
+	private static Date loginClientTime = new Date();
 	private static int CompanyId;
 	private static String CompanyName;
-	static {
-		loginClientTime = new Date();
-	}
-
-	public static void setLoginServerTime(Date loginServerTime) {
-		LoginBean4Wsdl.loginServerTime = loginServerTime;
-	}
 
 	public static void setLoginClientTime(Date loginClientTime) {
 		LoginBean4Wsdl.loginClientTime = loginClientTime;
@@ -33,10 +26,6 @@ public class LoginBean4Wsdl {
 
 	public static int getAttendanceId() {
 		return AttendanceId;
-	}
-
-	public static Date getLoginServerTime() {
-		return loginServerTime;
 	}
 
 	public static Date getLoginClientTime() {
@@ -78,4 +67,13 @@ public class LoginBean4Wsdl {
 	public static void setCompanyName(String companyName) {
 		CompanyName = companyName;
 	}
+
+	public static Date getLoginTime() {
+		return LoginTime;
+	}
+
+	public static void setLoginTime(Date loginTime) {
+		LoginTime = loginTime;
+	}
+
 }

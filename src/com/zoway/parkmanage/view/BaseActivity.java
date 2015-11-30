@@ -21,9 +21,9 @@ public class BaseActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
 
-	@Override
-	public void onAttachedToWindow() {
-		this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
-		super.onAttachedToWindow();
-	}
+	// @Override
+	// public void onAttachedToWindow() {
+	// this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
+	// super.onAttachedToWindow();
+	// }
 }

@@ -4,13 +4,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,12 +61,14 @@ public class MainActivity extends BaseActivity {
 				nm.cancelAll();
 				Intent ii = new Intent(MainActivity.this, TerminalService.class);
 				MainActivity.this.stopService(ii);
-				Intent MyIntent = new Intent(Intent.ACTION_MAIN);
-				MyIntent.addCategory(Intent.CATEGORY_HOME);
+
+				Intent MyIntent = new Intent(MainActivity.this,
+						HeadActivity.class);
+				MyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				MyIntent.putExtra("status", 1);
+
 				MainActivity.this.startActivity(MyIntent);
-				ActivityList.exitAllActivity();
-				MainActivity.this.finish();
-				System.exit(0);
+
 			}
 		});
 

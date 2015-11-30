@@ -189,9 +189,10 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
 		switch (arg0.getId()) {
 		case R.id.parkimg1:
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,
 					Uri.fromFile(new File(img_path, "p1ori.jpg")));
 			startActivityForResult(intent, REQIMG1);
