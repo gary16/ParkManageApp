@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
 				MyIntent.addCategory(Intent.CATEGORY_HOME);
 				MainActivity.this.startActivity(MyIntent);
 				ActivityList.exitAllActivity();
+				MainActivity.this.finish();
 				System.exit(0);
 			}
 		});
@@ -83,9 +84,11 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				// Intent intent = new Intent(MainActivity.this,
+				// TakeOcrPhotoActivity.class);
+				// intent.putExtra("type", 2);
 				Intent intent = new Intent(MainActivity.this,
-						TakeOcrPhotoActivity.class);
-				intent.putExtra("type", 2);
+						PayListsActivity.class);
 				MainActivity.this.startActivity(intent);
 			}
 		});

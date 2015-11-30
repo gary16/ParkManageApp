@@ -107,8 +107,12 @@
             android:label="@string/title_activity_fee_free" >
         </activity>
         <activity
-            android:name="com.zoway.parkmanage.view.RecordInfoActivity"
+            android:name=".view.RecordInfoActivity"
             android:label="@string/title_activity_record_info" >
+        </activity>
+        <activity
+            android:name="com.zoway.parkmanage.view.PayListsActivity"
+            android:label="@string/title_activity_pay_lists" >
         </activity>
     </application>
 

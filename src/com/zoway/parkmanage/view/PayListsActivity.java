@@ -3,7 +3,6 @@ package com.zoway.parkmanage.view;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,51 +14,48 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.utils.TimeUtil;
-import com.zoway.parkmanage.view.QueryListsActivity.MyExpandableListAdapter;
 
-public class UnhandledListActivity extends BaseActivity {
+public class PayListsActivity extends BaseActivity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
 	private MyExpandableListAdapter madapter;
-	private Button btnin30min;
-	private Button btnout30min;
 	private EditText edtquery;
 	private String qryStr = "";
 	private int qryStrLen = 0;
-	private int curFlg = 0;
+	private Button btnocrpay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_unhandled_list);
+		setContentView(R.layout.activity_pay_lists);
+
 		groups.clear();
-		List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 50, null);
+		List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50, null);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
+
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
 		lview.setGroupIndicator(null);
 		madapter = new MyExpandableListAdapter();
 		lview.setAdapter(madapter);
+
 		lview.setOnGroupClickListener(new OnGroupClickListener() {
 
 			@Override
@@ -69,78 +65,24 @@ public class UnhandledListActivity extends BaseActivity {
 				ParkRecord rec = groups.get(groupPosition);
 				long l1 = TimeUtil.getTime().getTime();
 				long l2 = rec.getParktime().getTime();
-				int diff = (int) (l1 - l2) / (1000);
 				Intent intent = new Intent();
 				intent.putExtra("hphm", rec.getHphm());
 				Bundle b1 = new Bundle();
 				b1.putSerializable("parktime", rec.getParktime());
 				intent.putExtras(b1);
 				intent.putExtra("tid", rec.getTid());
-				intent.putExtra("recordno", rec.getRecordno());
+				intent.putExtra("rcno", rec.getRecordno());
 				intent.putExtra("fname", rec.getFilepath());
-				if (diff > 1800) {
-					intent.setClass(UnhandledListActivity.this,
-							FeeEvasionActivity.class);
-				} else {
-					intent.setClass(UnhandledListActivity.this,
-							FeeFreeActivity.class);
-				}
-				UnhandledListActivity.this.startActivity(intent);
+				intent.putExtra("hphm", rec.getHphm());
+				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+				String rt = sdf1.format(rec.getParktime());
+				intent.putExtra("rt", rt);
+				intent.setClass(PayListsActivity.this, PaybillActivity.class);
+				PayListsActivity.this.startActivity(intent);
 				return false;
 			}
 		});
 
-		btnin30min = (Button) this.findViewById(R.id.btnin30min);
-		btnin30min.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (curFlg == 1) {
-					groups.clear();
-					String curStr = edtquery.getText().toString().toUpperCase();
-					List<ParkRecord> li = DbHelper.queryInOrOut30Min(0, 50,
-							curStr);
-
-					for (int i = 0; i < li.size(); i++) {
-						groups.append(i, li.get(i));
-					}
-
-					madapter = new MyExpandableListAdapter();
-					lview.setAdapter(madapter);
-					curFlg = 0;
-					btnin30min.setBackgroundColor(0xffcccc99);
-					btnin30min.setTextColor(0xff777777);
-					btnout30min.setBackgroundColor(0xfff9c164);
-					btnout30min.setTextColor(0xffffffff);
-				}
-			}
-		});
-		btnout30min = (Button) this.findViewById(R.id.btnout30min);
-		btnout30min.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (curFlg == 0) {
-					groups.clear();
-					String curStr = edtquery.getText().toString().toUpperCase();
-					List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50,
-							curStr);
-					for (int i = 0; i < li.size(); i++) {
-						groups.append(i, li.get(i));
-					}
-
-					madapter = new MyExpandableListAdapter();
-					lview.setAdapter(madapter);
-					curFlg = 1;
-					btnout30min.setBackgroundColor(0xffcccc99);
-					btnout30min.setTextColor(0xff777777);
-					btnin30min.setBackgroundColor(0xfff9c164);
-					btnin30min.setTextColor(0xffffffff);
-				}
-			}
-		});
 		edtquery = (EditText) this.findViewById(R.id.edtquery);
 		edtquery.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -151,8 +93,8 @@ public class UnhandledListActivity extends BaseActivity {
 					String curStr = edtquery.getText().toString().toUpperCase();
 					if (!curStr.equals(qryStr)) {
 						groups.clear();
-						List<ParkRecord> li = DbHelper.queryInOrOut30Min(
-								curFlg, 50, curStr);
+						List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50,
+								curStr);
 						for (int i = 0; i < li.size(); i++) {
 							groups.append(i, li.get(i));
 						}
@@ -170,21 +112,25 @@ public class UnhandledListActivity extends BaseActivity {
 
 			}
 		});
-	}
 
-	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		super.onBackPressed();
-		Intent ii = new Intent(this, MainActivity.class);
-		this.startActivity(ii);
-		this.finish();
+		btnocrpay = (Button) this.findViewById(R.id.btnocrpay);
+		btnocrpay.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(PayListsActivity.this,
+						TakeOcrPhotoActivity.class);
+				intent.putExtra("type", 2);
+				PayListsActivity.this.startActivity(intent);
+			}
+		});
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.unhandled_list, menu);
+		getMenuInflater().inflate(R.menu.pay_lists, menu);
 		return true;
 	}
 
@@ -235,18 +181,18 @@ public class UnhandledListActivity extends BaseActivity {
 		public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
 
-			RelativeLayout rl = new RelativeLayout(UnhandledListActivity.this);
-
+			RelativeLayout rl = new RelativeLayout(PayListsActivity.this);
 			rl.setId(1);
 			rl.setBackgroundResource(R.drawable.mainlistline);
 
-			TextView tv1 = new TextView(UnhandledListActivity.this);
+			TextView tv1 = new TextView(PayListsActivity.this);
 			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
 					RelativeLayout.LayoutParams.WRAP_CONTENT,
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
 			lp1.setMargins(5, 5, 0, 2);
 			String txt = groups.get(groupPosition).getHphm().toUpperCase();
 			SpannableString hphmsp = new SpannableString(txt);
+
 			if (!qryStr.equals("")) {
 				int idx = txt.indexOf(qryStr);
 				if (idx > -1) {
@@ -255,25 +201,22 @@ public class UnhandledListActivity extends BaseActivity {
 				}
 			}
 			tv1.setText(hphmsp);
-			tv1.setTextSize(21);
+			tv1.setTextSize(20);
 			tv1.setId(2);
 			tv1.setLayoutParams(lp1);
-
-			TextView tv2 = new TextView(UnhandledListActivity.this);
+			TextView tv2 = new TextView(PayListsActivity.this);
 			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
 					RelativeLayout.LayoutParams.WRAP_CONTENT,
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
 			lp2.addRule(RelativeLayout.BELOW, tv1.getId());
-			tv2.setPadding(0, 0, 0, 8);
-
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
 			tv2.setText("停车时间:"
 					+ sdf.format(groups.get(groupPosition).getParktime()));
 			tv2.setTextSize(18);
-			tv2.setTextColor(Color.rgb(148, 81, 68));
 			tv2.setId(3);
 			tv2.setLayoutParams(lp2);
-
+			tv2.setTextColor(Color.rgb(148, 81, 68));
+			tv2.setPadding(0, 0, 0, 8);
 			rl.addView(tv1);
 			rl.addView(tv2);
 
@@ -288,6 +231,15 @@ public class UnhandledListActivity extends BaseActivity {
 			return true;
 		}
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent ii = new Intent(this, MainActivity.class);
+		this.startActivity(ii);
+		this.finish();
 	}
 
 }
