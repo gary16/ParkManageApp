@@ -38,4 +38,16 @@ public class PathUtils {
 		return ss;
 	}
 
+	public static String getWintoneImagePath() {
+		String ss = null;
+		if (s != null) {
+			ss = s + File.separator + "wintoneimage" + File.separator;
+			File f = new File(ss);
+			if (!f.exists()) {
+				f.mkdir();
+			}
+		}
+		return ss;
+	}
+
 }

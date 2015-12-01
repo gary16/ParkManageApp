@@ -208,6 +208,10 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 
 				DbHelper.insertRecord(rcno, hphm, "blue", parkTime, img_path,
 						0, 0, 0);
+				File f = new File(fn);
+				if (f.exists()) {
+					f.delete();
+				}
 				progress.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
