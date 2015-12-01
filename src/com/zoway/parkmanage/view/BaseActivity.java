@@ -23,7 +23,7 @@ public class BaseActivity extends Activity {
 
 	// @Override
 	// public void onAttachedToWindow() {
-	// this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
 	// super.onAttachedToWindow();
+	// this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
 	// }
 }
