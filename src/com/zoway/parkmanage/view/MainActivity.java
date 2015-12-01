@@ -51,6 +51,8 @@ public class MainActivity extends BaseActivity {
 		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
 
 		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
+		malbun = (TextView) this.findViewById(R.id.malbun);
+		matxtworkpls = (TextView) this.findViewById(R.id.matxtworkpls);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		Date df = Calendar.getInstance().getTime();
