@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity {
 	private ImageButton btnmainescape;
 	private ImageButton btnmainquery;
 	private TextView matxtlgtime;
-	private TextView malbun;
+	private TextView matxtun;
 	private TextView matxtworkpls;
 
 	@Override
@@ -51,13 +51,13 @@ public class MainActivity extends BaseActivity {
 		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
 
 		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
-		malbun = (TextView) this.findViewById(R.id.malbun);
+		matxtun = (TextView) this.findViewById(R.id.matxtun);
 		matxtworkpls = (TextView) this.findViewById(R.id.matxtworkpls);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		Date df = Calendar.getInstance().getTime();
 		matxtlgtime.setText(sdf.format(df));
-		malbun.setText(LoginBean4Wsdl.getWorker().getWorkerName());
+		matxtun.setText(LoginBean4Wsdl.getWorker().getWorkerName());
 		matxtworkpls.setText(LoginBean4Wsdl.getParkName());
 
 		malogout.setOnClickListener(new OnClickListener() {
