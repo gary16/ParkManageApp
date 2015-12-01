@@ -85,7 +85,7 @@ public class FeeEvasionActivity extends BaseActivity {
 					.format("http://cx.zoway.com.cn:81/ParkRecord/show/%s.do",
 							recordno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(5);
+			printer.feedLine(4);
 		}
 
 		@Override
