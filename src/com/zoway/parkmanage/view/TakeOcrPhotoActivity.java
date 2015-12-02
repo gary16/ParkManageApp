@@ -71,6 +71,7 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 				intent.putExtra("fn", (String) msg.obj);
 				intent.putExtra("type", type);
 				TakeOcrPhotoActivity.this.startActivity(intent);
+				TakeOcrPhotoActivity.this.finish();
 				break;
 			}
 
@@ -83,6 +84,7 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 		super.onBackPressed();
 		Intent ii = new Intent(this, MainActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	@Override
@@ -122,7 +124,6 @@ public class TakeOcrPhotoActivity extends BaseActivity implements
 		rt = i.getStringExtra("rt");
 		type = i.getIntExtra("type", 0);
 		mPicture = new pitcCallback();
-
 	}
 
 	@Override

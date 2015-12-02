@@ -34,30 +34,6 @@ public class DbHelper {
 		// String insertSql =
 		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','X12345','blue','201510231200','201510231230',30,1,'',0,0)";
 		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','X23456','blue','201509231200','201509231300',30,1,'',0,0)";
-		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','X23456','blue','201509231300','201509231330',30,1,'',0,0)";
-		// db.execSQL(insertSql);
-		// String insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isupload,isprint) values(1,1,1,'','XAB123','blue','201510251200','',30,0,'',0,0)";
-		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isupload,isprint) values(1,1,1,'','XWD345','blue','201509241200','',30,0,'',0,0)";
-		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','XGK098','blue','201509241300','',30,0,'',0,0)";
-		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','XAB123','blue','201510251200','',30,2,'',0,0)";
-		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','XWD345','blue','201509241200','',30,2,'',0,0)";
-		// db.execSQL(insertSql);
-		// insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','XGK098','blue','201509241300','',30,2,'',0,0)";
-		// db.execSQL(insertSql);
 		String ct1Str = null;
 		ct1Str = " Create TABLE if not exists  t_parkrecord  (tid integer PRIMARY KEY AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno text,hphm text,hphmcolor text,parktime text,leavetime text,fees REAL,status integer,filepath text,isupload int,isprint int)";
 		db.execSQL(ct1Str);

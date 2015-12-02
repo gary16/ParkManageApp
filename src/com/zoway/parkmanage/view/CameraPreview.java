@@ -21,7 +21,6 @@ public class CameraPreview extends SurfaceView implements Callback {
 	public CameraPreview(Context context, Camera camera) {
 		super(context);
 		mCamera = camera;
-
 		// Install a SurfaceHolder.Callback so we get notified when the
 		// underlying surface is created and destroyed.
 		mHolder = getHolder();
@@ -52,7 +51,7 @@ public class CameraPreview extends SurfaceView implements Callback {
 
 			mCamera.startPreview();
 			Log.d("...", "create preview success");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.d("", "Error setting camera preview: " + e.getMessage());
 		}
 	}
@@ -65,7 +64,7 @@ public class CameraPreview extends SurfaceView implements Callback {
 		}
 		// stop preview before making changes
 		try {
-			// mCamera.stopPreview();
+			mCamera.stopPreview();
 		} catch (Exception e) {
 			// ignore: tried to stop a non-existent preview
 		}
@@ -94,19 +93,6 @@ public class CameraPreview extends SurfaceView implements Callback {
 		// start preview with new settings
 		try {
 
-			// Parameters mparam = mCamera.getParameters();
-			// boolean b = mparam.isSmoothZoomSupported();
-			// boolean c = mparam.isZoomSupported();
-			// mparam.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-			// List l = mparam.getSupportedPictureSizes();
-			// // Size s = mparam.getPictureSize();
-			// maxzoom = mparam.getMaxZoom();
-			// mparam.setPictureFormat(PixelFormat.JPEG);
-			// // mparam.setRotation(90);
-			// // mparam.setPictureSize(1920, 1080);
-			// mparam.setPictureSize(1600, 1200);
-			// mCamera.setParameters(mparam);
-			// mCamera.setDisplayOrientation(90);
 			mCamera.setPreviewDisplay(mHolder);
 
 			mCamera.startPreview();

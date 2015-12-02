@@ -18,13 +18,12 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		ActivityList.pushActivity(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
 
-	@Override
-	public void onAttachedToWindow() {
-		this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
-		super.onAttachedToWindow();
-	}
+	// @Override
+	// public void onAttachedToWindow() {
+	// super.onAttachedToWindow();
+	// this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);
+	// }
 }

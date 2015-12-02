@@ -80,12 +80,16 @@ public class LoginWsdl {
 						if (!s.equals("")) {
 							SimpleDateFormat sdf = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
+
 							int ii = s.indexOf(".");
-							s = s.substring(0, ii).replace("T", " ");
+							if (ii > 0) {
+								s = s.substring(0, ii).replace("T", " ");
+							} else {
+								s = s.replace("T", " ");
+							}
 							f.set(lb, sdf.parse(s));
 						} else {
-							f.set(lb, new Date());
-							lb.setLoginClientTime(new Date());
+							LoginBean4Wsdl.setLoginClientTime(new Date());
 						}
 					}
 				}

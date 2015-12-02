@@ -19,9 +19,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,7 +36,6 @@ import com.landicorp.android.eptapi.utils.QrCode;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.db.DbHelper;
-import com.zoway.parkmanage.http.RegisterVehicleInfoWsdl;
 import com.zoway.parkmanage.image.BitmapHandle;
 import com.zoway.parkmanage.utils.PathUtils;
 import com.zoway.parkmanage.utils.TimeUtil;
@@ -60,11 +57,10 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 
 	// size 48*48
 	private ImageButton img1;
-	private ImageButton img2;
 	private Button infosure;
 	private Button btninfocancel;
 	private Bitmap bitmapSelected1 = null;
-	private Bitmap bitmapSelected2 = null;
+	private Bitmap bitmapOcr = null;
 	private ProgressDialog pDia;
 	private TextView txtparktime;
 	private TextView txtcarnumber;
@@ -90,6 +86,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 				Intent intent = new Intent(InputInfoActivity.this,
 						MainActivity.class);
 				InputInfoActivity.this.startActivity(intent);
+				InputInfoActivity.this.finish();
 				break;
 			case 2:
 
@@ -140,7 +137,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void doPrint(Printer printer) throws Exception {
-			// TODO Auto-generated method stub
+			// // TODO Auto-generated method stub
 			Format format = new Format();
 			// Use this 5x7 dot and 1 times width, 2 times height
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
@@ -163,7 +160,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 			String cUrl = String.format(
 					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(5);
+			printer.feedLine(4);
 		}
 
 		@Override
@@ -191,22 +188,13 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
 		switch (arg0.getId()) {
 		case R.id.parkimg1:
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,
 					Uri.fromFile(new File(img_path, "p1ori.jpg")));
 			startActivityForResult(intent, REQIMG1);
-			break;
-		case R.id.parkimg2:
-			intent.putExtra(MediaStore.EXTRA_OUTPUT,
-					Uri.fromFile(new File(img_path, "p2.jpg")));
-			startActivityForResult(intent, REQIMG2);
-			break;
-		case R.id.parkimg3:
-			intent.putExtra(MediaStore.EXTRA_OUTPUT,
-					Uri.fromFile(new File(img_path, "p3.jpg")));
-			startActivityForResult(intent, REQIMG3);
 			break;
 		case R.id.btninfosure:
 			pDia = ProgressDialog.show(InputInfoActivity.this, "打印停车纸",
@@ -214,13 +202,16 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 			try {
 				InputStream is = getContentResolver().openInputStream(
 						Uri.fromFile(new File(fn)));
-				Bitmap b1 = BitmapHandle.getReduceBitmap(is, false, 5, 0);
+				bitmapOcr = BitmapHandle.getReduceBitmap(is, false, 5, 0);
 				BitmapHandle.writeJpgFromBitmap(img_path + File.separator
-						+ "p2.jpg", b1, 90);
-				b1 = null;
+						+ "p2.jpg", bitmapOcr, 90);
 
 				DbHelper.insertRecord(rcno, hphm, "blue", parkTime, img_path,
 						0, 0, 0);
+				File f = new File(fn);
+				if (f.exists()) {
+					f.delete();
+				}
 				progress.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -228,8 +219,8 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 			}
 			break;
 		case R.id.btninfocancel:
-			int iiii = 0;
 			this.onBackPressed();
+			this.finish();
 			break;
 		default:
 			break;
@@ -270,8 +261,6 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 			fDir.mkdirs();
 		}
 		img1 = (ImageButton) this.findViewById(R.id.parkimg1);
-		img2 = (ImageButton) this.findViewById(R.id.parkimg2);
-
 		infosure = (Button) this.findViewById(R.id.btninfosure);
 		btninfocancel = (Button) this.findViewById(R.id.btninfocancel);
 
@@ -281,7 +270,6 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
 		txtcarnumber.setText(hphm);
 		img1.setOnClickListener(this);
-		img2.setOnClickListener(this);
 		infosure.setOnClickListener(this);
 		btninfocancel.setOnClickListener(this);
 
@@ -325,33 +313,15 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 					if (f.exists()) {
 						f.delete();
 					}
-					if (bitmapSelected1 != null) {
-						bitmapSelected1 = null;
-					}
+
 				} catch (Exception er) {
 					er.printStackTrace();
-				}
-				break;
-			case REQIMG2:
-				try {
-					InputStream is = getContentResolver().openInputStream(
-							Uri.fromFile(new File(img_path, "p2ori.jpg")));
-					bitmapSelected2 = BitmapHandle.getReduceBitmap(is, false,
-							5, 90);
-					this.img2.setImageBitmap(bitmapSelected2);
-					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
-							+ "p2.jpg", bitmapSelected2, 90);
-					if (bitmapSelected2 != null) {
-						bitmapSelected2 = null;
-					}
-				} catch (Exception er) {
-					er.printStackTrace();
+				} finally {
 				}
 				break;
 			default:
 				break;
 			}
-			System.gc();
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
@@ -371,4 +341,27 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 		bindDeviceService();
 	}
 
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (bitmapSelected1 != null && !bitmapSelected1.isRecycled()) {
+			bitmapSelected1.recycle();
+			bitmapSelected1 = null;
+
+		}
+		if (bitmapOcr != null && !bitmapOcr.isRecycled()) {
+			bitmapOcr.recycle();
+			bitmapOcr = null;
+		}
+
+		System.gc();
+	}
 }

@@ -64,7 +64,12 @@ public class ParkWsdl {
 					} else if (f.getType() == java.util.Date.class) {
 						String s = oj.getPropertySafelyAsString(f.getName());
 						if (!s.equals("")) {
-							s = s.replace("T", " ");
+							int ii = s.indexOf(".");
+							if (ii > 0) {
+								s = s.substring(0, ii).replace("T", " ");
+							} else {
+								s = s.replace("T", " ");
+							}
 							f.set(obj, sdf.parse(s));
 						}
 					}

@@ -45,7 +45,7 @@ import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.utils.TimeUtil;
 
-public class QueryListsActivity extends  BaseActivity {
+public class QueryListsActivity extends BaseActivity {
 
 	private final SparseArray<ParkRecord> groups = new SparseArray<ParkRecord>();
 	private ExpandableListView lview;
@@ -189,6 +189,7 @@ public class QueryListsActivity extends  BaseActivity {
 		super.onBackPressed();
 		Intent ii = new Intent(this, MainActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	@Override
@@ -251,7 +252,7 @@ public class QueryListsActivity extends  BaseActivity {
 			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
 					RelativeLayout.LayoutParams.WRAP_CONTENT,
 					RelativeLayout.LayoutParams.WRAP_CONTENT);
-
+			lp1.setMargins(5, 5, 0, 2);
 			String txt = groups.get(groupPosition).getHphm().toUpperCase();
 			SpannableString hphmsp = new SpannableString(txt);
 
@@ -266,7 +267,7 @@ public class QueryListsActivity extends  BaseActivity {
 			tv1.setText(hphmsp);
 			tv1.setTextSize(20);
 			tv1.setId(1);
-
+			tv1.setLayoutParams(lp1);
 			TextView tv2 = new TextView(QueryListsActivity.this);
 			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
 					RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -275,10 +276,11 @@ public class QueryListsActivity extends  BaseActivity {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
 			tv2.setText("停车时间:"
 					+ sdf.format(groups.get(groupPosition).getParktime()));
+			tv2.setPadding(0, 0, 0, 8);
 			tv2.setTextSize(18);
 			tv2.setId(2);
 			tv2.setLayoutParams(lp2);
-
+			tv2.setTextColor(Color.rgb(148, 81, 68));
 			rl.addView(tv1);
 			rl.addView(tv2);
 			return rl;
@@ -293,5 +295,4 @@ public class QueryListsActivity extends  BaseActivity {
 		}
 	}
 
- 
 }

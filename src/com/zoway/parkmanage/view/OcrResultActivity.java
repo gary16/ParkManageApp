@@ -98,6 +98,7 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 			intent1.putExtra("fn", fn);
 			intent1.putExtra("type", type);
 			this.startActivity(intent1);
+			this.finish();
 			break;
 		}
 
@@ -113,6 +114,7 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 		super.onBackPressed();
 		Intent ii = new Intent(this, MainActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	@Override

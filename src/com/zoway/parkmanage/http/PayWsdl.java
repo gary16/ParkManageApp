@@ -58,7 +58,11 @@ public class PayWsdl {
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd HH:mm:ss");
 						int ii = s.indexOf(".");
-						s = s.substring(0, ii).replace("T", " ");
+						if (ii > 0) {
+							s = s.substring(0, ii).replace("T", " ");
+						} else {
+							s = s.replace("T", " ");
+						}
 						f.set(obj, sdf.parse(s));
 					}
 				}

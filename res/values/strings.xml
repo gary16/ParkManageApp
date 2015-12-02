@@ -138,5 +138,7 @@
     <string name="title_activity_unhandled_list">UnhandledListActivity</string>
     <string name="title_activity_fee_free">FeeFreeActivity</string>
     <string name="title_activity_record_info">RecordInfoActivity</string>
+    <string name="title_activity_pay_lists">PayListsActivity</string>
+    <string name="title_activity_head">HeadActivity</string>
 
 </resources>

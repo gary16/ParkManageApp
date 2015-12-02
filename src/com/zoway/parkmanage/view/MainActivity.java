@@ -1,5 +1,6 @@
 package com.zoway.parkmanage.view;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.service.TerminalService;
+import com.zoway.parkmanage.utils.PathUtils;
 
 public class MainActivity extends BaseActivity {
 
@@ -66,11 +67,34 @@ public class MainActivity extends BaseActivity {
 				nm.cancelAll();
 				Intent ii = new Intent(MainActivity.this, TerminalService.class);
 				MainActivity.this.stopService(ii);
-				Intent MyIntent = new Intent(Intent.ACTION_MAIN);
-				MyIntent.addCategory(Intent.CATEGORY_HOME);
+
+				String tmppath = PathUtils.getTmpImagePath();
+				File dri = new File(tmppath);
+				if (dri.exists() && dri.isDirectory()) {
+					File[] filelst = dri.listFiles();
+					for (int cnt = 0; cnt < filelst.length; cnt++) {
+						File f = filelst[cnt];
+						f.delete();
+					}
+				}
+
+				String wintonepath = PathUtils.getWintoneImagePath();
+				File wdri = new File(wintonepath);
+				if (wdri.exists() && wdri.isDirectory()) {
+					File[] filelst = wdri.listFiles();
+					for (int cnt = 0; cnt < filelst.length; cnt++) {
+						File f = filelst[cnt];
+						f.delete();
+					}
+				}
+
+				Intent MyIntent = new Intent(MainActivity.this,
+						HeadActivity.class);
+				MyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				MyIntent.putExtra("status", 1);
+
 				MainActivity.this.startActivity(MyIntent);
-				ActivityList.exitAllActivity();
-				System.exit(0);
+
 			}
 		});
 
@@ -85,17 +109,21 @@ public class MainActivity extends BaseActivity {
 				MainActivity.this.startActivity(intent);
 			}
 		});
+
 		btnmainpay.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				// Intent intent = new Intent(MainActivity.this,
+				// TakeOcrPhotoActivity.class);
+				// intent.putExtra("type", 2);
 				Intent intent = new Intent(MainActivity.this,
-						TakeOcrPhotoActivity.class);
-				intent.putExtra("type", 2);
+						PayListsActivity.class);
 				MainActivity.this.startActivity(intent);
 			}
 		});
+
 		btnmainescape.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -107,6 +135,7 @@ public class MainActivity extends BaseActivity {
 				MainActivity.this.startActivity(intent);
 			}
 		});
+
 		btnmainquery.setOnClickListener(new OnClickListener() {
 
 			@Override

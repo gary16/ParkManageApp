@@ -55,6 +55,7 @@ public class FeeEvasionActivity extends BaseActivity {
 	private TextView txtpark;
 	private TextView txtparktime;
 	private ProgressDialog pDia;
+	private Bitmap bitmapSelected1;
 
 	private Printer.Progress progress = new Printer.Progress() {
 
@@ -84,7 +85,7 @@ public class FeeEvasionActivity extends BaseActivity {
 					.format("http://cx.zoway.com.cn:81/ParkRecord/show/%s.do",
 							recordno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(5);
+			printer.feedLine(4);
 		}
 
 		@Override
@@ -122,6 +123,7 @@ public class FeeEvasionActivity extends BaseActivity {
 				Intent intent = new Intent(FeeEvasionActivity.this,
 						UnhandledListActivity.class);
 				FeeEvasionActivity.this.startActivity(intent);
+				FeeEvasionActivity.this.finish();
 				break;
 			case 2:
 				pDia.dismiss();
@@ -252,6 +254,7 @@ public class FeeEvasionActivity extends BaseActivity {
 		super.onBackPressed();
 		Intent ii = new Intent(this, UnhandledListActivity.class);
 		this.startActivity(ii);
+		this.finish();
 	}
 
 	@Override
@@ -264,8 +267,8 @@ public class FeeEvasionActivity extends BaseActivity {
 				try {
 					InputStream is = getContentResolver().openInputStream(
 							Uri.fromFile(new File(img_path, "p4ori.jpg")));
-					Bitmap bitmapSelected1 = BitmapHandle.getReduceBitmap(is,
-							false, 5, 90);
+					bitmapSelected1 = BitmapHandle.getReduceBitmap(is, false,
+							5, 90);
 					this.btnTakeEvapto.setImageBitmap(bitmapSelected1);
 					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
 							+ "p4.jpg", bitmapSelected1, 90);
@@ -322,6 +325,17 @@ public class FeeEvasionActivity extends BaseActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (bitmapSelected1 != null && !bitmapSelected1.isRecycled()) {
+			bitmapSelected1.recycle();
+			bitmapSelected1 = null;
+			System.gc();
+		}
 	}
 
 }

@@ -31,8 +31,10 @@ public class BitmapHandle {
 				bSrc.getHeight());
 	}
 
-	public static Bitmap getReduceBitmap(InputStream is,boolean decodebounds,int sampleSize,int roation) {
+	public static Bitmap getReduceBitmap(InputStream is, boolean decodebounds,
+			int sampleSize, int roation) {
 		Bitmap bitmap = null;
+		Bitmap rotate_bitmap = null;
 		try {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inJustDecodeBounds = decodebounds;
@@ -40,15 +42,21 @@ public class BitmapHandle {
 			bitmap = BitmapFactory.decodeStream(is, null, options);
 			Matrix matrix = new Matrix();
 			matrix.preRotate(roation);
-			Bitmap rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+			rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
 					bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-			bitmap = rotate_bitmap;
-			rotate_bitmap = null;
-			System.gc();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			// roation=0 ÎªÊä³öbitmapÔ­Í¼
+			if (roation % 360 != 0) {
+				if (bitmap != null && !bitmap.isRecycled()) {
+					bitmap.recycle();
+					bitmap = null;
+					System.gc();
+				}
+			}
 		}
-		return bitmap;
+		return rotate_bitmap;
 	}
 
 	public static Bitmap getRectBitmap(Bitmap bSrc, float wr, float hr) {
@@ -127,6 +135,9 @@ public class BitmapHandle {
 	public static void writeOcrJpgFromBytes(String filePath, int wid, int hei,
 			byte[] data, int ysb) {
 		File f1 = new File(filePath);
+		Bitmap bitmap = null;
+		Bitmap rotate_bitmap = null;
+		Bitmap cut_bitmap = null;
 		try {
 			if (f1.exists()) {
 				f1.delete();
@@ -137,75 +148,60 @@ public class BitmapHandle {
 			BitmapFactory.Options opts = new BitmapFactory.Options();
 			opts.inInputShareable = true;
 			opts.inPurgeable = true;
-			Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length,
-					opts);
+			bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opts);
 
 			Matrix matrix = new Matrix();
 			matrix.preRotate(90);
-			Bitmap rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+			rotate_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
 					bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-			if (bitmap != rotate_bitmap) {
-				if (!bitmap.isRecycled()) {
-					bitmap.recycle();
-					bitmap = null;
-				}
-				bitmap = rotate_bitmap;
-			}
+
 			float widthScale;
 			float heightScale;
 
-			if (bitmap.getWidth() > 2048 && bitmap.getHeight() > 1536) {
+			if (rotate_bitmap.getWidth() > 2048
+					&& rotate_bitmap.getHeight() > 1536) {
 				matrix = new Matrix();
-				widthScale = (float) 2048 / bitmap.getWidth();
-				heightScale = (float) 1536 / bitmap.getHeight();
+				widthScale = (float) 2048 / rotate_bitmap.getWidth();
+				heightScale = (float) 1536 / rotate_bitmap.getHeight();
 				matrix.postScale(widthScale, heightScale);
-				Bitmap cut_bitmap = Bitmap.createBitmap(bitmap, 0, 0, 2048,
+				cut_bitmap = Bitmap.createBitmap(rotate_bitmap, 0, 0, 2048,
 						1536, matrix, true);
-				if (bitmap != cut_bitmap) {
-					if (!bitmap.isRecycled()) {
-						bitmap.recycle();
-						bitmap = null;
-					}
-					bitmap = cut_bitmap;
-				}
-			} else if (bitmap.getWidth() > 2048 && bitmap.getHeight() <= 1536) {
+			} else if (rotate_bitmap.getWidth() > 2048
+					&& rotate_bitmap.getHeight() <= 1536) {
 				matrix = new Matrix();
-				widthScale = (float) 2048 / bitmap.getWidth();
+				widthScale = (float) 2048 / rotate_bitmap.getWidth();
 				heightScale = (float) 1.0;
 				matrix.postScale(widthScale, heightScale);
-				Bitmap cut_bitmap = Bitmap.createBitmap(bitmap, 0, 0, 2048,
-						bitmap.getHeight(), matrix, true);
-				if (bitmap != cut_bitmap) {
-					if (!bitmap.isRecycled()) {
-						bitmap.recycle();
-						bitmap = null;
-					}
-					bitmap = cut_bitmap;
-				}
-			} else if (bitmap.getWidth() <= 2048 && bitmap.getHeight() > 1536) {
+				cut_bitmap = Bitmap.createBitmap(rotate_bitmap, 0, 0, 2048,
+						rotate_bitmap.getHeight(), matrix, true);
+			} else if (rotate_bitmap.getWidth() <= 2048
+					&& rotate_bitmap.getHeight() > 1536) {
 				matrix = new Matrix();
 				widthScale = (float) 1.0;
-				heightScale = (float) 1536 / bitmap.getHeight();
+				heightScale = (float) 1536 / rotate_bitmap.getHeight();
 				matrix.postScale(widthScale, heightScale);
-				Bitmap cut_bitmap = Bitmap.createBitmap(bitmap, 0, 0,
-						bitmap.getWidth(), 1536, matrix, true);
-				if (bitmap != cut_bitmap) {
-					if (!bitmap.isRecycled()) {
-						bitmap.recycle();
-						bitmap = null;
-					}
-					bitmap = cut_bitmap;
-				}
+				cut_bitmap = Bitmap.createBitmap(rotate_bitmap, 0, 0,
+						rotate_bitmap.getWidth(), 1536, matrix, true);
 			}
-
-			bitmap.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
+			cut_bitmap.compress(Bitmap.CompressFormat.JPEG, ysb, bos);
 			bos.flush();
 			bos.close();
-			bitmap.recycle();
-			bitmap = null;
-			System.gc();
 		} catch (Exception er) {
 			er.printStackTrace();
+		} finally {
+			if (bitmap != null && !bitmap.isRecycled()) {
+				bitmap.recycle();
+				bitmap = null;
+			}
+			if (rotate_bitmap != null && !rotate_bitmap.isRecycled()) {
+				rotate_bitmap.recycle();
+				rotate_bitmap = null;
+			}
+			if (cut_bitmap != null && !cut_bitmap.isRecycled()) {
+				cut_bitmap.recycle();
+				cut_bitmap = null;
+			}
+			System.gc();
 		}
 	}
 

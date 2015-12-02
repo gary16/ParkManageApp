@@ -130,8 +130,9 @@ public class PaybillActivity extends BaseActivity {
 				}
 
 				Intent intent = new Intent(PaybillActivity.this,
-						MainActivity.class);
+						PayListsActivity.class);
 				PaybillActivity.this.startActivity(intent);
+				PaybillActivity.this.finish();
 				break;
 			case 2:
 				pDia.dismiss();
@@ -321,5 +322,13 @@ public class PaybillActivity extends BaseActivity {
 		bindDeviceService();
 	}
 
- 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent ii = new Intent(this, PayListsActivity.class);
+		this.startActivity(ii);
+		this.finish();
+	}
+
 }

@@ -110,6 +110,7 @@ public class FeeFreeActivity extends BaseActivity {
 				Intent intent = new Intent(FeeFreeActivity.this,
 						UnhandledListActivity.class);
 				FeeFreeActivity.this.startActivity(intent);
+				FeeFreeActivity.this.finish();
 				break;
 			case 2:
 				pDia.dismiss();
@@ -204,6 +205,7 @@ public class FeeFreeActivity extends BaseActivity {
 				Intent i = new Intent(FeeFreeActivity.this,
 						UnhandledListActivity.class);
 				FeeFreeActivity.this.startActivity(i);
+				FeeFreeActivity.this.finish();
 			}
 		});
 		btnprintqcode.setOnClickListener(new OnClickListener() {

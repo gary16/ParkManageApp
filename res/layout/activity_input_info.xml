@@ -158,19 +158,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="20dp"
             android:background="@drawable/iv_bg"
             android:padding="3dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/takephoto" />
-
-        <ImageButton
-            android:id="@+id/parkimg2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/parkimg1"
-            android:background="@drawable/iv_bg"
             android:scaleType="centerCrop"
             android:src="@drawable/takephoto" />
     </RelativeLayout>
