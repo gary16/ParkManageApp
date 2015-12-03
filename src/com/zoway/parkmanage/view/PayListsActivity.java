@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -39,12 +39,13 @@ public class PayListsActivity extends BaseActivity {
 	private String qryStr = "";
 	private int qryStrLen = 0;
 	private Button btnocrpay;
+	private LayoutInflater mInflater;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pay_lists);
-
+		mInflater = this.getLayoutInflater();
 		groups.clear();
 		List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50, null);
 		for (int i = 0; i < li.size(); i++) {
@@ -180,16 +181,18 @@ public class PayListsActivity extends BaseActivity {
 
 		public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
-
-			RelativeLayout rl = new RelativeLayout(PayListsActivity.this);
-			rl.setId(1);
-			rl.setBackgroundResource(R.drawable.mainlistline);
-
-			TextView tv1 = new TextView(PayListsActivity.this);
-			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp1.setMargins(5, 5, 0, 2);
+			ViewHolder holder;
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.listview_hphm, null);
+				holder = new ViewHolder();
+				holder.tv1 = (TextView) convertView
+						.findViewById(R.id.list_txthphm);
+				holder.tv2 = (TextView) convertView
+						.findViewById(R.id.list_txtparktime);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
 			String txt = groups.get(groupPosition).getHphm().toUpperCase();
 			SpannableString hphmsp = new SpannableString(txt);
 
@@ -200,27 +203,13 @@ public class PayListsActivity extends BaseActivity {
 							+ qryStrLen, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
 			}
-			tv1.setText(hphmsp);
-			tv1.setTextSize(20);
-			tv1.setId(2);
-			tv1.setLayoutParams(lp1);
-			TextView tv2 = new TextView(PayListsActivity.this);
-			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp2.addRule(RelativeLayout.BELOW, tv1.getId());
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
-			tv2.setText("停车时间:"
-					+ sdf.format(groups.get(groupPosition).getParktime()));
-			tv2.setTextSize(18);
-			tv2.setId(3);
-			tv2.setLayoutParams(lp2);
-			tv2.setTextColor(Color.rgb(148, 81, 68));
-			tv2.setPadding(0, 0, 0, 8);
-			rl.addView(tv1);
-			rl.addView(tv2);
 
-			return rl;
+			holder.tv1.setText(hphmsp);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
+			holder.tv2.setText("停车时间:"
+					+ sdf.format(groups.get(groupPosition).getParktime()));
+			return convertView;
 		}
 
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
@@ -231,6 +220,11 @@ public class PayListsActivity extends BaseActivity {
 			return true;
 		}
 
+	}
+
+	private static class ViewHolder {
+		public TextView tv1;
+		public TextView tv2;
 	}
 
 	@Override

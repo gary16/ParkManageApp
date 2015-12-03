@@ -149,7 +149,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
 			printer.printText("电话号码:26337118\n");
 			printer.printText("车牌号码:" + hphm + "\n");
-			printer.printText("停车位置:南源路\n");
+			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
 			printer.printText("停车时间:" + datetext + "\n");
 			printer.printText("操作员:"
 					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="3dp" >
+
+    <TextView
+        android:id="@+id/list_txthphm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="aaas"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/list_txtparktime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_txthphm"
+        android:layout_marginLeft="3dp"
+        android:gravity="center_vertical"
+        android:text="aaas"
+        android:textColor="#ff945144"
+        android:textSize="18sp" />
+
+</RelativeLayout>
