@@ -92,7 +92,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			loginHdlr.sendMessage(msg1);
 			LoginWsdl lws = new LoginWsdl();
 			// boolean b = lws.getLogin(devId, mgrId, pwd);
-			int b = lws.getLogin("h", mgrId, pwd);
+			int b = lws.getLogin(devId, mgrId, pwd);
 			if (b == 0) {
 				msg1 = new Message();
 				msg1.what = 2;

@@ -53,7 +53,7 @@ public final class R {
         public static final int userbig=0x7f020016;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b004f;
+        public static final int action_settings=0x7f0b0051;
         public static final int btnTakeEvapto=0x7f0b000e;
         public static final int btncapture=0x7f0b0045;
         public static final int btnctrllight=0x7f0b0044;
@@ -62,7 +62,7 @@ public final class R {
         public static final int btnin30min=0x7f0b0047;
         public static final int btninfocancel=0x7f0b0013;
         public static final int btninfosure=0x7f0b0012;
-        public static final int btninputdata=0x7f0b004b;
+        public static final int btninputdata=0x7f0b004d;
         public static final int btnloginsure=0x7f0b001c;
         public static final int btnmainescape=0x7f0b002a;
         public static final int btnmainpay=0x7f0b0029;
@@ -91,6 +91,8 @@ public final class R {
         public static final int lblpark=0x7f0b0005;
         public static final int lblparkimg=0x7f0b0009;
         public static final int lblparktime=0x7f0b0007;
+        public static final int list_txthphm=0x7f0b0049;
+        public static final int list_txtparktime=0x7f0b004a;
         public static final int lpass=0x7f0b001a;
         public static final int lunam=0x7f0b0018;
         public static final int ly1=0x7f0b0002;
@@ -114,17 +116,17 @@ public final class R {
         public static final int parkimg4=0x7f0b0017;
         public static final int reclist=0x7f0b0039;
         public static final int root_ly=0x7f0b003d;
-        public static final int tiv1=0x7f0b004c;
-        public static final int tiv2=0x7f0b004e;
+        public static final int tiv1=0x7f0b004e;
+        public static final int tiv2=0x7f0b0050;
         public static final int tkephotoly1=0x7f0b002c;
         public static final int tkephotoly2=0x7f0b002d;
         public static final int tkephotoly3=0x7f0b0033;
-        public static final int ttv1=0x7f0b004d;
+        public static final int ttv1=0x7f0b004f;
         public static final int txtcarnumber=0x7f0b0004;
         public static final int txtcartype=0x7f0b0003;
         public static final int txtleavetime=0x7f0b0011;
-        public static final int txtlistinfo=0x7f0b0049;
-        public static final int txtlistinfo2=0x7f0b004a;
+        public static final int txtlistinfo=0x7f0b004b;
+        public static final int txtlistinfo2=0x7f0b004c;
         public static final int txtmoney=0x7f0b003b;
         public static final int txtocrreshphm=0x7f0b0030;
         public static final int txtpark=0x7f0b0006;
@@ -151,9 +153,10 @@ public final class R {
         public static final int activity_show_ocr_photo=0x7f03000d;
         public static final int activity_take_photo=0x7f03000e;
         public static final int activity_unhandled_list=0x7f03000f;
-        public static final int mainlistdetails=0x7f030010;
-        public static final int mainlistparent=0x7f030011;
-        public static final int province_spinner=0x7f030012;
+        public static final int listview_hphm=0x7f030010;
+        public static final int mainlistdetails=0x7f030011;
+        public static final int mainlistparent=0x7f030012;
+        public static final int province_spinner=0x7f030013;
     }
     public static final class menu {
         public static final int camera=0x7f0a0000;

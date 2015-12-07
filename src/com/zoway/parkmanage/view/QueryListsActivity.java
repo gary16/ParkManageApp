@@ -3,47 +3,31 @@ package com.zoway.parkmanage.view;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
-import com.landicorp.android.eptapi.DeviceService;
-import com.landicorp.android.eptapi.device.Printer;
-import com.landicorp.android.eptapi.device.Printer.Format;
-import com.landicorp.android.eptapi.exception.ReloginException;
-import com.landicorp.android.eptapi.exception.RequestException;
-import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
-import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
 import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.db.DbHelper;
-import com.zoway.parkmanage.utils.TimeUtil;
 
 public class QueryListsActivity extends BaseActivity {
 
@@ -56,6 +40,7 @@ public class QueryListsActivity extends BaseActivity {
 	private String qryStr = "";
 	private int qryStrLen = 0;
 	private int curFlg = 1;
+	private LayoutInflater mInflater;
 
 	@Override
 	protected void onPause() {
@@ -75,7 +60,7 @@ public class QueryListsActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_query_lists);
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
-
+		mInflater = this.getLayoutInflater();
 		List<ParkRecord> li = DbHelper.queryRecordList("1", 100, null);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
@@ -245,14 +230,18 @@ public class QueryListsActivity extends BaseActivity {
 
 		public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
-			RelativeLayout rl = new RelativeLayout(QueryListsActivity.this);
-			rl.setBackgroundResource(R.drawable.mainlistline);
-
-			TextView tv1 = new TextView(QueryListsActivity.this);
-			RelativeLayout.LayoutParams lp1 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp1.setMargins(5, 5, 0, 2);
+			ViewHolder holder;
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.listview_hphm, null);
+				holder = new ViewHolder();
+				holder.tv1 = (TextView) convertView
+						.findViewById(R.id.list_txthphm);
+				holder.tv2 = (TextView) convertView
+						.findViewById(R.id.list_txtparktime);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
 			String txt = groups.get(groupPosition).getHphm().toUpperCase();
 			SpannableString hphmsp = new SpannableString(txt);
 
@@ -264,26 +253,12 @@ public class QueryListsActivity extends BaseActivity {
 				}
 			}
 
-			tv1.setText(hphmsp);
-			tv1.setTextSize(20);
-			tv1.setId(1);
-			tv1.setLayoutParams(lp1);
-			TextView tv2 = new TextView(QueryListsActivity.this);
-			RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
-					RelativeLayout.LayoutParams.WRAP_CONTENT,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			lp2.addRule(RelativeLayout.BELOW, tv1.getId());
+			holder.tv1.setText(hphmsp);
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
-			tv2.setText("停车时间:"
+			holder.tv2.setText("停车时间:"
 					+ sdf.format(groups.get(groupPosition).getParktime()));
-			tv2.setPadding(0, 0, 0, 8);
-			tv2.setTextSize(18);
-			tv2.setId(2);
-			tv2.setLayoutParams(lp2);
-			tv2.setTextColor(Color.rgb(148, 81, 68));
-			rl.addView(tv1);
-			rl.addView(tv2);
-			return rl;
+			return convertView;
 		}
 
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
@@ -293,6 +268,11 @@ public class QueryListsActivity extends BaseActivity {
 		public boolean hasStableIds() {
 			return true;
 		}
+	}
+
+	private static class ViewHolder {
+		public TextView tv1;
+		public TextView tv2;
 	}
 
 }
