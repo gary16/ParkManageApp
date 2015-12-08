@@ -2,218 +2,98 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="5dp"
+    android:background="#ff000000"
     tools:context="com.zoway.parkmanage.view.MainActivity" >
 
     <LinearLayout
         android:id="@+id/maly1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ff0878ca" >
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-        <TextView
+        <ImageView
             android:id="@+id/infofrguna"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="3dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="管理中心"
-            android:textColor="#ffffffff"
-            android:textSize="32sp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/new1" />
 
-        <Button
+        <ImageView
             android:id="@+id/malogout"
             android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="3dp"
-            android:background="@drawable/logout_bg"
-            android:gravity="center"
-            android:text="注销"
-            android:textColor="#ffffffff"
-            android:textSize="23sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/new2" />
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/maly2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly1"
-        android:layout_marginTop="10dp" >
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/maiv1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="6dp"
-            android:src="@drawable/userbig" >
-        </ImageView>
+            android:src="@drawable/new3" />
 
-        <TextView
+        <ImageView
             android:id="@+id/malbun"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/maiv1"
-            android:text="用户名称"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/matxtun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="6dp"
-            android:layout_toRightOf="@id/malbun"
-            android:text="测试人员"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/malblgtime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/malbun"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/maiv1"
-            android:text="登录时间"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/matxtlgtime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/malblgtime"
-            android:layout_below="@id/matxtun"
-            android:layout_marginLeft="6dp"
-            android:layout_toRightOf="@id/malblgtime"
-            android:text="2015年08月31日  12时12分"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/malbworkpls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/maiv1"
-            android:layout_below="@id/matxtlgtime"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/maiv1"
-            android:text="工作地点"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/matxtworkpls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/malbworkpls"
-            android:layout_below="@id/matxtlgtime"
-            android:layout_marginLeft="6dp"
-            android:layout_toRightOf="@id/malbworkpls"
-            android:text="测试路段"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/maiv2"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_below="@id/maly2"
-        android:layout_marginTop="10dp"
-        android:background="#ff0878ca"
-        android:src="@drawable/userbig" >
-    </ImageView>
+            android:src="@drawable/new4" />
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/mainly2"
+        android:id="@+id/maly3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/maiv2"
-        android:orientation="vertical"
-        android:weightSum="2" >
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maly2"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="2" >
+        <ImageView
+            android:id="@+id/btnmainremark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/new5" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" >
+        <ImageView
+            android:id="@+id/btnmainpay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/new6" />
+    </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btnmainremark"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                                android:layout_centerInParent="true"
-                    android:background="@drawable/c1" >
-                </ImageButton>
-            </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/maly4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maly3"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" >
+        <ImageView
+            android:id="@+id/btnmainescape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/new7" />
 
-                <ImageButton
-                    android:id="@+id/btnmainpay"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:layout_weight="1"
-                    android:background="@drawable/c2" >
-                </ImageButton>
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="2" >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" >
-
-                <ImageButton
-                    android:id="@+id/btnmainescape"
-                      android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:layout_weight="1"
-                    android:background="@drawable/c4" >
-                </ImageButton>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" >
-
-                <ImageButton
-                    android:id="@+id/btnmainquery"
-                         android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:layout_weight="1"
-                    android:background="@drawable/c3" >
-                </ImageButton>
-            </RelativeLayout>
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/btnmainquery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/new8" />
     </LinearLayout>
 
 </RelativeLayout>

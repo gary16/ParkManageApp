@@ -15,13 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.zoway.parkmanage.R;
-import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.service.TerminalService;
 import com.zoway.parkmanage.utils.PathUtils;
 
@@ -29,35 +26,25 @@ public class MainActivity extends BaseActivity {
 
 	private ExpandableListView lview;
 	private MainListAdapter madapter;
-	private Button malogout;
-	private ImageButton btnmainremark;
-	private ImageButton btnmainpay;
-	private ImageButton btnmainescape;
-	private ImageButton btnmainquery;
-	private TextView matxtlgtime;
-	private TextView matxtun;
-	private TextView matxtworkpls;
+	private ImageView malogout;
+	private ImageView btnmainremark;
+	private ImageView btnmainpay;
+	private ImageView btnmainescape;
+	private ImageView btnmainquery;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		SparseArray<Group> groups = createData();
-		malogout = (Button) this.findViewById(R.id.malogout);
-		btnmainremark = (ImageButton) this.findViewById(R.id.btnmainremark);
-		btnmainpay = (ImageButton) this.findViewById(R.id.btnmainpay);
-		btnmainescape = (ImageButton) this.findViewById(R.id.btnmainescape);
-		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
-
-		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
-		matxtun = (TextView) this.findViewById(R.id.matxtun);
-		matxtworkpls = (TextView) this.findViewById(R.id.matxtworkpls);
+		malogout = (ImageView) this.findViewById(R.id.malogout);
+		btnmainremark = (ImageView) this.findViewById(R.id.btnmainremark);
+		btnmainpay = (ImageView) this.findViewById(R.id.btnmainpay);
+		btnmainescape = (ImageView) this.findViewById(R.id.btnmainescape);
+		btnmainquery = (ImageView) this.findViewById(R.id.btnmainquery);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		Date df = Calendar.getInstance().getTime();
-		matxtlgtime.setText(sdf.format(df));
-		matxtun.setText(LoginBean4Wsdl.getWorker().getWorkerName());
-		matxtworkpls.setText(LoginBean4Wsdl.getParkName());
 		malogout.setOnClickListener(new OnClickListener() {
 
 			@Override
