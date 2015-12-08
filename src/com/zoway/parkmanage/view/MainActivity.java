@@ -42,7 +42,6 @@ public class MainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		SparseArray<Group> groups = createData();
 		malogout = (Button) this.findViewById(R.id.malogout);
 		btnmainremark = (ImageButton) this.findViewById(R.id.btnmainremark);
 		btnmainpay = (ImageButton) this.findViewById(R.id.btnmainpay);
