@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.zoway.parkmanage.bean.EscapeRecord;
+import com.zoway.parkmanage.bean.IgnoreRecord;
 import com.zoway.parkmanage.bean.ParkRecord;
 import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.utils.PathUtils;
@@ -40,6 +41,8 @@ public class DbHelper {
 		ct1Str = " Create  TABLE if not exists t_uploadevasion(tid int PRIMARY KEY,recordno text,hphm text,escapetime text,uploadtime text,uploadstatus int )";
 		db.execSQL(ct1Str);
 		ct1Str = " Create  TABLE if not exists t_uploadpay(tid int PRIMARY KEY,recordno text,hphm text,fare float,uploadtime text,uploadstatus int)";
+		db.execSQL(ct1Str);
+		ct1Str = " Create  TABLE if not exists t_uploadignore(tid int PRIMARY KEY,recordno text,hphm text,ignoretime text,uploadtime text,uploadstatus int )";
 		db.execSQL(ct1Str);
 		closeDatabase();
 	}
@@ -114,6 +117,21 @@ public class DbHelper {
 		return flg;
 	}
 
+	public static synchronized boolean updateUploadIgnoreFlag(int tid,
+			int isupload) {
+		boolean flg = false;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String da = sdf.format(TimeUtil.getTime());
+			String s1 = "update t_uploadignore set uploadtime=?,uploadstatus=? where tid=?";
+			execSql(s1, new Object[] { da, isupload, tid });
+			flg = true;
+		} catch (Exception er) {
+			er.printStackTrace();
+		}
+		return flg;
+	}
+
 	public static synchronized boolean setEscapeRecord(int tid,
 			String recordno, String hphm, Date escapetime) {
 		boolean flg = false;
@@ -123,6 +141,23 @@ public class DbHelper {
 			String s2 = "insert into t_uploadevasion(tid,recordno,hphm,escapetime,uploadstatus) values(?,?,?,?,0)";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String da = sdf.format(escapetime);
+			execSql(s2, new Object[] { tid, recordno, hphm, da });
+			flg = true;
+		} catch (Exception er) {
+			er.printStackTrace();
+		}
+		return flg;
+	}
+
+	public static synchronized boolean setIgnoreRecord(int tid,
+			String recordno, String hphm, Date ignoretime) {
+		boolean flg = false;
+		try {
+			String s1 = "update t_parkrecord set status=3 where tid=?";
+			execSql(s1, new Object[] { tid });
+			String s2 = "insert into t_uploadignore(tid,recordno,hphm,ignoretime,uploadstatus) values(?,?,?,?,0)";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String da = sdf.format(ignoretime);
 			execSql(s2, new Object[] { tid, recordno, hphm, da });
 			flg = true;
 		} catch (Exception er) {
@@ -270,21 +305,66 @@ public class DbHelper {
 		return list;
 	}
 
+	public static synchronized List<IgnoreRecord> queryNeedUploadIgnore(
+			int limit) {
+		List<IgnoreRecord> list = new ArrayList<IgnoreRecord>();
+		try {
+			openDatabase();
+			db.beginTransaction();
+			String sql1 = " select t.tid,t.recordno,t.hphm,t.ignoretime,t.uploadtime,t.uploadstatus from t_uploadignore as  t where t.uploadstatus=0  order by t.ignoretime limit 0,?";
+			Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			while (cur.moveToNext()) {
+
+				IgnoreRecord er = new IgnoreRecord();
+				er.setTid(cur.getInt(0));
+				er.setRecordno(cur.getString(1));
+				er.setHphm(cur.getString(2));
+
+				try {
+					if (cur.getString(3) != null
+							&& !cur.getString(3).equals("")) {
+						er.setIgnoretime(sdf.parse(cur.getString(3)));
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				er.setUploadstatus(0);
+				list.add(er);
+			}
+			db.setTransactionSuccessful();
+			db.endTransaction();
+			cur.close();
+			closeDatabase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	public static synchronized List<ParkRecord> queryRecordList(
-			String payStatus, int limit, String hphmStr) {
+			String payStatus, int limit, String order, String hphmStr) {
 		List<ParkRecord> list = new ArrayList<ParkRecord>();
 		try {
+			String ord = "asc";
+			if (order.equals("desc")) {
+				ord = "desc";
+			}
 			openDatabase();
 			db.beginTransaction();
 			Cursor cur = null;
 			String sqlStr = null;
 			if (hphmStr == null || hphmStr.equals("")) {
-				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  order by parktime limit 0,? ";
+				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  order by parktime "
+						+ ord + " limit 0,? ";
 				cur = db.rawQuery(sqlStr,
 						new String[] { payStatus, limit + "" });
 			} else {
 				hphmStr = "%" + hphmStr + "%";
-				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  and hphm like ? order by parktime limit 0,? ";
+				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  and hphm like ? order by parktime "
+						+ ord + " limit 0,? ";
 				cur = db.rawQuery(sqlStr, new String[] { payStatus, hphmStr,
 						limit + "" });
 			}

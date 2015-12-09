@@ -8,6 +8,8 @@ import android.os.IBinder;
 
 import com.zoway.parkmanage.bean.EscapeBean4Wsdl;
 import com.zoway.parkmanage.bean.EscapeRecord;
+import com.zoway.parkmanage.bean.IgnoreBean4Wsdl;
+import com.zoway.parkmanage.bean.IgnoreRecord;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
@@ -15,9 +17,9 @@ import com.zoway.parkmanage.bean.PayBean4Wsdl;
 import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.EscapeWsdl;
+import com.zoway.parkmanage.http.IgnoreWsdl;
 import com.zoway.parkmanage.http.ParkWsdl;
 import com.zoway.parkmanage.http.PayWsdl;
-import com.zoway.parkmanage.utils.LogUtils;
 
 public class TerminalService extends Service {
 
@@ -47,23 +49,17 @@ public class TerminalService extends Service {
 	}
 
 	private class UploadTask implements Runnable {
-		private int w = 0;
 
 		@Override
 		public void run() {
 
 			while (flg1) {
 				try {
-					if (w % 3 == 0) {
-						uploadParkingRecord();
-						uploadPayRecord();
-					}
-					if (w % 30 == 0) {
-						uploadEscapeRecord();
-						w = 0;
-					}
-					w++;
-					Thread.sleep(10000);
+					uploadParkingRecord();
+					uploadPayRecord();
+					uploadIgnoreRecord();
+					uploadEscapeRecord();
+					Thread.sleep(12000);
 				} catch (Exception er) {
 
 				}
@@ -108,6 +104,19 @@ public class TerminalService extends Service {
 						er.getFilepath());
 				if (eb != null & eb.isEscapeResult()) {
 					DbHelper.updateUploadEscapeFlag(er.getTid(), 1);
+				}
+			}
+		}
+
+		private void uploadIgnoreRecord() {
+			IgnoreWsdl wsdl = new IgnoreWsdl();
+			List<IgnoreRecord> li = DbHelper.queryNeedUploadIgnore(10);
+			for (int i = 0; i < li.size(); i++) {
+				IgnoreRecord er = li.get(i);
+				IgnoreBean4Wsdl ib = wsdl.whenCarIngore(er.getRecordno(),
+						LoginBean4Wsdl.getWorker().getWorkerId());
+				if (ib != null & ib.isIgnoreResult()) {
+					DbHelper.updateUploadIgnoreFlag(er.getTid(), 1);
 				}
 			}
 		}

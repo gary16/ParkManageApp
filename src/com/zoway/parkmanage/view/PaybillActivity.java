@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +12,7 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +24,7 @@ import com.landicorp.android.eptapi.exception.ReloginException;
 import com.landicorp.android.eptapi.exception.RequestException;
 import com.landicorp.android.eptapi.exception.ServiceOccupiedException;
 import com.landicorp.android.eptapi.exception.UnsupportMultiProcess;
+import com.landicorp.android.eptapi.utils.QrCode;
 import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LeaveBean4Wsdl;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
@@ -42,6 +40,9 @@ public class PaybillActivity extends BaseActivity {
 	private TextView txtleavetime;
 	private TextView txtmoney;
 	private Button btnsure4bill;
+	private Button btnsure4escape;
+	private Button btnsure4print;
+	private Button btnsure4ingore;
 	private String hphm;
 	private Date parktime;
 	private Date leavetime;
@@ -49,6 +50,7 @@ public class PaybillActivity extends BaseActivity {
 	private int tid;
 	private String rcno;
 	private ProgressDialog pDia;
+
 	private Printer.Progress progress = new Printer.Progress() {
 
 		@Override
@@ -100,6 +102,50 @@ public class PaybillActivity extends BaseActivity {
 		public void onFinish(int arg0) {
 			// TODO Auto-generated method stub
 			DbHelper.setPayRecord(tid, rcno, hphm, fare);
+			Message msg = new Message();
+			msg.what = 1;
+			handler.sendMessage(msg);
+		}
+
+		@Override
+		public void onCrash() {
+			// TODO Auto-generated method stub
+		}
+	};
+
+	private Printer.Progress progress2 = new Printer.Progress() {
+
+		@Override
+		public void doPrint(Printer printer) throws Exception {
+			// TODO Auto-generated method stub
+			Format format = new Format();
+			// Use this 5x7 dot and 1 times width, 2 times height
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+			String datetext = sdf.format(parktime);
+			printer.printText("        路边停车凭条\n");
+			format.setAscScale(Format.ASC_SC1x1);
+			printer.setFormat(format);
+			printer.printText("\n");
+			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
+			printer.printText("电话号码:26337118\n");
+			printer.printText("车牌号码:" + hphm + "\n");
+			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
+			printer.printText("停车时间:" + datetext + "\n");
+			printer.printText("操作员:"
+					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
+			printer.setAutoTrunc(false);
+			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
+			printer.printText("\n\n");
+
+			String cUrl = String.format(
+					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
+			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
+			printer.feedLine(4);
+		}
+
+		@Override
+		public void onFinish(int arg0) {
+			// TODO Auto-generated method stub
 			Message msg = new Message();
 			msg.what = 1;
 			handler.sendMessage(msg);
@@ -195,6 +241,9 @@ public class PaybillActivity extends BaseActivity {
 		txtleavetime = (TextView) this.findViewById(R.id.txtleavetime);
 		txtmoney = (TextView) this.findViewById(R.id.txtmoney);
 		btnsure4bill = (Button) this.findViewById(R.id.btnsure4bill);
+		btnsure4escape = (Button) this.findViewById(R.id.btnsure4escape);
+		btnsure4print = (Button) this.findViewById(R.id.btnsure4print);
+		btnsure4ingore = (Button) this.findViewById(R.id.btnsure4ingore);
 		txtcarnumber.setText(hphm);
 
 		String parktimetext = intent.getStringExtra("rt");
@@ -213,12 +262,13 @@ public class PaybillActivity extends BaseActivity {
 		txtleavetime.setText(sdf.format(leavetime));
 		Thread t1 = new Thread(new LeaveThread());
 		t1.start();
+
 		btnsure4bill.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				pDia = ProgressDialog.show(PaybillActivity.this, "打印停车纸",
+				pDia = ProgressDialog.show(PaybillActivity.this, "打印收费回执",
 						"正在打印中", true, false);
 				try {
 					progress.start();
@@ -228,6 +278,48 @@ public class PaybillActivity extends BaseActivity {
 				}
 			}
 		});
+
+		btnsure4escape.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				DbHelper.setEscapeRecord(tid, rcno, hphm, new Date());
+				Toast.makeText(PaybillActivity.this, "修改逃费成功",
+						Toast.LENGTH_LONG).show();
+				Intent i = new Intent(PaybillActivity.this,
+						PayListsActivity.class);
+				PaybillActivity.this.startActivity(i);
+			}
+		});
+
+		btnsure4print.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				pDia = ProgressDialog.show(PaybillActivity.this, "打印停车凭条",
+						"正在打印中", true, false);
+				try {
+					progress2.start();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
+		btnsure4ingore.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				DbHelper.setIgnoreRecord(tid, rcno, hphm, new Date());
+				Toast.makeText(PaybillActivity.this, "修改走费成功",
+						Toast.LENGTH_LONG).show();
+				Intent i = new Intent(PaybillActivity.this,
+						PayListsActivity.class);
+				PaybillActivity.this.startActivity(i);
+			}
+		});
+
 	}
 
 	private Handler leaveHdlr = new Handler() {

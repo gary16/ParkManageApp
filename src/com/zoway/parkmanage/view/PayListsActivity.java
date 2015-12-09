@@ -1,6 +1,7 @@
 package com.zoway.parkmanage.view;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Intent;
@@ -47,7 +48,8 @@ public class PayListsActivity extends BaseActivity {
 		setContentView(R.layout.activity_pay_lists);
 		mInflater = this.getLayoutInflater();
 		groups.clear();
-		List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50, null);
+		List<ParkRecord> li = DbHelper
+				.queryRecordList("0", 100, "desc", qryStr);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -58,14 +60,14 @@ public class PayListsActivity extends BaseActivity {
 		lview.setAdapter(madapter);
 
 		lview.setOnGroupClickListener(new OnGroupClickListener() {
-
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
 					int groupPosition, long id) {
 				// TODO Auto-generated method stub
 				ParkRecord rec = groups.get(groupPosition);
-				long l1 = TimeUtil.getTime().getTime();
-				long l2 = rec.getParktime().getTime();
+
+				long diff = TimeUtil.getTime().getTime()
+						- rec.getParktime().getTime();
 				Intent intent = new Intent();
 				intent.putExtra("hphm", rec.getHphm());
 				Bundle b1 = new Bundle();
@@ -73,13 +75,23 @@ public class PayListsActivity extends BaseActivity {
 				intent.putExtras(b1);
 				intent.putExtra("tid", rec.getTid());
 				intent.putExtra("rcno", rec.getRecordno());
+				intent.putExtra("recordno", rec.getRecordno());
 				intent.putExtra("fname", rec.getFilepath());
-				intent.putExtra("hphm", rec.getHphm());
 				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
 				String rt = sdf1.format(rec.getParktime());
 				intent.putExtra("rt", rt);
-				intent.setClass(PayListsActivity.this, PaybillActivity.class);
-				PayListsActivity.this.startActivity(intent);
+				if (diff > 1800000) {
+					intent.setClass(PayListsActivity.this,
+							PaybillActivity.class);
+					PayListsActivity.this.startActivity(intent);
+
+				} else {
+					intent.setClass(PayListsActivity.this,
+							FeeFreeActivity.class);
+					PayListsActivity.this.startActivity(intent);
+
+				}
+
 				return false;
 			}
 		});
@@ -94,8 +106,8 @@ public class PayListsActivity extends BaseActivity {
 					String curStr = edtquery.getText().toString().toUpperCase();
 					if (!curStr.equals(qryStr)) {
 						groups.clear();
-						List<ParkRecord> li = DbHelper.queryInOrOut30Min(1, 50,
-								curStr);
+						List<ParkRecord> li = DbHelper.queryRecordList("0",
+								100, "desc", curStr);
 						for (int i = 0; i < li.size(); i++) {
 							groups.append(i, li.get(i));
 						}
@@ -189,6 +201,8 @@ public class PayListsActivity extends BaseActivity {
 						.findViewById(R.id.list_txthphm);
 				holder.tv2 = (TextView) convertView
 						.findViewById(R.id.list_txtparktime);
+				holder.tv3 = (TextView) convertView
+						.findViewById(R.id.list_existtime);
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -209,6 +223,21 @@ public class PayListsActivity extends BaseActivity {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日  HH時mm分");
 			holder.tv2.setText("停车时间:"
 					+ sdf.format(groups.get(groupPosition).getParktime()));
+
+			long diff = TimeUtil.getTime().getTime()
+					- groups.get(groupPosition).getParktime().getTime();
+			int tday = (int) diff / (86400000);
+			int thour = (int) (diff / (3600000)) % 24;
+			int tmin = (int) (diff / (60000)) % 60;
+			String texist = String.format("%2d日%2d时%2d分", tday, thour, tmin)
+					.replace(" ", "0");
+			if (diff < 1800000) {
+				holder.tv3.setTextColor(Color.rgb(0, 103, 48));
+			} else {
+				holder.tv3.setTextColor(Color.rgb(0xff, 0x42, 0x38));
+			}
+
+			holder.tv3.setText(texist);
 			return convertView;
 		}
 
@@ -225,6 +254,7 @@ public class PayListsActivity extends BaseActivity {
 	private static class ViewHolder {
 		public TextView tv1;
 		public TextView tv2;
+		public TextView tv3;
 	}
 
 	@Override

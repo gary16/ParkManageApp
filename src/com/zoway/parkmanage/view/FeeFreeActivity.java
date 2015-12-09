@@ -108,7 +108,7 @@ public class FeeFreeActivity extends BaseActivity {
 				}
 
 				Intent intent = new Intent(FeeFreeActivity.this,
-						UnhandledListActivity.class);
+						PayListsActivity.class);
 				FeeFreeActivity.this.startActivity(intent);
 				FeeFreeActivity.this.finish();
 				break;
@@ -203,7 +203,7 @@ public class FeeFreeActivity extends BaseActivity {
 				Toast.makeText(FeeFreeActivity.this, "修改免费成功",
 						Toast.LENGTH_LONG).show();
 				Intent i = new Intent(FeeFreeActivity.this,
-						UnhandledListActivity.class);
+						PayListsActivity.class);
 				FeeFreeActivity.this.startActivity(i);
 				FeeFreeActivity.this.finish();
 			}

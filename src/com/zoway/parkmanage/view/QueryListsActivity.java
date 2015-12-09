@@ -61,7 +61,7 @@ public class QueryListsActivity extends BaseActivity {
 		setContentView(R.layout.activity_query_lists);
 		lview = (ExpandableListView) this.findViewById(R.id.reclist);
 		mInflater = this.getLayoutInflater();
-		List<ParkRecord> li = DbHelper.queryRecordList("1", 100, null);
+		List<ParkRecord> li = DbHelper.queryRecordList("1", 100, "asc", null);
 		for (int i = 0; i < li.size(); i++) {
 			groups.append(i, li.get(i));
 		}
@@ -96,7 +96,7 @@ public class QueryListsActivity extends BaseActivity {
 					groups.clear();
 					String curStr = edtquery.getText().toString();
 					List<ParkRecord> li = DbHelper.queryRecordList("1", 100,
-							curStr);
+							"asc", curStr);
 					for (int i = 0; i < li.size(); i++) {
 						groups.append(i, li.get(i));
 					}
@@ -121,7 +121,7 @@ public class QueryListsActivity extends BaseActivity {
 					groups.clear();
 					String curStr = edtquery.getText().toString();
 					List<ParkRecord> li = DbHelper.queryRecordList("2", 100,
-							curStr);
+							"asc", curStr);
 					for (int i = 0; i < li.size(); i++) {
 						groups.append(i, li.get(i));
 					}
@@ -148,7 +148,7 @@ public class QueryListsActivity extends BaseActivity {
 						groups.clear();
 						String status = curFlg + "";
 						List<ParkRecord> li = DbHelper.queryRecordList(status,
-								100, curStr);
+								100, "asc", curStr);
 						for (int i = 0; i < li.size(); i++) {
 							groups.append(i, li.get(i));
 						}

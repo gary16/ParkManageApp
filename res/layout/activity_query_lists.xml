@@ -57,6 +57,28 @@
             android:textSize="25sp" >
         </Button>
 
+        <Button
+            android:id="@+id/btnignorefees"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginLeft="3dp"
+            android:background="#fff9c164"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="已逃费"
+            android:textColor="#ffffffff"
+            android:textSize="25sp" >
+        </Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/maly3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maly2"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal" >
+
         <EditText
             android:id="@+id/edtquery"
             android:layout_width="match_parent"
@@ -69,7 +91,7 @@
         android:id="@+id/reclist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/maly2"
+        android:layout_below="@id/maly3"
         android:layout_marginLeft="3dp" >
     </ExpandableListView>
 
