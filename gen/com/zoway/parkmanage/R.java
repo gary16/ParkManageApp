@@ -74,9 +74,9 @@ public final class R {
         public static final int btninfosure=0x7f0b0012;
         public static final int btninputdata=0x7f0b0069;
         public static final int btnloginsure=0x7f0b001c;
-        public static final int btnmainescape=0x7f0b0025;
+        public static final int btnmainescape=0x7f0b0026;
         public static final int btnmainpay=0x7f0b0023;
-        public static final int btnmainquery=0x7f0b0026;
+        public static final int btnmainquery=0x7f0b0025;
         public static final int btnmainremark=0x7f0b0022;
         public static final int btnocrpay=0x7f0b0030;
         public static final int btnout30min=0x7f0b0063;

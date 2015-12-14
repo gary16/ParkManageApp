@@ -9,6 +9,7 @@ import java.util.Date;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -17,8 +18,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.service.TerminalService;
 import com.zoway.parkmanage.utils.PathUtils;
 
@@ -26,6 +29,7 @@ public class MainActivity extends BaseActivity {
 
 	private ExpandableListView lview;
 	private MainListAdapter madapter;
+	private TextView malbun;
 	private ImageView malogout;
 	private ImageView btnmainremark;
 	private ImageView btnmainpay;
@@ -37,14 +41,21 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		SparseArray<Group> groups = createData();
+		malbun = (TextView) this.findViewById(R.id.malbun);
 		malogout = (ImageView) this.findViewById(R.id.malogout);
 		btnmainremark = (ImageView) this.findViewById(R.id.btnmainremark);
 		btnmainpay = (ImageView) this.findViewById(R.id.btnmainpay);
 		btnmainescape = (ImageView) this.findViewById(R.id.btnmainescape);
 		btnmainquery = (ImageView) this.findViewById(R.id.btnmainquery);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
 		Date df = Calendar.getInstance().getTime();
+
+		malbun.setTextColor(Color.WHITE);
+		malbun.setTextSize(23);
+		malbun.setText(LoginBean4Wsdl.getWorker().getWorkerName() + "\n"
+				+ LoginBean4Wsdl.getParkName() + "\n" + sdf.format(df));
+
 		malogout.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -115,11 +126,11 @@ public class MainActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this,
-						UnhandledListActivity.class);
-				intent.putExtra("type", 3);
-				MainActivity.this.startActivity(intent);
+				// // TODO Auto-generated method stub
+				// Intent intent = new Intent(MainActivity.this,
+				// UnhandledListActivity.class);
+				// intent.putExtra("type", 3);
+				// MainActivity.this.startActivity(intent);
 			}
 		});
 

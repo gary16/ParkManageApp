@@ -137,31 +137,29 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void doPrint(Printer printer) throws Exception {
-			// // TODO Auto-generated method stub
-			// Format format = new Format();
-			// // Use this 5x7 dot and 1 times width, 2 times height
-			// SimpleDateFormat sdf = new
-			// SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			// String datetext = sdf.format(parkTime);
-			// printer.printText("        路边停车凭条\n");
-			// format.setAscScale(Format.ASC_SC1x1);
-			// printer.setFormat(format);
-			// printer.printText("\n");
-			// printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() +
-			// "\n");
-			// printer.printText("电话号码:26337118\n");
-			// printer.printText("车牌号码:" + hphm + "\n");
-			// printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
-			// printer.printText("停车时间:" + datetext + "\n");
-			// printer.printText("操作员:"
-			// + LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
-			// printer.setAutoTrunc(false);
-			// printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
-			// printer.printText("\n\n");
-			//
-			// String cUrl = String.format(
-			// "http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
-			// printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
+			// TODO Auto-generated method stub
+			Format format = new Format();
+			// Use this 5x7 dot and 1 times width, 2 times height
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+			String datetext = sdf.format(parkTime);
+			printer.printText("        路边停车凭条\n");
+			format.setAscScale(Format.ASC_SC1x1);
+			printer.setFormat(format);
+			printer.printText("\n");
+			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
+			printer.printText("电话号码:26337118\n");
+			printer.printText("车牌号码:" + hphm + "\n");
+			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
+			printer.printText("停车时间:" + datetext + "\n");
+			printer.printText("操作员:"
+					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
+			printer.setAutoTrunc(false);
+			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
+			printer.printText("\n\n");
+
+			String cUrl = String.format(
+					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
+			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
 			printer.feedLine(4);
 		}
 

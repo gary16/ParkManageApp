@@ -248,6 +248,16 @@ public class QueryListsActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (curFlg != 3) {
+					groups.clear();
+					String curStr = edtquery.getText().toString();
+					List<ParkRecord> li = DbHelper.queryRecordList("3", 100,
+							"asc", curStr);
+					for (int i = 0; i < li.size(); i++) {
+						groups.append(i, li.get(i));
+					}
+
+					madapter = new MyExpandableListAdapter();
+					lview.setAdapter(madapter);
 					curFlg = 3;
 					btnignorefees.setBackgroundColor(0xffcccc99);
 					btnignorefees.setTextColor(0xff777777);

@@ -70,7 +70,7 @@ public class PaybillActivity extends BaseActivity {
 			printer.feedLine(1);
 			printer.printText("车牌号码:" + hphm + "\n");
 			printer.feedLine(1);
-			printer.printText("停车位置:南源路\n");
+			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
 			printer.feedLine(1);
 			printer.printText("停车时间:" + sdf.format(parktime) + "\n");
 			printer.feedLine(1);
