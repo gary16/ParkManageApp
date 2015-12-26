@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,12 +80,13 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 				Toast.makeText(InputInfoActivity.this, "处理成功",
 						Toast.LENGTH_LONG).show();
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				nm.cancel(0xfedcba09);
 				Intent intent = new Intent(InputInfoActivity.this,
 						MainActivity.class);
 				InputInfoActivity.this.startActivity(intent);
@@ -238,7 +242,8 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		type = intent.getIntExtra("type", 0);
 		if (type == 4) {
-			rt = intent.getStringExtra("rt");
+			rt = intent.getStringExtra("rt").replace(" ", "").replace("\t", "")
+					.replace("-", "").replace(":", "");
 			try {
 				parkTime = sdf.parse(rt);
 			} catch (ParseException e) {
@@ -306,6 +311,7 @@ public class InputInfoActivity extends BaseActivity implements OnClickListener {
 							Uri.fromFile(new File(img_path, "p1ori.jpg")));
 					bitmapSelected1 = BitmapHandle.getReduceBitmap(is, false,
 							5, 90);
+					this.img1.setScaleType(ScaleType.FIT_XY);
 					this.img1.setImageBitmap(bitmapSelected1);
 					BitmapHandle.writeJpgFromBitmap(img_path + File.separator
 							+ "p1.jpg", bitmapSelected1, 90);

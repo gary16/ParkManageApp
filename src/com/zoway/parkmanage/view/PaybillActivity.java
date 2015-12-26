@@ -169,7 +169,7 @@ public class PaybillActivity extends BaseActivity {
 				Toast.makeText(PaybillActivity.this, "处理成功", Toast.LENGTH_LONG)
 						.show();
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

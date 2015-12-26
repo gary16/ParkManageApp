@@ -17,7 +17,7 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="16" />
 
     <application

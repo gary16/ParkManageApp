@@ -81,6 +81,8 @@ public class PayListsActivity extends BaseActivity {
 				String rt = sdf1.format(rec.getParktime());
 				intent.putExtra("rt", rt);
 				if (diff > 1800000) {
+
+					// if (diff > 0) {
 					intent.setClass(PayListsActivity.this,
 							PaybillActivity.class);
 					PayListsActivity.this.startActivity(intent);

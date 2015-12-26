@@ -45,7 +45,7 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 			Matcher mth = regex.matcher(txtHphm);
 			if (mth.matches()) {
 				txtHphm = mSpinner.getSelectedItem().toString() + txtHphm;
-				if (type == 1) {
+				if (type == 1 || type == 4) {
 					pr = DbHelper.queryRecordByHphm(txtHphm);
 					if (pr == null || pr.getStatus() != 0) {
 						Intent intent = new Intent(this,
