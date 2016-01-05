@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +34,7 @@ import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.LeaveWsdl;
 import com.zoway.parkmanage.utils.TimeUtil;
 
-public class PaybillActivity extends BaseActivity {
+public class PaybillActivity extends PrintActivity {
 
 	private TextView txtcarnumber;
 	private TextView txtpark;
@@ -50,182 +52,6 @@ public class PaybillActivity extends BaseActivity {
 	private int tid;
 	private String rcno;
 	private ProgressDialog pDia;
-
-	private Printer.Progress progress = new Printer.Progress() {
-
-		@Override
-		public void doPrint(Printer printer) throws Exception {
-			// TODO Auto-generated method stub
-
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			Format format = new Format();
-			// Use this 5x7 dot and 1 times width, 2 times height
-			format.setAscSize(Format.ASC_DOT5x7);
-			format.setAscScale(Format.ASC_SC1x2);
-			printer.setFormat(format);
-			printer.printText("        收费凭条\n");
-			format.setAscScale(Format.ASC_SC1x1);
-			printer.setFormat(format);
-			printer.printText("\n");
-			printer.feedLine(1);
-			printer.printText("车牌号码:" + hphm + "\n");
-			printer.feedLine(1);
-			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
-			printer.feedLine(1);
-			printer.printText("停车时间:" + sdf.format(parktime) + "\n");
-			printer.feedLine(1);
-			printer.printText("离开时间:" + sdf.format(leavetime) + "\n");
-			printer.feedLine(1);
-
-			Date d1 = parktime;
-			Date d2 = leavetime;
-			long diff = d2.getTime() - d1.getTime();
-			long days = diff / (1000 * 60 * 60 * 24);
-
-			long hours = (diff - days * (1000 * 60 * 60 * 24))
-					/ (1000 * 60 * 60);
-			long minutes = (diff - days * (1000 * 60 * 60 * 24) - hours
-					* (1000 * 60 * 60))
-					/ (1000 * 60);
-			printer.printText("停车时长:" + days + "日" + hours + "时" + minutes
-					+ "分");
-			printer.feedLine(1);
-			printer.printText("停车费用:" + fare + "\n");
-			printer.feedLine(1);
-			printer.printText("操作员:"
-					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
-			printer.setAutoTrunc(false);
-			printer.feedLine(5);
-		}
-
-		@Override
-		public void onFinish(int arg0) {
-			// TODO Auto-generated method stub
-			DbHelper.setPayRecord(tid, rcno, hphm, fare);
-			Message msg = new Message();
-			msg.what = 1;
-			handler.sendMessage(msg);
-		}
-
-		@Override
-		public void onCrash() {
-			// TODO Auto-generated method stub
-		}
-	};
-
-	private Printer.Progress progress2 = new Printer.Progress() {
-
-		@Override
-		public void doPrint(Printer printer) throws Exception {
-			// TODO Auto-generated method stub
-			Format format = new Format();
-			// Use this 5x7 dot and 1 times width, 2 times height
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			String datetext = sdf.format(parktime);
-			printer.printText("        路边停车凭条\n");
-			format.setAscScale(Format.ASC_SC1x1);
-			printer.setFormat(format);
-			printer.printText("\n");
-			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
-			printer.printText("电话号码:26337118\n");
-			printer.printText("车牌号码:" + hphm + "\n");
-			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
-			printer.printText("停车时间:" + datetext + "\n");
-			printer.printText("操作员:"
-					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
-			printer.setAutoTrunc(false);
-			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
-			printer.printText("\n\n");
-
-			String cUrl = String.format(
-					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", rcno);
-			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(4);
-		}
-
-		@Override
-		public void onFinish(int arg0) {
-			// TODO Auto-generated method stub
-			Message msg = new Message();
-			msg.what = 1;
-			handler.sendMessage(msg);
-		}
-
-		@Override
-		public void onCrash() {
-			// TODO Auto-generated method stub
-		}
-	};
-
-	private Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO 接收消息并且去更新UI线程上的控件内容
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case 1:
-				pDia.dismiss();
-				Toast.makeText(PaybillActivity.this, "处理成功", Toast.LENGTH_LONG)
-						.show();
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				Intent intent = new Intent(PaybillActivity.this,
-						PayListsActivity.class);
-				PaybillActivity.this.startActivity(intent);
-				PaybillActivity.this.finish();
-				break;
-			case 2:
-				pDia.dismiss();
-				Toast.makeText(PaybillActivity.this, "处理不成功", Toast.LENGTH_LONG)
-						.show();
-				break;
-			}
-
-		}
-	};
-
-	public void runOnUiThreadDelayed(Runnable r, int delayMillis) {
-		handler.postDelayed(r, delayMillis);
-	}
-
-	/*
-	 * To gain control of the device service, you need invoke this method before
-	 * any device operation.
-	 */
-	public void bindDeviceService() {
-		try {
-			DeviceService.login(this);
-		} catch (RequestException e) {
-			// Rebind after a few milliseconds,
-			// If you want this application keep the right of the device service
-			runOnUiThreadDelayed(new Runnable() {
-				@Override
-				public void run() {
-					bindDeviceService();
-				}
-			}, 300);
-			e.printStackTrace();
-		} catch (ServiceOccupiedException e) {
-			e.printStackTrace();
-		} catch (ReloginException e) {
-			e.printStackTrace();
-		} catch (UnsupportMultiProcess e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Release the right of using the device.
-	 */
-	public void unbindDeviceService() {
-		DeviceService.logout();
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -267,11 +93,10 @@ public class PaybillActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				pDia = ProgressDialog.show(PaybillActivity.this, "打印收费回执",
-						"正在打印中", true, false);
+				DbHelper.setPayRecord(tid, rcno, hphm, fare);
 				try {
-					progress.start();
+					PaybillActivity.this.basePrinter.doPrint2(hphm, parktime,
+							leavetime, fare);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -296,10 +121,9 @@ public class PaybillActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				pDia = ProgressDialog.show(PaybillActivity.this, "打印停车凭条",
-						"正在打印中", true, false);
 				try {
-					progress2.start();
+					PaybillActivity.this.basePrinter.doPrint(hphm, parktime,
+							rcno);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -400,27 +224,19 @@ public class PaybillActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-
-		super.onPause();
-		unbindDeviceService();
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		bindDeviceService();
-	}
-
-	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		Intent ii = new Intent(this, PayListsActivity.class);
 		this.startActivity(ii);
 		this.finish();
+	}
+
+	public boolean afterPrint() {
+		Intent intent = new Intent(PaybillActivity.this, PayListsActivity.class);
+		PaybillActivity.this.startActivity(intent);
+		PaybillActivity.this.finish();
+		return true;
 	}
 
 }

@@ -31,7 +31,7 @@ import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.db.DbHelper;
 
-public class FeeFreeActivity extends BaseActivity {
+public class FeeFreeActivity extends PrintActivity {
 
 	private TextView txtcarnumber;
 	private TextView txtpark;
@@ -43,136 +43,6 @@ public class FeeFreeActivity extends BaseActivity {
 	private String hphm;
 	private Date parktime;
 	private String recordno;
-	private ProgressDialog pDia;
-	private Printer.Progress progress = new Printer.Progress() {
-
-		@Override
-		public void doPrint(Printer printer) throws Exception {
-			// TODO Auto-generated method stub
-			Format format = new Format();
-			// Use this 5x7 dot and 1 times width, 2 times height
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
-			String datetext = sdf.format(parktime);
-			printer.printText("        路边停车凭条\n");
-			format.setAscScale(Format.ASC_SC1x1);
-			printer.setFormat(format);
-			printer.printText("\n");
-			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
-			printer.printText("电话号码:26337118\n");
-			printer.printText("车牌号码:" + hphm + "\n");
-			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
-			printer.printText("停车时间:" + datetext + "\n");
-			printer.printText("操作员:"
-					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
-			printer.setAutoTrunc(false);
-			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
-			printer.printText("\n\n");
-
-			String cUrl = String
-					.format("http://cx.zoway.com.cn:81/ParkRecord/show/%s.do",
-							recordno);
-			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
-			printer.feedLine(5);
-		}
-
-		@Override
-		public void onFinish(int arg0) {
-			// TODO Auto-generated method stub
-			Message msg = new Message();
-			msg.what = 1;
-			handler.sendMessage(msg);
-		}
-
-		@Override
-		public void onCrash() {
-			// TODO Auto-generated method stub
-		}
-	};
-
-	private Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO 接收消息并且去更新UI线程上的控件内容
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case 1:
-				pDia.dismiss();
-				Toast.makeText(FeeFreeActivity.this, "打印成功", Toast.LENGTH_LONG)
-						.show();
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				Intent intent = new Intent(FeeFreeActivity.this,
-						PayListsActivity.class);
-				FeeFreeActivity.this.startActivity(intent);
-				FeeFreeActivity.this.finish();
-				break;
-			case 2:
-				pDia.dismiss();
-				Toast.makeText(FeeFreeActivity.this, "打印不成功", Toast.LENGTH_LONG)
-						.show();
-				break;
-			}
-
-		}
-	};
-
-	public void runOnUiThreadDelayed(Runnable r, int delayMillis) {
-		handler.postDelayed(r, delayMillis);
-	}
-
-	/*
-	 * To gain control of the device service, you need invoke this method before
-	 * any device operation.
-	 */
-	public void bindDeviceService() {
-		try {
-			DeviceService.login(this);
-		} catch (RequestException e) {
-			// Rebind after a few milliseconds,
-			// If you want this application keep the right of the device service
-			runOnUiThreadDelayed(new Runnable() {
-				@Override
-				public void run() {
-					bindDeviceService();
-				}
-			}, 300);
-			e.printStackTrace();
-		} catch (ServiceOccupiedException e) {
-			e.printStackTrace();
-		} catch (ReloginException e) {
-			e.printStackTrace();
-		} catch (UnsupportMultiProcess e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Release the right of using the device.
-	 */
-	public void unbindDeviceService() {
-		DeviceService.logout();
-	}
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-
-		super.onPause();
-		unbindDeviceService();
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		bindDeviceService();
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -213,10 +83,9 @@ public class FeeFreeActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				// TODO Auto-generated method stub
-				pDia = ProgressDialog.show(FeeFreeActivity.this, "打印凭条",
-						"正在打印中", true, false);
 				try {
-					progress.start();
+					FeeFreeActivity.this.basePrinter.doPrint(hphm, parktime,
+							recordno);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -242,6 +111,13 @@ public class FeeFreeActivity extends BaseActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	public boolean afterPrint() {
+		Intent intent = new Intent(FeeFreeActivity.this, PayListsActivity.class);
+		FeeFreeActivity.this.startActivity(intent);
+		FeeFreeActivity.this.finish();
+		return true;
 	}
 
 }

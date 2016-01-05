@@ -27,8 +27,6 @@ import com.zoway.parkmanage.utils.PathUtils;
 
 public class MainActivity extends BaseActivity {
 
-	private ExpandableListView lview;
-	private MainListAdapter madapter;
 	private TextView malbun;
 	private ImageView malogout;
 	private ImageView btnmainremark;
@@ -40,7 +38,6 @@ public class MainActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		SparseArray<Group> groups = createData();
 		malbun = (TextView) this.findViewById(R.id.malbun);
 		malogout = (ImageView) this.findViewById(R.id.malogout);
 		btnmainremark = (ImageView) this.findViewById(R.id.btnmainremark);
@@ -170,48 +167,6 @@ public class MainActivity extends BaseActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	public SparseArray<Group> createData() {
-
-		SparseArray<Group> groups = new SparseArray<Group>();
-		Group group = new Group("待拍照车辆", R.drawable.park);
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		groups.append(0, group);
-
-		group = new Group("被呼叫", R.drawable.called);
-		groups.append(1, group);
-
-		group = new Group("逃费管理", R.drawable.runfee);
-		groups.append(2, group);
-
-		group = new Group("设置", R.drawable.settings);
-		groups.append(3, group);
-
-		return groups;
-	}
-
-	public SparseArray<Group> createData(ArrayList<String[]> al) {
-
-		SparseArray<Group> groups = new SparseArray<Group>();
-		Group group = new Group("待拍照车辆", R.drawable.park);
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		groups.append(0, group);
-
-		group = new Group("被呼叫", R.drawable.called);
-		groups.append(1, group);
-
-		group = new Group("逃费管理", R.drawable.runfee);
-		groups.append(2, group);
-
-		group = new Group("设置", R.drawable.settings);
-		groups.append(3, group);
-
-		return groups;
 	}
 
 }
