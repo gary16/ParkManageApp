@@ -80,20 +80,22 @@ public class PayListsActivity extends BaseActivity {
 				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
 				String rt = sdf1.format(rec.getParktime());
 				intent.putExtra("rt", rt);
-				if (diff > 1800000) {
-
-					// if (diff > 0) {
-					intent.setClass(PayListsActivity.this,
-							PaybillActivity.class);
-					PayListsActivity.this.startActivity(intent);
-
-				} else {
-					intent.setClass(PayListsActivity.this,
-							FeeFreeActivity.class);
-					PayListsActivity.this.startActivity(intent);
-
-				}
-
+				// if (diff > 1800000) {
+				//
+				// // if (diff > 0) {
+				// intent.setClass(PayListsActivity.this,
+				// PaybillActivity.class);
+				// PayListsActivity.this.startActivity(intent);
+				//
+				// } else {
+				// intent.setClass(PayListsActivity.this,
+				// FeeFreeActivity.class);
+				// PayListsActivity.this.startActivity(intent);
+				//
+				// }
+				intent.setClass(PayListsActivity.this,
+						PaybillActivity.class);
+				PayListsActivity.this.startActivity(intent);
 				return false;
 			}
 		});

@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity {
 		Date df = Calendar.getInstance().getTime();
 
 		malbun.setTextColor(Color.WHITE);
-		malbun.setTextSize(23);
+		malbun.setTextSize(18);
 		malbun.setText(LoginBean4Wsdl.getWorker().getWorkerName() + "\n"
 				+ LoginBean4Wsdl.getParkName() + "\n" + sdf.format(df));
 

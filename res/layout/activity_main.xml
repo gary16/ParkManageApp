@@ -3,28 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ff000000"
+    android:gravity="center_vertical"
     tools:context="com.zoway.parkmanage.view.MainActivity" >
 
     <LinearLayout
         android:id="@+id/maly1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/infofrguna"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/new1" />
+            android:layout_width="@dimen/x229"
+            android:layout_height="@dimen/y46"
+            android:scaleType="fitXY"
+            android:src="@drawable/p1" />
 
         <ImageView
             android:id="@+id/malogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/new2" />
+            android:layout_width="@dimen/x66"
+            android:layout_height="@dimen/y46"
+            android:layout_marginLeft="@dimen/x9"
+            android:scaleType="fitXY"
+            android:src="@drawable/p2" />
     </LinearLayout>
 
     <LinearLayout
@@ -32,26 +34,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/y9"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/maiv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/new3" />
+            android:layout_width="@dimen/x103"
+            android:layout_height="@dimen/y102"
+            android:scaleType="fitXY"
+            android:src="@drawable/p3" />
 
         <TextView
             android:id="@+id/malbun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/new4"
+            android:layout_width="@dimen/x191"
+            android:layout_height="@dimen/y102"
+            android:layout_marginLeft="@dimen/x9"
+            android:background="@drawable/p4"
             android:gravity="center_vertical"
             android:lineSpacingExtra="5dp"
             android:paddingLeft="3dp"
-            android:paddingTop="5dp" />
+            android:paddingTop="5dp"
+            android:scaleType="fitXY" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,22 +63,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly2"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/y9"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/btnmainremark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/new5" />
+            android:layout_width="@dimen/x147"
+            android:layout_height="@dimen/y128"
+            android:scaleType="fitXY"
+            android:src="@drawable/p5" />
 
         <ImageView
             android:id="@+id/btnmainpay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/new6" />
+            android:layout_width="@dimen/x147"
+            android:layout_height="@dimen/y128"
+            android:layout_marginLeft="@dimen/x9"
+            android:scaleType="fitXY"
+            android:src="@drawable/p6" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,22 +88,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly3"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/y9"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/btnmainquery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/new8" />
+            android:layout_width="@dimen/x147"
+            android:layout_height="@dimen/y128"
+            android:scaleType="fitXY"
+            android:src="@drawable/p7" />
 
         <ImageView
             android:id="@+id/btnmainescape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/new7" />
+            android:layout_width="@dimen/x147"
+            android:layout_height="@dimen/y128"
+            android:layout_marginLeft="@dimen/x9"
+            android:scaleType="fitXY"
+            android:src="@drawable/p8" />
     </LinearLayout>
 
 </RelativeLayout>
