@@ -16,14 +16,14 @@
         <ImageView
             android:id="@+id/infofrguna"
             android:layout_width="@dimen/x229"
-            android:layout_height="@dimen/y46"
+            android:layout_height="@dimen/x46"
             android:scaleType="fitXY"
             android:src="@drawable/p1" />
 
         <ImageView
             android:id="@+id/malogout"
             android:layout_width="@dimen/x66"
-            android:layout_height="@dimen/y46"
+            android:layout_height="@dimen/x46"
             android:layout_marginLeft="@dimen/x9"
             android:scaleType="fitXY"
             android:src="@drawable/p2" />
@@ -34,21 +34,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly1"
-        android:layout_marginTop="@dimen/y9"
+        android:layout_marginTop="@dimen/x9"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/maiv1"
             android:layout_width="@dimen/x103"
-            android:layout_height="@dimen/y102"
+            android:layout_height="@dimen/x102"
             android:scaleType="fitXY"
             android:src="@drawable/p3" />
 
         <TextView
             android:id="@+id/malbun"
             android:layout_width="@dimen/x191"
-            android:layout_height="@dimen/y102"
+            android:layout_height="@dimen/x102"
             android:layout_marginLeft="@dimen/x9"
             android:background="@drawable/p4"
             android:gravity="center_vertical"
@@ -63,21 +63,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly2"
-        android:layout_marginTop="@dimen/y9"
+        android:layout_marginTop="@dimen/x9"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/btnmainremark"
             android:layout_width="@dimen/x147"
-            android:layout_height="@dimen/y128"
+            android:layout_height="@dimen/x128"
             android:scaleType="fitXY"
             android:src="@drawable/p5" />
 
         <ImageView
             android:id="@+id/btnmainpay"
             android:layout_width="@dimen/x147"
-            android:layout_height="@dimen/y128"
+            android:layout_height="@dimen/x128"
             android:layout_marginLeft="@dimen/x9"
             android:scaleType="fitXY"
             android:src="@drawable/p6" />
@@ -88,21 +88,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly3"
-        android:layout_marginTop="@dimen/y9"
+        android:layout_marginTop="@dimen/x9"
         android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/btnmainquery"
             android:layout_width="@dimen/x147"
-            android:layout_height="@dimen/y128"
+            android:layout_height="@dimen/x128"
             android:scaleType="fitXY"
             android:src="@drawable/p7" />
 
         <ImageView
             android:id="@+id/btnmainescape"
             android:layout_width="@dimen/x147"
-            android:layout_height="@dimen/y128"
+            android:layout_height="@dimen/x128"
             android:layout_marginLeft="@dimen/x9"
             android:scaleType="fitXY"
             android:src="@drawable/p8" />

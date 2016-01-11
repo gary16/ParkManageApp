@@ -70,6 +70,7 @@ public class PayListsActivity extends BaseActivity {
 						- rec.getParktime().getTime();
 				Intent intent = new Intent();
 				intent.putExtra("hphm", rec.getHphm());
+				intent.putExtra("hpzl", rec.getHpzl());
 				Bundle b1 = new Bundle();
 				b1.putSerializable("parktime", rec.getParktime());
 				intent.putExtras(b1);
@@ -93,8 +94,7 @@ public class PayListsActivity extends BaseActivity {
 				// PayListsActivity.this.startActivity(intent);
 				//
 				// }
-				intent.setClass(PayListsActivity.this,
-						PaybillActivity.class);
+				intent.setClass(PayListsActivity.this, PaybillActivity.class);
 				PayListsActivity.this.startActivity(intent);
 				return false;
 			}

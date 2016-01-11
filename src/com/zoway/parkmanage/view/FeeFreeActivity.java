@@ -37,10 +37,12 @@ public class FeeFreeActivity extends PrintActivity {
 	private TextView txtpark;
 	private TextView txtparktime;
 	private TextView txtleavetime;
+	private TextView lblcartype;
 	private Button btnsure4bill;
 	private Button btnprintqcode;
 	private int tid;
 	private String hphm;
+	private String hpzl;
 	private Date parktime;
 	private String recordno;
 
@@ -52,14 +54,17 @@ public class FeeFreeActivity extends PrintActivity {
 		txtpark = (TextView) this.findViewById(R.id.txtpark);
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
 		txtleavetime = (TextView) this.findViewById(R.id.txtleavetime);
+		lblcartype = (TextView) this.findViewById(R.id.lblcartype);
 		btnsure4bill = (Button) this.findViewById(R.id.btnsure4bill);
 		btnprintqcode = (Button) this.findViewById(R.id.btnprintqcode);
 		Intent ii = this.getIntent();
 		hphm = ii.getStringExtra("hphm");
+		hpzl = ii.getStringExtra("hpzl");
 		parktime = (Date) ii.getSerializableExtra("parktime");
 		recordno = ii.getStringExtra("recordno");
 		tid = ii.getIntExtra("tid", 0);
 		txtcarnumber.setText(hphm);
+		lblcartype.setText(hpzl);
 		txtpark.setText(LoginBean4Wsdl.getParkName());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		txtparktime.setText(sdf.format(parktime));

@@ -41,11 +41,13 @@ public class PaybillActivity extends PrintActivity {
 	private TextView txtparktime;
 	private TextView txtleavetime;
 	private TextView txtmoney;
+	private TextView lblcartype;
 	private Button btnsure4bill;
 	private Button btnsure4escape;
 	private Button btnsure4print;
 	private Button btnsure4ingore;
 	private String hphm;
+	private String hpzl;
 	private Date parktime;
 	private Date leavetime;
 	private float fare;
@@ -59,6 +61,7 @@ public class PaybillActivity extends PrintActivity {
 		setContentView(R.layout.activity_paybill);
 		Intent intent = this.getIntent();
 		hphm = intent.getStringExtra("hphm");
+		hpzl = intent.getStringExtra("hpzl");
 		tid = intent.getIntExtra("tid", 0);
 		rcno = intent.getStringExtra("rcno");
 		txtcarnumber = (TextView) this.findViewById(R.id.txtcarnumber);
@@ -66,12 +69,13 @@ public class PaybillActivity extends PrintActivity {
 		txtparktime = (TextView) this.findViewById(R.id.txtparktime);
 		txtleavetime = (TextView) this.findViewById(R.id.txtleavetime);
 		txtmoney = (TextView) this.findViewById(R.id.txtmoney);
+		lblcartype = (TextView) this.findViewById(R.id.lblcartype);
 		btnsure4bill = (Button) this.findViewById(R.id.btnsure4bill);
 		btnsure4escape = (Button) this.findViewById(R.id.btnsure4escape);
 		btnsure4print = (Button) this.findViewById(R.id.btnsure4print);
 		btnsure4ingore = (Button) this.findViewById(R.id.btnsure4ingore);
 		txtcarnumber.setText(hphm);
-
+		lblcartype.setText(hpzl);
 		String parktimetext = intent.getStringExtra("rt");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");

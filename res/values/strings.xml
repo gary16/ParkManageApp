@@ -50,6 +50,12 @@
         <item>澳</item>
         <item>台</item>
     </string-array>
+    <string-array name="hpzl">
+        <item>小型汽车</item>
+        <item>大型汽车</item>
+        <item>超大型车</item>
+        <item>摩托车或电动车</item>
+    </string-array>
 
     <string name="title_activity_printinfo_activity_for_k6_p100">PrintinfoActivityForK6P100</string>
     <string name="title_activity_input_info_activity_for_k6_p100">InputInfoActivityForK6P100</string>

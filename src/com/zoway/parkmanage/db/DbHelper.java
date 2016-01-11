@@ -36,7 +36,7 @@ public class DbHelper {
 		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','X12345','blue','201510231200','201510231230',30,1,'',0,0)";
 		// db.execSQL(insertSql);
 		String ct1Str = null;
-		ct1Str = " Create TABLE if not exists  t_parkrecord  (tid integer PRIMARY KEY AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno text,hphm text,hphmcolor text,parktime text,leavetime text,fees REAL,status integer,filepath text,isupload int,isprint int)";
+		ct1Str = " Create TABLE if not exists  t_parkrecord  (tid integer PRIMARY KEY AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno text,hphm text,hpzl text,hphmcolor text,parktime text,leavetime text,fees REAL,status integer,filepath text,isupload int,isprint int)";
 		db.execSQL(ct1Str);
 		ct1Str = " Create  TABLE if not exists t_uploadevasion(tid int PRIMARY KEY,recordno text,hphm text,escapetime text,uploadtime text,uploadstatus int )";
 		db.execSQL(ct1Str);
@@ -44,6 +44,7 @@ public class DbHelper {
 		db.execSQL(ct1Str);
 		ct1Str = " Create  TABLE if not exists t_uploadignore(tid int PRIMARY KEY,recordno text,hphm text,ignoretime text,uploadtime text,uploadstatus int )";
 		db.execSQL(ct1Str);
+
 		closeDatabase();
 	}
 
@@ -61,14 +62,14 @@ public class DbHelper {
 	}
 
 	public static synchronized boolean insertRecord(String recordno,
-			String hphm, String hphmcolor, Date parktime, String filepath,
-			int status, int isupload, int isprint) {
+			String hphm, String hpzl, String hphmcolor, Date parktime,
+			String filepath, int status, int isupload, int isprint) {
 		boolean flg = false;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String datetext = sdf.format(parktime);
-			String inSql = " insert into t_parkrecord(recordno,hphm,hphmcolor,parktime,filepath,status,isupload,isprint) values(?,?,?,?,?,?,?,?)";
-			Object[] objArr = new Object[] { recordno, hphm, hphmcolor,
+			String inSql = " insert into t_parkrecord(recordno,hphm,hpzl,hphmcolor,parktime,filepath,status,isupload,isprint) values(?,?,?,?,?,?,?,?,?)";
+			Object[] objArr = new Object[] { recordno, hphm, hpzl, hphmcolor,
 					datetext, filepath, status, isupload, isprint };
 			execSql(inSql, objArr);
 			flg = true;
@@ -189,7 +190,7 @@ public class DbHelper {
 		try {
 			openDatabase();
 			db.beginTransaction();
-			String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where status=0 and isupload=0 order by parktime limit 0,?";
+			String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where status=0 and isupload=0 order by parktime limit 0,?";
 			Cursor cur = db.rawQuery(sql1, new String[] { limit + "" });
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			while (cur.moveToNext()) {
@@ -218,6 +219,7 @@ public class DbHelper {
 				rec.setFilepath(cur.getString(10));
 				rec.setIsprint(cur.getInt(11));
 				rec.setTid(cur.getInt(12));
+				rec.setHpzl(cur.getString(13));
 				list.add(rec);
 			}
 			db.setTransactionSuccessful();
@@ -357,13 +359,13 @@ public class DbHelper {
 			Cursor cur = null;
 			String sqlStr = null;
 			if (hphmStr == null || hphmStr.equals("")) {
-				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  order by parktime "
+				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where   status=?  order by parktime "
 						+ ord + " limit 0,? ";
 				cur = db.rawQuery(sqlStr,
 						new String[] { payStatus, limit + "" });
 			} else {
 				hphmStr = "%" + hphmStr + "%";
-				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where   status=?  and hphm like ? order by parktime "
+				sqlStr = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where   status=?  and hphm like ? order by parktime "
 						+ ord + " limit 0,? ";
 				cur = db.rawQuery(sqlStr, new String[] { payStatus, hphmStr,
 						limit + "" });
@@ -396,6 +398,7 @@ public class DbHelper {
 				rec.setFilepath(cur.getString(10));
 				rec.setIsprint(cur.getInt(11));
 				rec.setTid(cur.getInt(12));
+				rec.setHpzl(cur.getString(13));
 				list.add(rec);
 			}
 			db.setTransactionSuccessful();
@@ -413,7 +416,7 @@ public class DbHelper {
 		try {
 			openDatabase();
 			db.beginTransaction();
-			String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where hphm=? order by parktime desc limit 0,1";
+			String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where hphm=? order by parktime desc limit 0,1";
 			Cursor cur = db.rawQuery(sql1, new String[] { hphm });
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			while (cur.moveToNext()) {
@@ -442,6 +445,7 @@ public class DbHelper {
 				rec.setFilepath(cur.getString(10));
 				rec.setIsprint(cur.getInt(11));
 				rec.setTid(cur.getInt(12));
+				rec.setHpzl(cur.getString(13));
 			}
 			db.setTransactionSuccessful();
 			db.endTransaction();
@@ -458,7 +462,7 @@ public class DbHelper {
 		try {
 			openDatabase();
 			db.beginTransaction();
-			String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where tid=? order by parktime desc limit 0,1";
+			String sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where tid=? order by parktime desc limit 0,1";
 			Cursor cur = db.rawQuery(sql1, new String[] { tid + "" });
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			while (cur.moveToNext()) {
@@ -487,6 +491,7 @@ public class DbHelper {
 				rec.setFilepath(cur.getString(10));
 				rec.setIsprint(cur.getInt(11));
 				rec.setTid(cur.getInt(12));
+				rec.setHpzl(cur.getString(13));
 			}
 			db.setTransactionSuccessful();
 			db.endTransaction();
@@ -511,11 +516,11 @@ public class DbHelper {
 			// in 30s
 			if (type == 0) {
 				if (qryStr == null || qryStr.equals("")) {
-					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))<1800 and status=0 order by parktime limit 0,?";
+					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))<1800 and status=0 order by parktime limit 0,?";
 					cur = db.rawQuery(sql1, new String[] { pt, limit + "" });
 				} else {
 					qryStr = "%" + qryStr + "%";
-					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))<1800 and status=0  and hphm like ? order by parktime limit 0,?";
+					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))<1800 and status=0  and hphm like ? order by parktime limit 0,?";
 					cur = db.rawQuery(sql1, new String[] { pt, qryStr,
 							limit + "" });
 				}
@@ -523,11 +528,11 @@ public class DbHelper {
 			// out 30s
 			else {
 				if (qryStr == null || qryStr.equals("")) {
-					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))>=1800 and status =0 order by parktime limit 0,?";
+					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))>=1800 and status =0 order by parktime limit 0,?";
 					cur = db.rawQuery(sql1, new String[] { pt, limit + "" });
 				} else {
 					qryStr = "%" + qryStr + "%";
-					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))>=1800 and status =0 and hphm like ? order by parktime limit 0,?";
+					sql1 = "select recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint,tid,hpzl from t_parkrecord where (strftime('%s',?)-strftime('%s',parktime))>=1800 and status =0 and hphm like ? order by parktime limit 0,?";
 					cur = db.rawQuery(sql1, new String[] { pt, qryStr,
 							limit + "" });
 				}
@@ -559,6 +564,7 @@ public class DbHelper {
 				rec.setFilepath(cur.getString(10));
 				rec.setIsprint(cur.getInt(11));
 				rec.setTid(cur.getInt(12));
+				rec.setHpzl(cur.getString(13));
 				list.add(rec);
 			}
 			db.setTransactionSuccessful();

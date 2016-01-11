@@ -23,14 +23,14 @@ public class ParkWsdl {
 	private String soapAction = "http://tempuri.org/Park";
 
 	public ParkBean4Wsdl whenCarIn(String recordNo, int terminalId,
-			int workerId, int vehicleType, String vehicleNo, Date reachTime) {
+			int workerId, String vehicleType, String vehicleNo, Date reachTime) {
 		ParkBean4Wsdl obj = null;
 		try {
 			SoapObject rpc = new SoapObject(nameSpace, methodName);
 			rpc.addProperty("recordNo", recordNo);
 			rpc.addProperty("terminalId", terminalId);
 			rpc.addProperty("workerId", workerId);
-			rpc.addProperty("vehicleType", "Ð¡ÐÍÆû³µ");
+			rpc.addProperty("vehicleType", vehicleType);
 			rpc.addProperty("vehicleNo", vehicleNo);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String ss = sdf.format(reachTime).replace(" ", "T");

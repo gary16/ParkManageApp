@@ -93,8 +93,8 @@ public class TerminalService extends Service {
 				ParkRecord p = li.get(i);
 				ParkBean4Wsdl p4 = wsdl.whenCarIn(p.getRecordno(),
 						LoginBean4Wsdl.getTerminalId(), LoginBean4Wsdl
-								.getWorker().getWorkerId(), 2, p.getHphm(), p
-								.getParktime());
+								.getWorker().getWorkerId(), p.getHpzl(), p
+								.getHphm(), p.getParktime());
 				if (p4 != null) {
 					DbHelper.updateUploadFlag(p.getTid(), 1);
 				} else {

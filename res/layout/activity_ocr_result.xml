@@ -1,15 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.zoway.parkmanage.view.OcrResultActivity" >
 
     <LinearLayout
         android:id="@+id/tkephotoly1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8" >
+        android:layout_height="wrap_content" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,50 +26,88 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/tkephotoly2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tkephotoly1"
         android:layout_marginBottom="15dp"
-        android:layout_weight="1.4"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/lblocrres"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="车辆号牌"
-            android:textColor="#ffffffff"
-            android:textSize="30sp" />
+        android:layout_marginTop="30dp" >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@id/ly1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:gravity="center_horizontal" >
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
 
-            <Spinner
-                android:id="@+id/comshengfen"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/lblocrres"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/shengfen"
-                android:spinnerMode="dialog" />
+                android:gravity="center_horizontal"
+                android:text="车辆号牌"
+                android:textSize="30sp" />
 
-            <EditText
-                android:id="@+id/txtocrreshphm"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="dp"
-                android:text="X123456"
-                android:textSize="33sp"
-                android:width="150dp" />
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <Spinner
+                    android:id="@+id/comshengfen"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog" />
+
+                <EditText
+                    android:id="@+id/txtocrreshphm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:gravity="bottom"
+                    android:text="123456"
+                    android:textSize="33sp"
+                    android:width="150dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@id/ly2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+            android:layout_alignLeft="@id/ly1"
+            android:layout_alignRight="@id/ly1"
+            android:layout_below="@id/ly1"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/lblocrres2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="车辆类型 "
+                android:textSize="30sp" />
+
+            <Spinner
+                android:id="@+id/comhpzl"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:spinnerMode="dialog" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/ly3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/ly2"
+            android:layout_marginTop="30dp"
+            android:gravity="bottom|center_horizontal" >
 
             <Button
                 android:id="@+id/btnressure"
@@ -88,7 +124,7 @@
                 android:id="@+id/btnrescancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="30dp"
                 android:background="#ff30cf86"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -96,18 +132,6 @@
                 android:textColor="#ffffffff"
                 android:textSize="30sp" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/tkephotoly3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="0.8" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00000000" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

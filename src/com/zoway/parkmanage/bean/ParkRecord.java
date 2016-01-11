@@ -16,6 +16,16 @@ public class ParkRecord implements Serializable {
 	int parkid;
 	String parkno;
 	String hphm;
+	String hpzl;
+
+	public String getHpzl() {
+		return hpzl;
+	}
+
+	public void setHpzl(String hpzl) {
+		this.hpzl = hpzl;
+	}
+
 	String hphmcolor;
 	Date parktime;
 	Date leavetime;
