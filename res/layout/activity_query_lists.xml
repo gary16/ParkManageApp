@@ -43,25 +43,23 @@
                 android:layout_width="2dp"
                 android:layout_height="2dp"
                 android:layout_alignParentTop="true"
-                android:background="#000000"
-                 />
+                android:background="#000000" />
 
             <ImageView
                 android:id="@+id/firsthln1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_toRightOf="@id/firstpt1"
-                android:background="#000000"
-                 />
+                android:background="#000000" />
 
             <ImageView
                 android:id="@+id/firsthln2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:visibility="invisible"
                 android:layout_alignLeft="@id/firsthln1"
                 android:layout_below="@id/firsthln1"
-                android:background="#777777" />
+                android:background="#777777"
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/btnpayfees"
@@ -91,10 +89,10 @@
                 android:id="@+id/firsthln3"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:visibility="invisible"
                 android:layout_below="@id/btnpayfees"
                 android:layout_toRightOf="@id/firstpt2"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/firstvln1"
@@ -102,28 +100,27 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/firstpt2"
                 android:layout_alignParentLeft="true"
-                android:background="#000000"
-                 />
+                android:background="#000000" />
 
             <ImageView
                 android:id="@+id/firstvln2"
                 android:layout_width="2dp"
-                android:visibility="invisible"
                 android:layout_height="match_parent"
                 android:layout_above="@id/firsthln3"
                 android:layout_below="@id/firsthln2"
                 android:layout_toRightOf="@id/firstvln1"
-                android:background="#777777" />
+                android:background="#777777"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/firstvln3"
                 android:layout_width="2dp"
-                android:visibility="invisible"
                 android:layout_height="match_parent"
                 android:layout_above="@id/firsthln3"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/firsthln2"
-                android:background="#777777" />
+                android:background="#777777"
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -135,17 +132,15 @@
                 android:id="@+id/secondpt1"
                 android:layout_width="2dp"
                 android:layout_height="2dp"
-                android:background="#000000"
-                 />
+                android:background="#000000" />
 
             <ImageView
                 android:id="@+id/secondhln1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:visibility="invisible"
                 android:layout_toRightOf="@id/secondpt1"
                 android:background="#000000"
-                 />
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/secondhln2"
@@ -166,7 +161,7 @@
                 android:background="#fff9c164"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:text="已走费"
+                android:text="已逃费"
                 android:textColor="#ffffffff"
                 android:textSize="25sp" >
             </Button>
@@ -193,8 +188,7 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/secondhln3"
                 android:layout_alignParentLeft="true"
-                android:background="#000000"
-                 />
+                android:background="#000000" />
 
             <ImageView
                 android:id="@+id/secondvln2"
@@ -223,29 +217,29 @@
             <ImageView
                 android:id="@+id/thirdpt1"
                 android:layout_width="2dp"
-                android:visibility="invisible"
                 android:layout_height="2dp"
                 android:layout_alignParentTop="true"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/thirdpt2"
                 android:layout_width="2dp"
                 android:layout_height="2dp"
-                android:visibility="invisible"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/thirdhln1"
-                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@id/thirdpt2"
                 android:layout_toRightOf="@id/thirdpt1"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/thirdhln2"
@@ -254,8 +248,7 @@
                 android:layout_alignLeft="@id/thirdhln1"
                 android:layout_alignRight="@id/thirdhln1"
                 android:layout_below="@id/thirdhln1"
-                android:background="#777777"
-                 />
+                android:background="#777777" />
 
             <Button
                 android:id="@+id/btnignorefees"
@@ -268,7 +261,7 @@
                 android:background="#fff9c164"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:text="已逃费"
+                android:text="已走费"
                 android:textColor="#ffffffff"
                 android:textSize="25sp" >
             </Button>
@@ -296,28 +289,27 @@
                 android:layout_below="@id/btnignorefees"
                 android:layout_toLeftOf="@id/thirdpt2"
                 android:layout_toRightOf="@id/thirdpt1"
-                android:background="#000000"
-                 />
+                android:background="#000000" />
 
             <ImageView
                 android:id="@+id/thirdvln1"
                 android:layout_width="2dp"
-                android:visibility="invisible"
                 android:layout_height="match_parent"
                 android:layout_above="@id/thirdhln3"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/thirdhln1"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/thirdvln4"
                 android:layout_width="2dp"
-                android:visibility="invisible"
                 android:layout_height="match_parent"
                 android:layout_above="@id/thirdpt4"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/thirdhln1"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/thirdvln2"
@@ -326,8 +318,7 @@
                 android:layout_above="@id/thirdhln3"
                 android:layout_below="@id/thirdhln2"
                 android:layout_toRightOf="@id/thirdvln1"
-                android:background="#777777"
-                 />
+                android:background="#777777" />
 
             <ImageView
                 android:id="@+id/thirdvln3"
@@ -336,8 +327,7 @@
                 android:layout_above="@id/thirdhln3"
                 android:layout_below="@id/thirdhln2"
                 android:layout_toLeftOf="@id/thirdvln4"
-                android:background="#777777"
-                 />
+                android:background="#777777" />
         </RelativeLayout>
     </LinearLayout>
 
