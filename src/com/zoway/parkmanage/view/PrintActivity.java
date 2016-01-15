@@ -70,6 +70,7 @@ public class PrintActivity extends BaseActivity {
 		this.basePrinter.printDia = null;
 		this.basePrinter.printHandler = null;
 		this.basePrinter.activity = null;
+		this.basePrinter = null;
 	}
 
 	@Override
