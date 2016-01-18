@@ -994,6 +994,7 @@ public final class R {
         public static final int mainlistdetails=0x7f03000d;
         public static final int mainlistparent=0x7f03000e;
         public static final int province_spinner=0x7f03000f;
+        public static final int view_null=0x7f030010;
     }
     public static final class menu {
         public static final int camera=0x7f0a0000;

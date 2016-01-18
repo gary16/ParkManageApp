@@ -270,4 +270,12 @@ public class PayListsActivity extends BaseActivity {
 		this.finish();
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		setContentView(R.layout.view_null);
+		mInflater.inflate(R.layout.listview_hphm, null);
+		super.onDestroy();
+	}
+
 }

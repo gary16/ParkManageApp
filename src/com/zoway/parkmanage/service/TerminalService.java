@@ -98,7 +98,7 @@ public class TerminalService extends Service {
 				if (p4 != null) {
 					DbHelper.updateUploadFlag(p.getTid(), 1);
 				} else {
-					DbHelper.updateUploadFlag(p.getTid(), -1);
+					// DbHelper.updateUploadFlag(p.getTid(), -1);
 				}
 			}
 		}
@@ -113,7 +113,7 @@ public class TerminalService extends Service {
 				if (p4 != null) {
 					DbHelper.updateUploadPayFlag(p.getTid(), 1);
 				} else {
-					DbHelper.updateUploadPayFlag(p.getTid(), -1);
+					// DbHelper.updateUploadPayFlag(p.getTid(), -1);
 				}
 			}
 		}
@@ -129,7 +129,7 @@ public class TerminalService extends Service {
 				if (eb != null & eb.isEscapeResult()) {
 					DbHelper.updateUploadEscapeFlag(er.getTid(), 1);
 				} else {
-					DbHelper.updateUploadEscapeFlag(er.getTid(), -1);
+					// DbHelper.updateUploadEscapeFlag(er.getTid(), -1);
 				}
 			}
 		}
@@ -144,7 +144,7 @@ public class TerminalService extends Service {
 				if (ib != null & ib.isIgnoreResult()) {
 					DbHelper.updateUploadIgnoreFlag(er.getTid(), 1);
 				} else {
-					DbHelper.updateUploadIgnoreFlag(er.getTid(), -1);
+					// DbHelper.updateUploadIgnoreFlag(er.getTid(), -1);
 				}
 			}
 		}

@@ -257,7 +257,7 @@ public class InputInfoActivity extends PrintActivity implements OnClickListener 
 			bitmapOcr.recycle();
 			bitmapOcr = null;
 		}
-
+		setContentView(R.layout.view_null);
 		System.gc();
 	}
 

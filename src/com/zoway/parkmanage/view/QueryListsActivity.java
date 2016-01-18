@@ -431,4 +431,12 @@ public class QueryListsActivity extends BaseActivity {
 		public TextView tv2;
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		setContentView(R.layout.view_null);
+		mInflater.inflate(R.layout.listview_hphm, null);
+		super.onDestroy();
+	}
+
 }
