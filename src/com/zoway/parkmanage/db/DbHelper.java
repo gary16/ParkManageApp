@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.zoway.parkmanage.bean.EscapeRecord;
 import com.zoway.parkmanage.bean.IgnoreRecord;
 import com.zoway.parkmanage.bean.ParkRecord;
+import com.zoway.parkmanage.bean.ParkRecordByTags;
 import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.utils.PathUtils;
 import com.zoway.parkmanage.utils.TimeUtil;
@@ -22,7 +23,7 @@ public class DbHelper {
 	private static String dbpath = PathUtils.getSdPath() + File.separator
 			+ "parkmanage.db";
 
-	private static void openDatabase() {
+	private static synchronized void openDatabase() {
 		if (db == null) {
 			db = SQLiteDatabase.openOrCreateDatabase(dbpath, null);
 		}
@@ -30,11 +31,6 @@ public class DbHelper {
 
 	public static synchronized void createTables() {
 		openDatabase();
-		// String deleteStr = " drop table if exists t_uploadevasion";
-		// db.execSQL(deleteStr);
-		// String insertSql =
-		// "insert into t_parkrecord(recordid,recordno,parkid,parkno,hphm,hphmcolor,parktime,leavetime,fees,status,filepath,isprint) values(1,1,1,'','X12345','blue','201510231200','201510231230',30,1,'',0,0)";
-		// db.execSQL(insertSql);
 		String ct1Str = null;
 		ct1Str = " Create TABLE if not exists  t_parkrecord  (tid integer PRIMARY KEY AUTOINCREMENT,recordid integer,recordno text,parkid integer,parkno text,hphm text,hpzl text,hphmcolor text,parktime text,leavetime text,fees REAL,status integer,filepath text,isupload int,isprint int)";
 		db.execSQL(ct1Str);
@@ -44,7 +40,8 @@ public class DbHelper {
 		db.execSQL(ct1Str);
 		ct1Str = " Create  TABLE if not exists t_uploadignore(tid int PRIMARY KEY,recordno text,hphm text,ignoretime text,uploadtime text,uploadstatus int )";
 		db.execSQL(ct1Str);
-
+		ct1Str = " Create TABLE if not exists  t_parkrecord_bytags (tid integer PRIMARY KEY AUTOINCREMENT,recordno text,parkno text,parktime text,status int)";
+		db.execSQL(ct1Str);
 		closeDatabase();
 	}
 
@@ -577,7 +574,53 @@ public class DbHelper {
 		return list;
 	}
 
-	private static void closeDatabase() {
+	public static synchronized boolean insertTagsRecord(String recordno,
+			String sno, Date parktime, int status) {
+		boolean flg = false;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String datetext = sdf.format(parktime);
+			String inSql = " insert into t_parkrecord_bytags(recordno,parkno,parktime,status) values(?,?,?,?)";
+			Object[] objArr = new Object[] { recordno, sno, datetext, status };
+			execSql(inSql, objArr);
+			flg = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flg;
+	}
+
+	public static synchronized List<ParkRecordByTags> queryInOrOut30MinTasgsRecord(
+			int status) {
+		List<ParkRecordByTags> list = new ArrayList<ParkRecordByTags>();
+		try {
+			openDatabase();
+			db.beginTransaction();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String datetext = sdf.format(new Date());
+			String sql1 = "select recordno,parkno,parktime,status from t_parkrecord_bytags  where (strftime('%s',?)-strftime('%s',parktime))>=1380 and status = ? order by parktime asc limit 0,1";
+			Cursor cur = db.rawQuery(sql1,
+					new String[] { datetext, status + "" });
+			while (cur.moveToNext()) {
+				ParkRecordByTags rec = new ParkRecordByTags();
+				rec.setRecordno(cur.getString(0));
+				rec.setParkno(cur.getString(1));
+				if (cur.getString(2) != null && !cur.getString(2).equals("")) {
+					rec.setParktime(sdf.parse(cur.getString(2)));
+				}
+				rec.setStauts(cur.getInt(3));
+				list.add(rec);
+			}
+			db.setTransactionSuccessful();
+			db.endTransaction();
+			closeDatabase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private static synchronized void closeDatabase() {
 		if (db != null) {
 			db.close();
 			db = null;

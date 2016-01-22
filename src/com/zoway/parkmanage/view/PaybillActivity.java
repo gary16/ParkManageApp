@@ -86,7 +86,7 @@ public class PaybillActivity extends PrintActivity {
 			e1.printStackTrace();
 		}
 		txtparktime.setText(sdf.format(parktime));
-		txtpark.setText("дот╢б╥");
+		txtpark.setText( LoginBean4Wsdl.getParkName());
 
 		leavetime = TimeUtil.getTime();
 		txtleavetime.setText(sdf.format(leavetime));

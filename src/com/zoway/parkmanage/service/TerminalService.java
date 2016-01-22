@@ -1,6 +1,8 @@
 package com.zoway.parkmanage.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Notification;
@@ -75,7 +77,7 @@ public class TerminalService extends Service {
 						times = 0;
 					}
 					if (times % 2 == 0) {
-						// checkNewParkInfo();
+						checkNewParkInfo();
 					}
 					uploadParkingRecord();
 					times++;
@@ -164,7 +166,51 @@ public class TerminalService extends Service {
 					String rcid = al.get(0)[0];
 					String rcno = al.get(0)[1];
 					String sno = al.get(0)[3];
-					String rt = al.get(0)[4].replace("T", "	");
+					String rt = al.get(0)[4].replace("\t", " ").replace("T",
+							" ");
+					String rt1 = al.get(0)[4];
+					Uri u = RingtoneManager
+							.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+					Notification noti = new Notification.Builder(
+							TerminalService.this)
+							.setContentTitle(String.format("车位位置:%s", sno))
+							.setContentText(String.format("入库时间:%s", rt))
+							.setSmallIcon(R.drawable.ic_launcher).setSound(u)
+							.build();
+
+					noti.defaults |= Notification.DEFAULT_ALL;
+
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy-MM-dd HH:mm:ss");
+					Date parktime = sdf.parse(rt);
+					DbHelper.insertTagsRecord(rcno, sno, parktime, 0);
+					nm.cancel(0xfedcba09);
+
+					nm.notify(0xfedcba09, noti);
+					orderid = noid;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void remindTakePhoto() {
+
+		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		try {
+			String noid = "";
+			UnhandleParkinfoWsdl ups = new UnhandleParkinfoWsdl();
+			ArrayList<String[]> al = ups.getUnhandleList(4, 1, 0);
+			if (al != null && al.size() > 0) {
+				noid = al.get(0)[0];
+				if (!noid.equals(orderid)) {
+
+					String rcid = al.get(0)[0];
+					String rcno = al.get(0)[1];
+					String sno = al.get(0)[3];
+					String rt = al.get(0)[4].replace("T", " ");
 
 					Intent it1 = new Intent(TerminalService.this,
 							TakeOcrPhotoActivity.class);

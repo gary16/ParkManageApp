@@ -35,20 +35,12 @@
         android:layout_marginTop="30dp" >
 
         <LinearLayout
-            android:id="@id/ly1"
+            android:id="@+id/ly1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
+            android:gravity="bottom"
             android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/lblocrres"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="车辆号牌"
-                android:textSize="30sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,31 +59,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
-                    android:gravity="bottom"
-                    android:text="123456"
+                    android:background="@drawable/bg_edittext"
+                    android:gravity="bottom|right"
+                    android:hint="123456"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textCursorDrawable="@null"
                     android:textSize="33sp"
                     android:width="150dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@id/ly2"
+            android:id="@+id/ly2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_alignLeft="@id/ly1"
             android:layout_alignRight="@id/ly1"
             android:layout_below="@id/ly1"
             android:layout_marginTop="20dp"
-            android:gravity="center"
+            android:gravity="bottom"
             android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/lblocrres2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="车辆类型 "
-                android:textSize="30sp" />
 
             <Spinner
                 android:id="@+id/comhpzl"
@@ -101,11 +89,45 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@id/ly3"
+            android:id="@+id/ly3"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignLeft="@id/ly2"
+            android:layout_alignRight="@id/ly2"
+            android:layout_below="@id/ly2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="bottom"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/parkno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:background="@drawable/bg_edittext"
+                    android:gravity="bottom|right"
+                    android:hint="车位位置"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textCursorDrawable="@null"
+                    android:textSize="30sp"
+                    android:width="150dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/ly2"
+            android:layout_below="@id/ly3"
             android:layout_marginTop="30dp"
             android:gravity="bottom|center_horizontal" >
 
