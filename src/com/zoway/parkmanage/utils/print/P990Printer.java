@@ -50,10 +50,14 @@ public class P990Printer extends BasePrinter {
 	}
 
 	@Override
-	public void doPrint(String hphm, Date parktime, String recno) {
+	public void doPrint(String hphm, Date parktime, String recno, int fromWhere) {
 		// TODO Auto-generated method stub
 		P990Printer.this.activity.beforePrint();
-		progress = new Printpro(hphm, parktime, recno);
+		if (fromWhere == 0) {
+			progress = new Printpro(hphm, parktime, recno);
+		} else if (fromWhere == 1) {
+			progress = new Printpro_ChenChun(hphm, parktime, recno);
+		}
 		this.printDia = ProgressDialog.show(this.activity, "打印停车纸", "正在打印中",
 				true, false);
 		try {
@@ -65,10 +69,16 @@ public class P990Printer extends BasePrinter {
 	}
 
 	@Override
-	public void doPrint2(String hphm, Date parktime, Date leavetime, float fare) {
+	public void doPrint2(String hphm, Date parktime, Date leavetime,
+			float fare, int fromWhere) {
 		// TODO Auto-generated method stub
 		P990Printer.this.activity.beforePrint();
-		progress = new Printpro2(hphm, parktime, leavetime, fare);
+		if (fromWhere == 0) {
+			progress = new Printpro2(hphm, parktime, leavetime, fare);
+		} else if (fromWhere == 1) {
+			progress = new Printpro2_ChenChun(hphm, parktime, leavetime, fare);
+		}
+
 		this.printDia = ProgressDialog.show(this.activity, "打印凭条", "正在打印中",
 				true, false);
 		try {
@@ -184,6 +194,60 @@ public class P990Printer extends BasePrinter {
 		}
 	}
 
+	private class Printpro_ChenChun extends Printer.Progress {
+
+		private String hphm;
+		private Date parktime;
+		private String recno;
+
+		public Printpro_ChenChun(String hphm, Date parktime, String recno) {
+			this.hphm = hphm;
+			this.parktime = parktime;
+			this.recno = recno;
+		}
+
+		@Override
+		public void doPrint(Printer printer) throws Exception {
+			// TODO Auto-generated method stub
+			Format format = new Format();
+			// Use this 5x7 dot and 1 times width, 2 times height
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+			String datetext = sdf.format(parktime);
+			printer.printText("        占用场地使用计时卡\n");
+			format.setAscScale(Format.ASC_SC1x1);
+			printer.setFormat(format);
+			printer.printText("\n");
+			printer.printText("车牌号码:" + hphm + "\n");
+			printer.printText("占用场地位置:" + LoginBean4Wsdl.getParkName() + "\n");
+			printer.printText("开始时间:" + datetext + "\n");
+			printer.printText("操作员:"
+					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n");
+			printer.printText("物业联系电话:29996660\n");
+			printer.printText("说明:1.本凭条仅作为占用场地起始\n计时证明\n2.本收费性质为场地，秩序维护和场\n地使用费，请各车主停车离开时锁好\n门窗并带走车内物品，以免造成不\n必要的损失\n3.本园区停车不提供安全保管服务，\n不负车辆保管责任。\n\n");
+			printer.setAutoTrunc(false);
+			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
+			printer.printText("\n\n");
+
+			String cUrl = String.format(
+					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", recno);
+			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
+			printer.feedLine(4);
+		}
+
+		@Override
+		public void onFinish(int arg0) {
+			// TODO Auto-generated method stub
+			Message msg = new Message();
+			msg.what = 1;
+			printHandler.sendMessage(msg);
+		}
+
+		@Override
+		public void onCrash() {
+			// TODO Auto-generated method stub
+		}
+	}
+
 	private class Printpro2 extends Printer.Progress {
 
 		private Date parktime;
@@ -237,7 +301,84 @@ public class P990Printer extends BasePrinter {
 			printer.printText("停车费用:" + fare + "\n");
 			printer.feedLine(1);
 			printer.printText("操作员:"
-					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
+					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n");
+			printer.printText("说明:1.本收费性质为场地，秩序维\n护和场地使用费\n2.本园区停车不提供安全保管服务，\n不负车辆保管责任。\n");
+
+			printer.setAutoTrunc(false);
+			printer.feedLine(5);
+		}
+
+		@Override
+		public void onFinish(int arg0) {
+			// TODO Auto-generated method stub
+			Message msg = new Message();
+			msg.what = 1;
+			printHandler.sendMessage(msg);
+		}
+
+		@Override
+		public void onCrash() {
+			// TODO Auto-generated method stub
+		}
+	}
+
+	private class Printpro2_ChenChun extends Printer.Progress {
+
+		private Date parktime;
+		private Date leavetime;
+		private float fare;
+		private String hphm;
+
+		public Printpro2_ChenChun(String hphm, Date parktime, Date leavetime,
+				float fare) {
+			this.hphm = hphm;
+			this.parktime = parktime;
+			this.leavetime = leavetime;
+			this.fare = fare;
+		}
+
+		@Override
+		public void doPrint(Printer printer) throws Exception {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+			Format format = new Format();
+			// Use this 5x7 dot and 1 times width, 2 times height
+			format.setAscSize(Format.ASC_DOT5x7);
+			format.setAscScale(Format.ASC_SC1x2);
+			printer.setFormat(format);
+			printer.printText("        占用场地使用计费卡\n");
+			format.setAscScale(Format.ASC_SC1x1);
+			printer.setFormat(format);
+			printer.printText("\n");
+			printer.feedLine(1);
+			printer.printText("车牌号码:" + hphm + "\n");
+			printer.feedLine(1);
+			printer.printText("占用场地位置:" + LoginBean4Wsdl.getParkName() + "\n");
+			printer.feedLine(1);
+			printer.printText("开始时间:" + sdf.format(parktime) + "\n");
+			printer.feedLine(1);
+			printer.printText("结束时间:" + sdf.format(leavetime) + "\n");
+			printer.feedLine(1);
+
+			Date d1 = parktime;
+			Date d2 = leavetime;
+			long diff = d2.getTime() - d1.getTime();
+			long days = diff / (1000 * 60 * 60 * 24);
+
+			long hours = (diff - days * (1000 * 60 * 60 * 24))
+					/ (1000 * 60 * 60);
+			long minutes = (diff - days * (1000 * 60 * 60 * 24) - hours
+					* (1000 * 60 * 60))
+					/ (1000 * 60);
+			printer.printText("占用时长:" + days + "日" + hours + "时" + minutes
+					+ "分");
+			printer.feedLine(1);
+			printer.printText("占场费用:" + fare + "\n");
+			printer.feedLine(1);
+			printer.printText("操作员:"
+					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n");
+			printer.printText("说明:1.本收费性质为场地，秩序维\n护和场地使用费\n2.本园区停车不提供安全保管服务，\n不负车辆保管责任。\n");
+
 			printer.setAutoTrunc(false);
 			printer.feedLine(5);
 		}

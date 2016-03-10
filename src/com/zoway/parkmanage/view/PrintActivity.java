@@ -89,8 +89,8 @@ public class PrintActivity extends BaseActivity {
 		basePrinter.doAfterActivityResult(requestCode, resultCode, data);
 	}
 
-	public void doPrint(String hphm, Date parktime, String recno) {
-		basePrinter.doPrint(hphm, parktime, recno);
+	public void doPrint(String hphm, Date parktime, String recno, int fromWhere) {
+		basePrinter.doPrint(hphm, parktime, recno, fromWhere);
 	}
 
 	public boolean beforePrint() {

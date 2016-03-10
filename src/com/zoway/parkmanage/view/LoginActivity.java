@@ -46,10 +46,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				break;
 			case 2:
 				pDia.dismiss();
+				DbHelper.createTables();
 				Intent ii = new Intent(LoginActivity.this,
 						TerminalService.class);
 				ComponentName cnn = LoginActivity.this.startService(ii);
-				DbHelper.createTables();
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				LoginActivity.this.startActivity(intent);

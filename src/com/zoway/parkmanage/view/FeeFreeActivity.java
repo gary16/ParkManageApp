@@ -90,7 +90,7 @@ public class FeeFreeActivity extends PrintActivity {
 				// TODO Auto-generated method stub
 				try {
 					FeeFreeActivity.this.basePrinter.doPrint(hphm, parktime,
-							recordno);
+							recordno,1);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

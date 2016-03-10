@@ -72,7 +72,8 @@ public class RecordInfoActivity extends PrintActivity {
 
 				try {
 					RecordInfoActivity.this.basePrinter.doPrint2(pr.getHphm(),
-							pr.getParktime(), pr.getLeavetime(), pr.getFees());
+							pr.getParktime(), pr.getLeavetime(), pr.getFees(),
+							1);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

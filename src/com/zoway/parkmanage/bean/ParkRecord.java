@@ -17,6 +17,12 @@ public class ParkRecord implements Serializable {
 	String parkno;
 	String hphm;
 	String hpzl;
+	String hphmcolor;
+	Date parktime;
+	Date leavetime;
+	float fees;
+	int status;
+	String filepath;
 
 	public String getHpzl() {
 		return hpzl;
@@ -25,13 +31,6 @@ public class ParkRecord implements Serializable {
 	public void setHpzl(String hpzl) {
 		this.hpzl = hpzl;
 	}
-
-	String hphmcolor;
-	Date parktime;
-	Date leavetime;
-	float fees;
-	int status;
-	String filepath;
 
 	public String getFilepath() {
 		return filepath;

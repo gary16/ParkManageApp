@@ -86,7 +86,7 @@ public class PaybillActivity extends PrintActivity {
 			e1.printStackTrace();
 		}
 		txtparktime.setText(sdf.format(parktime));
-		txtpark.setText( LoginBean4Wsdl.getParkName());
+		txtpark.setText(LoginBean4Wsdl.getParkName());
 
 		leavetime = TimeUtil.getTime();
 		txtleavetime.setText(sdf.format(leavetime));
@@ -100,7 +100,7 @@ public class PaybillActivity extends PrintActivity {
 				DbHelper.setPayRecord(tid, rcno, hphm, fare);
 				try {
 					PaybillActivity.this.basePrinter.doPrint2(hphm, parktime,
-							leavetime, fare);
+							leavetime, fare, 1);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -127,7 +127,7 @@ public class PaybillActivity extends PrintActivity {
 			public void onClick(View v) {
 				try {
 					PaybillActivity.this.basePrinter.doPrint(hphm, parktime,
-							rcno);
+							rcno, 1);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

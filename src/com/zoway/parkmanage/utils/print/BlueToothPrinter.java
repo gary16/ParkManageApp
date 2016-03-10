@@ -146,7 +146,7 @@ public class BlueToothPrinter extends BasePrinter {
 	}
 
 	@Override
-	public void doPrint(String hphm, Date parktime, String recno) {
+	public void doPrint(String hphm, Date parktime, String recno, int fromWhere) {
 		// TODO Auto-generated method stub
 		if (mBtAdapter == null) {
 			Toast.makeText(activity, "该设备不支持蓝牙", Toast.LENGTH_LONG).show();
@@ -169,7 +169,8 @@ public class BlueToothPrinter extends BasePrinter {
 	}
 
 	@Override
-	public void doPrint2(String hphm, Date parktime, Date leavetime, float fare) {
+	public void doPrint2(String hphm, Date parktime, Date leavetime,
+			float fare, int fromWhere) {
 		// TODO Auto-generated method stub
 		if (mBtAdapter == null) {
 			Toast.makeText(activity, "该设备不支持蓝牙", Toast.LENGTH_LONG).show();

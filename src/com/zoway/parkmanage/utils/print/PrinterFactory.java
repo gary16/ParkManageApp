@@ -6,8 +6,8 @@ public class PrinterFactory {
 
 	public static BasePrinter getPrinter(PrintActivity acti) {
 
-		BasePrinter bp = new P990Printer(acti);
-		// BasePrinter bp = new BlueToothPrinter(acti);
+		// BasePrinter bp = new P990Printer(acti);
+		BasePrinter bp = new BlueToothPrinter(acti);
 		return bp;
 	}
 }

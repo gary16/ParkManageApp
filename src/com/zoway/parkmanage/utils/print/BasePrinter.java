@@ -74,10 +74,11 @@ public abstract class BasePrinter {
 			Intent data) {
 	};
 
-	public void doPrint(String hphm, Date parktime, String recno) {
+	public void doPrint(String hphm, Date parktime, String recno, int fromWhere) {
 	}
 
-	public void doPrint2(String hphm, Date parktime, Date leavetime, float fare) {
+	public void doPrint2(String hphm, Date parktime, Date leavetime,
+			float fare, int fromWhere) {
 	}
 
 }
