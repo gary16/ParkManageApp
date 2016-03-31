@@ -49,6 +49,7 @@
                 android:ems="10"
                 android:gravity="center_vertical"
                 android:inputType="text"
+                android:text="01"
                 android:textSize="22sp" />
         </LinearLayout>
 
@@ -77,6 +78,7 @@
                 android:ems="10"
                 android:gravity="center_vertical"
                 android:inputType="textPassword"
+                android:text="0"
                 android:textSize="22sp" />
         </LinearLayout>
 

@@ -49,10 +49,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				Intent ii = new Intent(LoginActivity.this,
 						TerminalService.class);
 				ComponentName cnn = LoginActivity.this.startService(ii);
-				DbHelper.createTables();
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				LoginActivity.this.startActivity(intent);
+				LoginActivity.this.finish();
 				break;
 
 			case 3:
@@ -70,6 +70,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}
 
 	};
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		setContentView(R.layout.view_null);
+		super.onDestroy();
+	}
 
 	private class LoginThread implements Runnable {
 
@@ -163,4 +170,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	}
 
+	@Override
+	public void onAttachedToWindow() {
+
+	}
 }

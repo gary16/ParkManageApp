@@ -158,10 +158,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
-            android:background="@drawable/iv_bg"
-            android:padding="3dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/takephoto" />
+            android:background="@drawable/takephoto"
+            android:padding="3dp" />
     </RelativeLayout>
 
 </RelativeLayout>

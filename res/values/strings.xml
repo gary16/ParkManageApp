@@ -16,7 +16,7 @@
     <string name="parkinfonotification">parkinfonotification</string>
 
     <string-array name="shengfen">
-        <item>粵</item>
+        <item>粤</item>
         <item>京</item>
         <item>津</item>
         <item>冀</item>
@@ -49,6 +49,12 @@
         <item>港</item>
         <item>澳</item>
         <item>台</item>
+    </string-array>
+    <string-array name="hpzl">
+        <item>小型汽车</item>
+        <item>大型汽车</item>
+        <item>超大型车</item>
+        <item>摩托车或电动车</item>
     </string-array>
 
     <string name="title_activity_printinfo_activity_for_k6_p100">PrintinfoActivityForK6P100</string>

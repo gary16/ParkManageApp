@@ -1,13 +1,25 @@
 package com.zoway.parkmanage.service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 
+import com.zoway.parkmanage.R;
 import com.zoway.parkmanage.bean.EscapeBean4Wsdl;
 import com.zoway.parkmanage.bean.EscapeRecord;
+import com.zoway.parkmanage.bean.IgnoreBean4Wsdl;
+import com.zoway.parkmanage.bean.IgnoreRecord;
 import com.zoway.parkmanage.bean.LoginBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkBean4Wsdl;
 import com.zoway.parkmanage.bean.ParkRecord;
@@ -15,13 +27,16 @@ import com.zoway.parkmanage.bean.PayBean4Wsdl;
 import com.zoway.parkmanage.bean.PayRecord;
 import com.zoway.parkmanage.db.DbHelper;
 import com.zoway.parkmanage.http.EscapeWsdl;
+import com.zoway.parkmanage.http.IgnoreWsdl;
 import com.zoway.parkmanage.http.ParkWsdl;
 import com.zoway.parkmanage.http.PayWsdl;
-import com.zoway.parkmanage.utils.LogUtils;
+import com.zoway.parkmanage.http.UnhandleParkinfoWsdl;
+import com.zoway.parkmanage.view.TakeOcrPhotoActivity;
 
 public class TerminalService extends Service {
 
 	private boolean flg1 = true;
+	private String orderid = "";
 
 	@Override
 	public void onCreate() {
@@ -47,23 +62,26 @@ public class TerminalService extends Service {
 	}
 
 	private class UploadTask implements Runnable {
-		private int w = 0;
+
+		private int times = 0;
 
 		@Override
 		public void run() {
 
 			while (flg1) {
 				try {
-					if (w % 3 == 0) {
-						uploadParkingRecord();
+					if (times % 4 == 0) {
 						uploadPayRecord();
-					}
-					if (w % 30 == 0) {
+						uploadIgnoreRecord();
 						uploadEscapeRecord();
-						w = 0;
+						times = 0;
 					}
-					w++;
-					Thread.sleep(10000);
+					if (times % 2 == 0) {
+						checkNewParkInfo();
+					}
+					uploadParkingRecord();
+					times++;
+					Thread.sleep(3000);
 				} catch (Exception er) {
 
 				}
@@ -77,10 +95,12 @@ public class TerminalService extends Service {
 				ParkRecord p = li.get(i);
 				ParkBean4Wsdl p4 = wsdl.whenCarIn(p.getRecordno(),
 						LoginBean4Wsdl.getTerminalId(), LoginBean4Wsdl
-								.getWorker().getWorkerId(), 2, p.getHphm(), p
-								.getParktime());
+								.getWorker().getWorkerId(), p.getHpzl(), p
+								.getHphm(), p.getParktime());
 				if (p4 != null) {
 					DbHelper.updateUploadFlag(p.getTid(), 1);
+				} else {
+					// DbHelper.updateUploadFlag(p.getTid(), -1);
 				}
 			}
 		}
@@ -94,6 +114,8 @@ public class TerminalService extends Service {
 						(int) p.getFare());
 				if (p4 != null) {
 					DbHelper.updateUploadPayFlag(p.getTid(), 1);
+				} else {
+					// DbHelper.updateUploadPayFlag(p.getTid(), -1);
 				}
 			}
 		}
@@ -108,73 +130,121 @@ public class TerminalService extends Service {
 						er.getFilepath());
 				if (eb != null & eb.isEscapeResult()) {
 					DbHelper.updateUploadEscapeFlag(er.getTid(), 1);
+				} else {
+					// DbHelper.updateUploadEscapeFlag(er.getTid(), -1);
+				}
+			}
+		}
+
+		private void uploadIgnoreRecord() {
+			IgnoreWsdl wsdl = new IgnoreWsdl();
+			List<IgnoreRecord> li = DbHelper.queryNeedUploadIgnore(10);
+			for (int i = 0; i < li.size(); i++) {
+				IgnoreRecord er = li.get(i);
+				IgnoreBean4Wsdl ib = wsdl.whenCarIngore(er.getRecordno(),
+						LoginBean4Wsdl.getWorker().getWorkerId());
+				if (ib != null & ib.isIgnoreResult()) {
+					DbHelper.updateUploadIgnoreFlag(er.getTid(), 1);
+				} else {
+					// DbHelper.updateUploadIgnoreFlag(er.getTid(), -1);
 				}
 			}
 		}
 	}
 
-	// private class CheckNewParkInfo implements Runnable {
-	//
-	// private NotificationManager nm;
-	// private int orderid = 0;
-	//
-	// @SuppressLint("NewApi")
-	// @Override
-	// public void run() {
-	// orderid = 0;
-	// nm = (NotificationManager)
-	// getSystemService(Context.NOTIFICATION_SERVICE);
-	// while (flg1) {
-	// try {
-	// int noid = 0;
-	// UnhandleParkinfoWsdl ups = new UnhandleParkinfoWsdl();
-	// ArrayList<String[]> al = ups.getUnhandleList(4, 1, 0);
-	// if (al != null && al.size() > 0) {
-	// noid = Integer.parseInt(al.get(0)[0]);
-	// if (noid != orderid) {
-	//
-	// String rcid = al.get(0)[0];
-	// String rcno = al.get(0)[1];
-	// String sno = al.get(0)[3];
-	// String rt = al.get(0)[4].replace("T", "	");
-	//
-	// Intent it1 = new Intent(TerminalService.this,
-	// TakeOcrPhotoActivity.class);
-	// it1.putExtra("rcid", rcid);
-	// it1.putExtra("rcno", rcno);
-	// it1.putExtra("sno", sno);
-	// it1.putExtra("rt", rt);
-	// PendingIntent pt1 = PendingIntent.getActivity(
-	// TerminalService.this, 0, it1,
-	// PendingIntent.FLAG_CANCEL_CURRENT);
-	//
-	// Uri u = RingtoneManager
-	// .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-	// Notification noti = new Notification.Builder(
-	// TerminalService.this)
-	// .setContentTitle(
-	// String.format("车位位置:%s", sno))
-	// .setContentText(
-	// String.format("入库时间:%s", rt))
-	// .setSmallIcon(R.drawable.ic_launcher)
-	// .setSound(u).setContentIntent(pt1).build();
-	//
-	// noti.defaults |= Notification.DEFAULT_ALL;
-	// noti.flags |= Notification.FLAG_NO_CLEAR;
-	//
-	// nm.cancel(orderid);
-	//
-	// nm.notify(noid, noti);
-	// orderid = noid;
-	// }
-	// }
-	// Thread.sleep(2500);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// }
-	// }
+	public void checkNewParkInfo() {
+
+		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		try {
+			String noid = "";
+			UnhandleParkinfoWsdl ups = new UnhandleParkinfoWsdl();
+			ArrayList<String[]> al = ups.getUnhandleList(4, 1, 0);
+			if (al != null && al.size() > 0) {
+				noid = al.get(0)[0];
+				if (!noid.equals(orderid)) {
+
+					String rcid = al.get(0)[0];
+					String rcno = al.get(0)[1];
+					String sno = al.get(0)[3];
+					String rt = al.get(0)[4].replace("\t", " ").replace("T",
+							" ");
+					String rt1 = al.get(0)[4];
+					Uri u = RingtoneManager
+							.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+					Notification noti = new Notification.Builder(
+							TerminalService.this)
+							.setContentTitle(String.format("车位位置:%s", sno))
+							.setContentText(String.format("入库时间:%s", rt))
+							.setSmallIcon(R.drawable.ic_launcher).setSound(u)
+							.build();
+
+					noti.defaults |= Notification.DEFAULT_ALL;
+
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy-MM-dd HH:mm:ss");
+					Date parktime = sdf.parse(rt);
+					DbHelper.insertTagsRecord(rcno, sno, parktime, 0);
+					nm.cancel(0xfedcba09);
+
+					nm.notify(0xfedcba09, noti);
+					orderid = noid;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void remindTakePhoto() {
+
+		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		try {
+			String noid = "";
+			UnhandleParkinfoWsdl ups = new UnhandleParkinfoWsdl();
+			ArrayList<String[]> al = ups.getUnhandleList(4, 1, 0);
+			if (al != null && al.size() > 0) {
+				noid = al.get(0)[0];
+				if (!noid.equals(orderid)) {
+
+					String rcid = al.get(0)[0];
+					String rcno = al.get(0)[1];
+					String sno = al.get(0)[3];
+					String rt = al.get(0)[4].replace("T", " ");
+
+					Intent it1 = new Intent(TerminalService.this,
+							TakeOcrPhotoActivity.class);
+					it1.putExtra("rcid", rcid);
+					it1.putExtra("rcno", rcno);
+					it1.putExtra("sno", sno);
+					it1.putExtra("rt", rt);
+					it1.putExtra("type", 4);
+					PendingIntent pt1 = PendingIntent.getActivity(
+							TerminalService.this, 0, it1,
+							PendingIntent.FLAG_CANCEL_CURRENT);
+
+					Uri u = RingtoneManager
+							.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+					Notification noti = new Notification.Builder(
+							TerminalService.this)
+							.setContentTitle(String.format("车位位置:%s", sno))
+							.setContentText(String.format("入库时间:%s", rt))
+							.setSmallIcon(R.drawable.ic_launcher).setSound(u)
+							.setContentIntent(pt1).build();
+
+					noti.defaults |= Notification.DEFAULT_ALL;
+					noti.flags |= Notification.FLAG_NO_CLEAR;
+
+					nm.cancel(0xfedcba09);
+
+					nm.notify(0xfedcba09, noti);
+					orderid = noid;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 
 }

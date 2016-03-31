@@ -192,7 +192,7 @@ public class ShowOcrPhotoActivity extends BaseActivity {
 						.length();
 				msg1.obj = fieldvalue[0].substring(1, len);
 			} else {
-				msg1.obj = "?????";
+				msg1.obj = "?";
 			}
 			handler.sendMessage(msg1);
 		}

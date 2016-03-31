@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.zoway.parkmanage.R;
+import com.zoway.parkmanage.db.DbHelper;
 
 public class HeadActivity extends BaseActivity {
 
@@ -17,10 +18,12 @@ public class HeadActivity extends BaseActivity {
 		setContentView(R.layout.activity_head);
 		Intent i = this.getIntent();
 		int status = i.getIntExtra("status", 0);
+
 		if (status == 0) {
+			DbHelper.createTables();
 			Intent intent = new Intent(this, LoginActivity.class);
 			this.startActivity(intent);
-		} else {
+		} else if (status == 1) {
 
 			Intent MyIntent = new Intent(Intent.ACTION_MAIN);
 			MyIntent.addCategory(Intent.CATEGORY_HOME);
@@ -28,6 +31,7 @@ public class HeadActivity extends BaseActivity {
 
 			ActivityManager am = (ActivityManager) this
 					.getSystemService(Context.ACTIVITY_SERVICE);
+
 			am.killBackgroundProcesses("com.zoway.parkmanage");
 
 			this.finish();

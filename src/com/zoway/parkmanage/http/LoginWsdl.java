@@ -47,7 +47,7 @@ public class LoginWsdl {
 			String result = object.getProperty(0).toString();
 
 			if (result.indexOf("Exception") > 0) {
-
+				int ii = 0;
 			} else {
 
 				SoapObject oj = (SoapObject) object.getProperty(0);

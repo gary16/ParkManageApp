@@ -9,6 +9,7 @@
         android:id="@+id/maly1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
         android:background="#ff0878ca" >
 
         <TextView
@@ -28,34 +29,323 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/maly1"
-        android:layout_marginTop="5dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/btnpayfees"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_marginLeft="3dp"
-            android:background="#ffcccc99"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="已缴费"
-            android:textColor="#ff777777"
-            android:textSize="25sp" >
-        </Button>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
 
-        <Button
-            android:id="@+id/btnescapefees"
+            <ImageView
+                android:id="@+id/firstpt1"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignParentTop="true"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/firsthln1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_toRightOf="@id/firstpt1"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/firsthln2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_alignLeft="@id/firsthln1"
+                android:layout_below="@id/firsthln1"
+                android:background="#777777"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btnpayfees"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@id/firsthln2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffcccc99"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="已缴费"
+                android:textColor="#ff777777"
+                android:textSize="25sp" >
+            </Button>
+
+            <ImageView
+                android:id="@+id/firstpt2"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignLeft="@id/firstpt1"
+                android:layout_below="@id/btnpayfees"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/firsthln3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/btnpayfees"
+                android:layout_toRightOf="@id/firstpt2"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/firstvln1"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/firstpt2"
+                android:layout_alignParentLeft="true"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/firstvln2"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/firsthln3"
+                android:layout_below="@id/firsthln2"
+                android:layout_toRightOf="@id/firstvln1"
+                android:background="#777777"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/firstvln3"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/firsthln3"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/firsthln2"
+                android:background="#777777"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/secondpt1"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/secondhln1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_toRightOf="@id/secondpt1"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/secondhln2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_alignLeft="@id/secondhln1"
+                android:layout_below="@id/secondhln1"
+                android:background="#777777" />
+
+            <Button
+                android:id="@+id/btnescapefees"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@id/secondhln2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff9c164"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="已逃费"
+                android:textColor="#ffffffff"
+                android:textSize="25sp" >
+            </Button>
+
+            <ImageView
+                android:id="@+id/secondpt2"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignLeft="@id/secondpt1"
+                android:layout_below="@id/btnescapefees"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/secondhln3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/btnescapefees"
+                android:layout_toRightOf="@id/secondpt2"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/secondvln1"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/secondhln3"
+                android:layout_alignParentLeft="true"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/secondvln2"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/secondhln3"
+                android:layout_below="@id/secondhln2"
+                android:layout_toRightOf="@id/secondvln1"
+                android:background="#777777" />
+
+            <ImageView
+                android:id="@+id/secondvln3"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/secondhln3"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/secondhln2"
+                android:background="#777777" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/thirdpt1"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignParentTop="true"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/thirdpt2"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/thirdhln1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@id/thirdpt2"
+                android:layout_toRightOf="@id/thirdpt1"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/thirdhln2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_alignLeft="@id/thirdhln1"
+                android:layout_alignRight="@id/thirdhln1"
+                android:layout_below="@id/thirdhln1"
+                android:background="#777777" />
+
+            <Button
+                android:id="@+id/btnignorefees"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_below="@id/thirdhln2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff9c164"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="已走费"
+                android:textColor="#ffffffff"
+                android:textSize="25sp" >
+            </Button>
+
+            <ImageView
+                android:id="@+id/thirdpt3"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignLeft="@id/thirdpt1"
+                android:layout_below="@id/btnignorefees"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/thirdpt4"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_alignRight="@id/thirdpt2"
+                android:layout_below="@id/btnignorefees"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/thirdhln3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/btnignorefees"
+                android:layout_toLeftOf="@id/thirdpt2"
+                android:layout_toRightOf="@id/thirdpt1"
+                android:background="#000000" />
+
+            <ImageView
+                android:id="@+id/thirdvln1"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/thirdhln3"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/thirdhln1"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/thirdvln4"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/thirdpt4"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/thirdhln1"
+                android:background="#000000"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/thirdvln2"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/thirdhln3"
+                android:layout_below="@id/thirdhln2"
+                android:layout_toRightOf="@id/thirdvln1"
+                android:background="#777777" />
+
+            <ImageView
+                android:id="@+id/thirdvln3"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_above="@id/thirdhln3"
+                android:layout_below="@id/thirdhln2"
+                android:layout_toLeftOf="@id/thirdvln4"
+                android:background="#777777" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/maly3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maly2"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/lalhphm"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
-            android:layout_marginLeft="3dp"
-            android:background="#fff9c164"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="已逃费"
-            android:textColor="#ffffffff"
-            android:textSize="25sp" >
-        </Button>
+            android:layout_marginLeft="5dp"
+            android:text="车牌号码"
+            android:textSize="22sp" />
 
         <EditText
             android:id="@+id/edtquery"
@@ -65,11 +355,29 @@
             android:layout_marginRight="5dp" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/firstvline"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/maly2"
+        android:layout_marginLeft="2dp"
+        android:background="#000000" />
+
+    <ImageView
+        android:id="@+id/fourthvline"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/maly2"
+        android:layout_marginRight="2dp"
+        android:background="#000000" />
+
     <ExpandableListView
         android:id="@+id/reclist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/maly2"
+        android:layout_below="@id/maly3"
         android:layout_marginLeft="3dp" >
     </ExpandableListView>
 

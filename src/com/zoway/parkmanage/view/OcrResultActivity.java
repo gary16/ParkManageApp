@@ -25,6 +25,7 @@ import com.zoway.parkmanage.db.DbHelper;
 
 public class OcrResultActivity extends BaseActivity implements OnClickListener {
 	private Spinner mSpinner;
+	private Spinner hSpinner;
 	private String rcid = null;
 	private String rcno = null;
 	private String sno = null;
@@ -40,12 +41,13 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnressure:
 			String txtHphm = txtocrreshphm.getText().toString().toUpperCase();
+			String txthpzl = hSpinner.getSelectedItem().toString();
 			Pattern regex = Pattern
 					.compile("^[A-HJ-Z][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9][A-HJ-NP-Z0-9]$");
 			Matcher mth = regex.matcher(txtHphm);
 			if (mth.matches()) {
 				txtHphm = mSpinner.getSelectedItem().toString() + txtHphm;
-				if (type == 1) {
+				if (type == 1 || type == 4) {
 					pr = DbHelper.queryRecordByHphm(txtHphm);
 					if (pr == null || pr.getStatus() != 0) {
 						Intent intent = new Intent(this,
@@ -56,6 +58,7 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 						intent.putExtra("rt", rt);
 						intent.putExtra("type", type);
 						intent.putExtra("fn", fn);
+						intent.putExtra("hpzl", txthpzl);
 						intent.putExtra("hphm", txtHphm);
 						this.startActivity(intent);
 					} else {
@@ -79,6 +82,7 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 						intent.putExtra("type", type);
 						intent.putExtra("fn", fn);
 						intent.putExtra("tid", pr.getTid());
+						intent.putExtra("hpzl", txthpzl);
 						intent.putExtra("hphm", txtHphm);
 						this.startActivity(intent);
 					}
@@ -136,7 +140,9 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 		btnressure.setOnClickListener(this);
 		btnrescancel.setOnClickListener(this);
 		mSpinner = (Spinner) this.findViewById(R.id.comshengfen);
+		hSpinner = (Spinner) this.findViewById(R.id.comhpzl);
 		this.initView();
+		this.initView2();
 
 	}
 
@@ -165,6 +171,14 @@ public class OcrResultActivity extends BaseActivity implements OnClickListener {
 				R.layout.province_spinner, curs);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpinner.setAdapter(adapter);
+	}
+
+	private void initView2() {
+		String[] curs = getResources().getStringArray(R.array.hpzl);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				R.layout.province_spinner, curs);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		hSpinner.setAdapter(adapter);
 	}
 
 }

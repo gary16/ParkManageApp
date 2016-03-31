@@ -2,22 +2,21 @@ package com.zoway.parkmanage.view;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zoway.parkmanage.R;
@@ -27,36 +26,33 @@ import com.zoway.parkmanage.utils.PathUtils;
 
 public class MainActivity extends BaseActivity {
 
-	private ExpandableListView lview;
-	private MainListAdapter madapter;
-	private Button malogout;
-	private ImageButton btnmainremark;
-	private ImageButton btnmainpay;
-	private ImageButton btnmainescape;
-	private ImageButton btnmainquery;
-	private TextView matxtlgtime;
-	private TextView matxtun;
-	private TextView matxtworkpls;
+	private TextView malbun;
+	private ImageView malogout;
+	private ImageView btnmainremark;
+	private ImageView btnmainpay;
+	private ImageView btnmainescape;
+	private ImageView btnmainquery;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		malogout = (Button) this.findViewById(R.id.malogout);
-		btnmainremark = (ImageButton) this.findViewById(R.id.btnmainremark);
-		btnmainpay = (ImageButton) this.findViewById(R.id.btnmainpay);
-		btnmainescape = (ImageButton) this.findViewById(R.id.btnmainescape);
-		btnmainquery = (ImageButton) this.findViewById(R.id.btnmainquery);
 
-		matxtlgtime = (TextView) this.findViewById(R.id.matxtlgtime);
-		matxtun = (TextView) this.findViewById(R.id.matxtun);
-		matxtworkpls = (TextView) this.findViewById(R.id.matxtworkpls);
+		malbun = (TextView) this.findViewById(R.id.malbun);
+		malogout = (ImageView) this.findViewById(R.id.malogout);
+		btnmainremark = (ImageView) this.findViewById(R.id.btnmainremark);
+		btnmainpay = (ImageView) this.findViewById(R.id.btnmainpay);
+		btnmainescape = (ImageView) this.findViewById(R.id.btnmainescape);
+		btnmainquery = (ImageView) this.findViewById(R.id.btnmainquery);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+
 		Date df = Calendar.getInstance().getTime();
-		matxtlgtime.setText(sdf.format(df));
-		matxtun.setText(LoginBean4Wsdl.getWorker().getWorkerName());
-		matxtworkpls.setText(LoginBean4Wsdl.getParkName());
+
+		malbun.setTextColor(Color.WHITE);
+		malbun.setTextSize(18);
+		malbun.setText(LoginBean4Wsdl.getWorker().getWorkerName() + "\n"
+				+ LoginBean4Wsdl.getParkName() + "\n" + sdf.format(df));
 
 		malogout.setOnClickListener(new OnClickListener() {
 
@@ -128,11 +124,11 @@ public class MainActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this,
-						UnhandledListActivity.class);
-				intent.putExtra("type", 3);
-				MainActivity.this.startActivity(intent);
+				// // TODO Auto-generated method stub
+				// Intent intent = new Intent(MainActivity.this,
+				// UnhandledListActivity.class);
+				// intent.putExtra("type", 3);
+				// MainActivity.this.startActivity(intent);
 			}
 		});
 
@@ -172,48 +168,6 @@ public class MainActivity extends BaseActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	public SparseArray<Group> createData() {
-
-		SparseArray<Group> groups = new SparseArray<Group>();
-		Group group = new Group("待拍照车辆", R.drawable.park);
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		groups.append(0, group);
-
-		group = new Group("被呼叫", R.drawable.called);
-		groups.append(1, group);
-
-		group = new Group("逃费管理", R.drawable.runfee);
-		groups.append(2, group);
-
-		group = new Group("设置", R.drawable.settings);
-		groups.append(3, group);
-
-		return groups;
-	}
-
-	public SparseArray<Group> createData(ArrayList<String[]> al) {
-
-		SparseArray<Group> groups = new SparseArray<Group>();
-		Group group = new Group("待拍照车辆", R.drawable.park);
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		group.children.add("车位 123456,时间 8月30号15时15分");
-		groups.append(0, group);
-
-		group = new Group("被呼叫", R.drawable.called);
-		groups.append(1, group);
-
-		group = new Group("逃费管理", R.drawable.runfee);
-		groups.append(2, group);
-
-		group = new Group("设置", R.drawable.settings);
-		groups.append(3, group);
-
-		return groups;
 	}
 
 }
