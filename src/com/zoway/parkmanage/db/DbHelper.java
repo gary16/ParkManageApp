@@ -42,6 +42,8 @@ public class DbHelper {
 		db.execSQL(ct1Str);
 		ct1Str = " Create TABLE if not exists  t_parkrecord_bytags (tid integer PRIMARY KEY AUTOINCREMENT,recordno text,parkno text,parktime text,status int)";
 		db.execSQL(ct1Str);
+		ct1Str = " Create TABLE if not exists  t_settings (k text,val text)";
+		db.execSQL(ct1Str);
 		closeDatabase();
 	}
 
@@ -618,6 +620,25 @@ public class DbHelper {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public static synchronized String getSettings(String keys) {
+		String values = "";
+		try {
+			openDatabase();
+			db.beginTransaction();
+			String sql1 = "select val from t_settings where k=?";
+			Cursor cur = db.rawQuery(sql1, new String[] { keys });
+			while (cur.moveToNext()) {
+				values = cur.getString(0);
+			}
+			db.setTransactionSuccessful();
+			db.endTransaction();
+			closeDatabase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return values;
 	}
 
 	private static synchronized void closeDatabase() {

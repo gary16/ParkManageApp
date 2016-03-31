@@ -164,12 +164,12 @@ public class P990Printer extends BasePrinter {
 			printer.setFormat(format);
 			printer.printText("\n");
 			printer.printText("商户名称:" + LoginBean4Wsdl.getCompanyName() + "\n");
-			printer.printText("电话号码:26337118\n");
 			printer.printText("车牌号码:" + hphm + "\n");
 			printer.printText("停车位置:" + LoginBean4Wsdl.getParkName() + "\n");
 			printer.printText("停车时间:" + datetext + "\n");
 			printer.printText("操作员:"
 					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n\n");
+			//printer.printText("操作人员:张三\n\n");
 			printer.setAutoTrunc(false);
 			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");
 			printer.printText("\n\n");
@@ -177,6 +177,15 @@ public class P990Printer extends BasePrinter {
 			String cUrl = String.format(
 					"http://cx.zoway.com.cn:81/ParkRecord/show/%s.do", recno);
 			printer.printQrCode(35, new QrCode(cUrl, QrCode.ECLEVEL_M), 312);
+
+			printer.printMixText(
+					Format.hz(Format.HZ_DOT24x24, Format.HZ_SC1x1), "本系统数据已与广东");
+			printer.printMixText(
+					Format.hz(Format.HZ_DOT16x16, Format.HZ_SC2x2), "  德信行  \n");
+			printer.printMixText(
+					Format.hz(Format.HZ_DOT24x24, Format.HZ_SC1x1),
+					"信用系统对接，请注重诚信，自觉缴费。\n\n");
+
 			printer.feedLine(4);
 		}
 
@@ -222,7 +231,6 @@ public class P990Printer extends BasePrinter {
 			printer.printText("开始时间:" + datetext + "\n");
 			printer.printText("操作员:"
 					+ LoginBean4Wsdl.getWorker().getWorkerName() + "\n");
-			printer.printText("物业联系电话:29996660\n");
 			printer.printText("说明:1.本凭条仅作为占用场地起始\n计时证明\n2.本收费性质为场地，秩序维护和场\n地使用费，请各车主停车离开时锁好\n门窗并带走车内物品，以免造成不\n必要的损失\n3.本园区停车不提供安全保管服务，\n不负车辆保管责任。\n\n");
 			printer.setAutoTrunc(false);
 			printer.printText("敬爱的车主，请使用微信扫描下方二维码查询停车时长。");

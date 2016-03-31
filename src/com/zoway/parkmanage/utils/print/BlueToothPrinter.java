@@ -72,8 +72,7 @@ public class BlueToothPrinter extends BasePrinter {
 							m_BluetoothManager.PrintData(s);
 							m_BluetoothManager.SetPrintModel(0, 0);
 							StringBuffer sb1 = new StringBuffer("商户名称:"
-									+ LoginBean4Wsdl.getCompanyName()
-									+ "\n\n电话号码:26337118\n\n");
+									+ LoginBean4Wsdl.getCompanyName() + "\n\n ");
 							sb1.append("车牌号码:" + hphm + "\n\n");
 							sb1.append("停车位置:" + LoginBean4Wsdl.getParkName()
 									+ "\n\n");

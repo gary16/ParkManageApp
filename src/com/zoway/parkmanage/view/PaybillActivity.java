@@ -99,8 +99,16 @@ public class PaybillActivity extends PrintActivity {
 			public void onClick(View v) {
 				DbHelper.setPayRecord(tid, rcno, hphm, fare);
 				try {
-					PaybillActivity.this.basePrinter.doPrint2(hphm, parktime,
-							leavetime, fare, 1);
+					if (fare < 1) {
+						Intent intent = new Intent(PaybillActivity.this,
+								PayListsActivity.class);
+						PaybillActivity.this.startActivity(intent);
+						PaybillActivity.this.finish();
+					} else {
+						PaybillActivity.this.basePrinter.doPrint2(hphm,
+								parktime, leavetime, fare, 1);
+					}
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

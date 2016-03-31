@@ -104,7 +104,7 @@ public class InputInfoActivity extends PrintActivity implements OnClickListener 
 				if (f.exists()) {
 					f.delete();
 				}
-				this.basePrinter.doPrint(hphm, parkTime, rcno, 1);
+				this.basePrinter.doPrint(hphm, parkTime, rcno, 0);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

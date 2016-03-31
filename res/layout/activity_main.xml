@@ -97,7 +97,7 @@
             android:layout_width="@dimen/x147"
             android:layout_height="@dimen/x128"
             android:scaleType="fitXY"
-            android:src="@drawable/p7" />
+            android:src="@drawable/p8" />
 
         <ImageView
             android:id="@+id/btnmainescape"
@@ -105,7 +105,7 @@
             android:layout_height="@dimen/x128"
             android:layout_marginLeft="@dimen/x9"
             android:scaleType="fitXY"
-            android:src="@drawable/p8" />
+            android:src="@drawable/p7" />
     </LinearLayout>
 
 </RelativeLayout>
