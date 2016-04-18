@@ -47,17 +47,23 @@ public class DbHelper {
 		closeDatabase();
 	}
 
-	private static void execSql(String sql, Object[] bindArgs) {
-		openDatabase();
-		db.beginTransaction();
-		if (bindArgs == null || bindArgs.length == 0) {
-			db.execSQL(sql);
-		} else {
-			db.execSQL(sql, bindArgs);
+	private static void execSql(String sql, Object[] bindArgs) throws Exception {
+		try {
+			openDatabase();
+			db.beginTransaction();
+			if (bindArgs == null || bindArgs.length == 0) {
+				db.execSQL(sql);
+			} else {
+				db.execSQL(sql, bindArgs);
+			}
+			db.setTransactionSuccessful();
+		} catch (Exception er) {
+			throw er;
+		} finally {
+			db.endTransaction();
+			closeDatabase();
 		}
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		closeDatabase();
+
 	}
 
 	public static synchronized boolean insertRecord(String recordno,
@@ -224,9 +230,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -259,9 +266,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -299,9 +307,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -338,9 +347,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -403,9 +413,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -449,9 +460,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return rec;
 	}
@@ -495,9 +507,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return rec;
 	}
@@ -569,9 +582,10 @@ public class DbHelper {
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			cur.close();
-			closeDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -615,9 +629,11 @@ public class DbHelper {
 			}
 			db.setTransactionSuccessful();
 			db.endTransaction();
-			closeDatabase();
+			cur.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return list;
 	}
@@ -634,9 +650,11 @@ public class DbHelper {
 			}
 			db.setTransactionSuccessful();
 			db.endTransaction();
-			closeDatabase();
+			cur.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeDatabase();
 		}
 		return values;
 	}

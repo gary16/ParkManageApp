@@ -77,7 +77,8 @@ public class TerminalService extends Service {
 						times = 0;
 					}
 					if (times % 2 == 0) {
-						checkNewParkInfo();
+						// 无地磁版本没有
+						// checkNewParkInfo();
 					}
 					uploadParkingRecord();
 					times++;
@@ -245,6 +246,12 @@ public class TerminalService extends Service {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
 	}
 
 }

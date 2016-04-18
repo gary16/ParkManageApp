@@ -25,6 +25,7 @@ public class LeaveWsdl {
 		LeaveBean4Wsdl obj = null;
 		try {
 			SoapObject rpc = new SoapObject(nameSpace, methodName);
+
 			rpc.addProperty("recordNo", recordNo);
 			rpc.addProperty("workerId", workerId);
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -38,7 +39,6 @@ public class LeaveWsdl {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 			SoapObject object = (SoapObject) envelope.bodyIn;
 			SoapObject oj = (SoapObject) object.getProperty(0);
 			obj = new LeaveBean4Wsdl();
